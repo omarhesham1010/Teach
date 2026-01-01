@@ -6,6 +6,9 @@
 <div class="course-list">
     {% for course in courses %}
     <div class="card">
+        {% if course.thumbnail %}
+        <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" style="width:100%; border-radius: 5px;">
+        {% endif %}
         <h3><a href="{% url 'course_detail' course.pk %}" style="text-decoration:none; color:#333;">{{ course.title
                 }}</a></h3>
         <p><strong>Instructor:</strong> {{ course.instructor.username }}</p>
