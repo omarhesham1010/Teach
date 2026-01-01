@@ -5,7 +5,7 @@ import os
 DEBUG = False
 
 # Render sets ALLOWED_HOSTS for us or we set it manually
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') + ['.onrender.com']
 
 # Database
 # https://github.com/jazzband/dj-database-url
@@ -22,3 +22,7 @@ SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True') == 'True'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
+
+# Static Files (WhiteNoise)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
