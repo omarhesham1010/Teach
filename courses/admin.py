@@ -16,7 +16,7 @@ class CourseAdmin(admin.ModelAdmin):
         if db_field.name == "instructor":
             User = get_user_model()
             # Explicitly filter for INSTRUCTOR role
-            kwargs["queryset"] = User.objects.filter(role="INSTRUCTOR")
+            kwargs["queryset"] = User.objects.filter(role="Instructor")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(Lesson)
