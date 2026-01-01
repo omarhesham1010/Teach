@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="course-detail">
+    <h2>{{ course.title }}</h2>
+    <p><strong>Instructor:</strong> {{ course.instructor.username }}</p>
+    <p class="price"><strong>Price:</strong> ${{ course.price }}</p>
+
+    <div class="description" style="margin: 1rem 0; padding: 1rem; background: #f9f9f9;">
+        {{ course.description|linebreaks }}
+    </div>
+
+    {% if user.is_authenticated %}
+    {% if is_enrolled %}
+    <button class="btn" style="background-color: green; cursor: default;">Enrolled</button>
+    {% else %}
+    <form action="{% url 'enroll_course' course.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Enroll Now</button>
+    </form>
+    {% endif %}
+    {% else %}
+    <p><a href="{% url 'login' %}?next={{ request.path }}">Login to enroll</a></p>
+    {% endif %}
+
+    <hr style="margin: 2rem 0;">
+
+    <h3>Curriculum</h3>
+    {% if course.lessons.all %}
+    <ul style="list-style: none; padding: 0;">
+        {% for lesson in course.lessons.all %}
+        <li style="border-bottom: 1px solid #eee; padding: 0.5rem 0;">
+            <strong>{{ lesson.order }}. {{ lesson.title }}</strong>
+            {% if is_enrolled %}
+            <ul style="margin-top: 0.5rem;">
+                {% for video in lesson.videos.all %}
+                <li>Video: {{ video.title }} ({{ video.duration|default:"--" }})</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <span style="color: #888; font-size: 0.9em;">(Enroll to view content)</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No lessons added yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
