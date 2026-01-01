@@ -1,4 +1,6 @@
 from .base import *
+# WARNING: This file is for LOCAL DEVELOPMENT ONLY.
+# NEVER use this in production. It contains hardcoded credentials and disables security features.
 import os
 
 DEBUG = True
