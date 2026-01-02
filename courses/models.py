@@ -1,17 +1,40 @@
 from django.db import models
 from django.conf import settings
+import uuid
+import os
+
+def course_thumbnail_path(instance, filename):
+    # Extension
+    ext = filename.split('.')[-1]
+    # Unique ID
+    filename = f"{uuid.uuid4()}.{ext}"
+    # Path: Teach/Courses/<filename>
+    return os.path.join('Teach/Courses/', filename)
 
 class Course(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     instructor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='courses', limit_choices_to={'role': 'INSTRUCTOR'})
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    thumbnail = models.ImageField(upload_to='thumbnails/', blank=True, null=True)
+    
+    # Updated thumbnail field
+    thumbnail = models.ImageField(upload_to=course_thumbnail_path, blank=True, null=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
+
+    @property
+    def thumbnail_url(self):
+        """Returns the Cloudinary URL or a placeholder if no image exists."""
+        if self.thumbnail:
+            return self.thumbnail.url
+        # Fallback placeholder (ensure your cloud_name is correct in production or use a generic public one)
+        # Using a generic placeholder for now as requested example
+        cloud_name = settings.CLOUDINARY_STORAGE.get('CLOUD_NAME', 'demo') 
+        return f"https://res.cloudinary.com/{cloud_name}/image/upload/v1/Teach/placeholder_course.png"
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons')
