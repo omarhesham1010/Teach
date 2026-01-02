@@ -1,15 +1,6 @@
 from django.db import models
 from django.conf import settings
-import uuid
-import os
 
-def course_thumbnail_path(instance, filename):
-    # Extension
-    ext = filename.split('.')[-1]
-    # Unique ID
-    filename = f"{uuid.uuid4()}.{ext}"
-    # Path: Teach/Courses/<filename>
-    return os.path.join('Teach/Courses/', filename)
 
 class Course(models.Model):
     title = models.CharField(max_length=255)
@@ -18,7 +9,7 @@ class Course(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     
     # Updated thumbnail field
-    thumbnail = models.ImageField(upload_to=course_thumbnail_path, blank=True, null=True)
+    thumbnail = models.ImageField(upload_to='Teach/Courses/', blank=True, null=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
