@@ -16,15 +16,23 @@ DATABASES = {
     )
 }
 
-# Cloudinary Storage Configuration
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
+# Cloudinary Configuration
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL'),
-    # Fallbacks if individual vars are used instead of the full URL
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'), 
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
+
+# Storage Configuration (Modern Django 5.0+ Syntax)
+# DEFAULT_FILE_STORAGE and STATICFILES_STORAGE are deprecated/removed.
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
 }
 
 # Security
@@ -33,6 +41,3 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
-
-# Static Files (WhiteNoise)
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
