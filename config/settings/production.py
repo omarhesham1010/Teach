@@ -20,39 +20,19 @@ DATABASES = {
 # Cloudinary Storage Configuration
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Explicitly disable MEDIA_URL in production so we don't get relative paths
-# Cloudinary will provide absolute URLs
-MEDIA_URL = '/media/' # Keeping it for now as some libs expect it, but storage backend overrides it.
-# Actually, let's allow the storage to drive.
-
+# Using cloudinary library to parse CLOUDINARY_URL safely
 CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
 if CLOUDINARY_URL:
-    # Use the official library to parse the URL safely
-    config = cloudinary.config(parse_conversion_features=False) 
-    # config is already set globally by the library reading the env var!
-    # But django-cloudinary-storage needs CLOUDINARY_STORAGE dict.
+    # This automatically reads the env var and sets global config
+    config = cloudinary.config()
     
-    # We can extract from the global config if the env var was read
-    # OR we just populate the dict from the env var directly as better practice
-    
-    # Let's extract manually but safer than regex
-    # cloudinary://API_KEY:API_SECRET@CLOUD_NAME
-    
-    try:
-        prefix = "cloudinary://"
-        if CLOUDINARY_URL.startswith(prefix):
-            creds = CLOUDINARY_URL[len(prefix):]
-            api_part, cloud_name = creds.split('@')
-            api_key, api_secret = api_part.split(':')
-            
-            CLOUDINARY_STORAGE = {
-                'CLOUD_NAME': cloud_name,
-                'API_KEY': api_key,
-                'API_SECRET': api_secret,
-            }
-    except Exception:
-        # Fallback or pass (will error on upload if failed)
-        pass
+    # Populate the dict that django-cloudinary-storage expects
+    if config.cloud_name:
+        CLOUDINARY_STORAGE = {
+            'CLOUD_NAME': config.cloud_name,
+            'API_KEY': config.api_key,
+            'API_SECRET': config.api_secret,
+        }
 
 # Security
 SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True') == 'True'
