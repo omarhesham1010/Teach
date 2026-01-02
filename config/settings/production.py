@@ -1,7 +1,6 @@
 from .base import *
 import dj_database_url
 import os
-import cloudinary
 
 DEBUG = False
 
@@ -20,19 +19,13 @@ DATABASES = {
 # Cloudinary Storage Configuration
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Using cloudinary library to parse CLOUDINARY_URL safely
-CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
-if CLOUDINARY_URL:
-    # This automatically reads the env var and sets global config
-    config = cloudinary.config()
-    
-    # Populate the dict that django-cloudinary-storage expects
-    if config.cloud_name:
-        CLOUDINARY_STORAGE = {
-            'CLOUD_NAME': config.cloud_name,
-            'API_KEY': config.api_key,
-            'API_SECRET': config.api_secret,
-        }
+CLOUDINARY_STORAGE = {
+    'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL'),
+    # Fallbacks if individual vars are used instead of the full URL
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'), 
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
 
 # Security
 SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True') == 'True'
