@@ -2,7 +2,7 @@ from rest_framework import viewsets, permissions, status, decorators
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from courses.models import Course, Lesson, Enrollment
-from .serializers import CourseSerializer, LessonSerializer, EnrollmentSerializer
+from .serializers import CourseListSerializer, CourseDetailSerializer, LessonSerializer, EnrollmentSerializer
 from .permissions import IsInstructorOrReadOnly, IsOwnerOrReadOnly
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -10,8 +10,12 @@ class CourseViewSet(viewsets.ModelViewSet):
     ViewSet for viewing and editing courses.
     """
     queryset = Course.objects.filter(is_deleted=False)
-    serializer_class = CourseSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsInstructorOrReadOnly, IsOwnerOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CourseListSerializer
+        return CourseDetailSerializer
 
     def perform_destroy(self, instance):
         # Soft delete

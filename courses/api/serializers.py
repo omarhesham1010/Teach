@@ -7,7 +7,22 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'order', 'course']
         read_only_fields = ['course']
 
-class CourseSerializer(serializers.ModelSerializer):
+class CourseListSerializer(serializers.ModelSerializer):
+    """
+    Lightweight serializer for listing courses.
+    """
+    instructor_name = serializers.CharField(source='instructor.username', read_only=True)
+    thumbnail_url = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Course
+        fields = ['id', 'title', 'description', 'instructor', 'instructor_name', 'price', 'thumbnail', 'thumbnail_url', 'created_at']
+        read_only_fields = ['instructor', 'created_at']
+
+class CourseDetailSerializer(serializers.ModelSerializer):
+    """
+    Detailed serializer including nested lessons.
+    """
     lessons = LessonSerializer(many=True, read_only=True)
     instructor_name = serializers.CharField(source='instructor.username', read_only=True)
     thumbnail_url = serializers.ReadOnlyField()
