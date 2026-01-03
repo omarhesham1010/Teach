@@ -11,6 +11,8 @@ class Course(models.Model):
     # Updated thumbnail field
     thumbnail = models.ImageField(upload_to='Teach/Courses/', blank=True, null=True)
     
+    is_deleted = models.BooleanField(default=False) # Soft delete
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

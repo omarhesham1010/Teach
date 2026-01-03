@@ -9,3 +9,4 @@ whitenoise
 cloudinary
 django-cloudinary-storage
 Pillow
+djangorestframework-simplejwt

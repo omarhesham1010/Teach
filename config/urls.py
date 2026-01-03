@@ -13,6 +13,10 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')), # Built-in auth
     path('courses/', include('courses.urls')),
+    
+    # API endpoints
+    path('api/v1/auth/', include('accounts.api.urls')),
+    path('api/v1/', include('courses.api.urls')),
 ]
 
 if settings.DEBUG:
