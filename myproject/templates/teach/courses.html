@@ -25,10 +25,16 @@
             </div>
             <span class="text-xl font-bold tracking-tight">EduFlow</span>
         </div>
-        <button class="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700">
-            <img alt="Student profile" class="w-full h-full object-cover"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsQBVtRDULc1AFvvpvxN5NlYmKBSHP6pQH0nk866O510Q3WkFARQ0XX1hyJl4qtuXo6lURnZx15svBUeQx60FDYSL-AujKZeIm__QCATyBkus-JGll-qICX48BhWnzN81WWuiMD4xoVEN5--Hbwbe-aLf-qm9OP6-qpX2Ic2jxEo8GEr0PTDhL3SA7lnK8Qzmierusd0am_dftjDfKCiSERUgu094E6TUKcqczBTov-68d9h6hk83duCEaHppDtfc8ZRHtCS7KhFE" />
-        </button>
+        <div class="flex items-center gap-3">
+            <button onclick="toggleDarkMode()"
+                class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400">
+                <span class="material-icons-outlined">dark_mode</span>
+            </button>
+            <button class="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700">
+                <img alt="Student profile" class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsQBVtRDULc1AFvvpvxN5NlYmKBSHP6pQH0nk866O510Q3WkFARQ0XX1hyJl4qtuXo6lURnZx15svBUeQx60FDYSL-AujKZeIm__QCATyBkus-JGll-qICX48BhWnzN81WWuiMD4xoVEN5--Hbwbe-aLf-qm9OP6-qpX2Ic2jxEo8GEr0PTDhL3SA7lnK8Qzmierusd0am_dftjDfKCiSERUgu094E6TUKcqczBTov-68d9h6hk83duCEaHppDtfc8ZRHtCS7KhFE" />
+            </button>
+        </div>
     </header>
     <main class="px-6 pb-32">
         <div class="mt-4 mb-8">
@@ -187,17 +193,21 @@
     </main>
     <nav
         class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/80 ios-blur border-t border-slate-200 dark:border-slate-800 pb-8 pt-2 px-8 flex justify-between items-center z-50">
-        <a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
-            <span class="material-symbols-outlined">explore</span>
-            <span class="text-[10px] font-semibold">Courses</span>
+        <a href="{% url 'courses' %}" class="flex flex-col items-center gap-1 text-primary">
+            <span class="material-icons-outlined">home</span>
+            <span class="text-[10px] font-bold">Home</span>
         </a>
-        <a class="flex flex-col items-center gap-1 text-primary" href="#">
-            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">play_lesson</span>
-            <span class="text-[10px] font-semibold">My Courses</span>
+        <a href="{% url 'instructor' %}" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary">
+            <span class="material-icons-outlined">people</span>
+            <span class="text-[10px]">Instructors</span>
         </a>
-        <a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
-            <span class="material-symbols-outlined">person</span>
-            <span class="text-[10px] font-semibold">Profile</span>
+        <a href="{% url 'messages' %}" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary">
+            <span class="material-icons-outlined">chat_bubble_outline</span>
+            <span class="text-[10px]">Messages</span>
+        </a>
+        <a href="{% url 'profile' %}" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary">
+            <span class="material-icons-outlined">person</span>
+            <span class="text-[10px]">Profile</span>
         </a>
     </nav>
     <div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full z-[60]">
