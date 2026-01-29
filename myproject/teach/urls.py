@@ -14,4 +14,9 @@ urlpatterns = [
     path('quiz/', views.quiz, name='quiz'),
     path('quiz-submit/', views.quiz_submit, name='quiz_submit'),
     path('submission-success/', views.submission_success, name='submission_success'),
+    path('profile/', views.profile_view, name='profile'),
+    path('settings/', views.settings_view, name='settings'),
+    path('messages/', views.messages_view, name='messages'),
+    path('notes/', views.notes_view, name='notes'),
+    path('discussion/', views.discussion_view, name='discussion'),
 ]

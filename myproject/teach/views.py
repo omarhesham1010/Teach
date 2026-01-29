@@ -32,3 +32,18 @@ def quiz_submit(request):
 
 def submission_success(request):
     return render(request, 'teach/submissionsuccess.html')
+
+def profile_view(request):
+    return render(request, 'teach/profile.html')
+
+def settings_view(request):
+    return render(request, 'teach/settings.html')
+
+def messages_view(request):
+    return render(request, 'teach/messages.html')
+
+def notes_view(request):
+    return render(request, 'teach/notes.html')
+
+def discussion_view(request):
+    return render(request, 'teach/discussion.html')

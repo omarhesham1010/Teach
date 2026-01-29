@@ -64,11 +64,11 @@
                     <p class="text-sm text-slate-600 dark:text-slate-300 mb-5">Next: <span
                             class="font-medium text-slate-900 dark:text-white">Setting up MongoDB Clusters</span></p>
                     <div class="flex flex-col gap-3">
-                        <button
-                            class="w-full py-3 bg-primary hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors active:scale-[0.98]">Continue</button>
-                        <button
-                            class="w-full py-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-xl text-sm transition-colors">View
-                            course details</button>
+                        <a href="{% url 'course_content' %}"
+                            class="block w-full py-3 bg-primary hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors active:scale-[0.98] text-center">Continue</a>
+                        <a href="{% url 'course_details' %}"
+                            class="block w-full py-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-xl text-sm transition-colors text-center">View
+                            course details</a>
                     </div>
                 </div>
             </div>

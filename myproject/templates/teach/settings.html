@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link rel="stylesheet" href="/static/teach/css/style.css">
+    <script src="/static/teach/js/script.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 pb-20">
+    <nav
+        class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
+        <a href="{% url 'profile' %}"
+            class="flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+            <span class="material-icons-outlined">arrow_back</span>
+        </a>
+        <span class="font-bold text-lg tracking-tight">Settings</span>
+    </nav>
+
+    <main class="px-4 py-6 max-w-lg mx-auto">
+
+        <!-- Account Settings -->
+        <div class="mb-8">
+            <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 px-2">Account</h2>
+            <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                <a href="#"
+                    class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-outlined text-slate-400">person_outline</span>
+                        <span class="font-medium">Personal Information</span>
+                    </div>
+                    <span class="material-icons-outlined text-slate-400 text-sm">chevron_right</span>
+                </a>
+                <a href="#"
+                    class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-outlined text-slate-400">lock_open</span>
+                        <span class="font-medium">Security & Password</span>
+                    </div>
+                    <span class="material-icons-outlined text-slate-400 text-sm">chevron_right</span>
+                </a>
+                <a href="#"
+                    class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-outlined text-slate-400">payment</span>
+                        <span class="font-medium">Payment Methods</span>
+                    </div>
+                    <span class="material-icons-outlined text-slate-400 text-sm">chevron_right</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Preferences -->
+        <div class="mb-8">
+            <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 px-2">Preferences</h2>
+            <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                <div class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-outlined text-slate-400">notifications_none</span>
+                        <span class="font-medium">Push Notifications</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" value="" class="sr-only peer" checked>
+                        <div
+                            class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
+                        </div>
+                    </label>
+                </div>
+                <div class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-outlined text-slate-400">dark_mode</span>
+                        <span class="font-medium">Dark Mode</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" value="" class="sr-only peer"
+                            onclick="document.documentElement.classList.toggle('dark')">
+                        <div
+                            class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary">
+                        </div>
+                    </label>
+                </div>
+                <a href="#" class="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-outlined text-slate-400">language</span>
+                        <span class="font-medium">Language</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-slate-500">
+                        <span class="text-sm">English (US)</span>
+                        <span class="material-icons-outlined text-sm">chevron_right</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Support -->
+        <div class="mb-8">
+            <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 px-2">Support</h2>
+            <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm">
+                <a href="#"
+                    class="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-outlined text-slate-400">help_outline</span>
+                        <span class="font-medium">Help Center</span>
+                    </div>
+                    <span class="material-icons-outlined text-slate-400 text-sm">chevron_right</span>
+                </a>
+                <a href="#" class="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-outlined text-slate-400">info</span>
+                        <span class="font-medium">About EduPlatform</span>
+                    </div>
+                    <span class="material-icons-outlined text-slate-400 text-sm">chevron_right</span>
+                </a>
+            </div>
+        </div>
+
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Course Discussion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link rel="stylesheet" href="/static/teach/css/style.css">
+    <script src="/static/teach/js/script.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 pb-20">
+    <nav
+        class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <a href="{% url 'course_content' %}" class="flex items-center gap-2">
+                <span class="material-icons-outlined text-primary">arrow_back</span>
+                <span class="font-bold text-lg tracking-tight">Discussion</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="px-4 py-6">
+        <!-- Filters -->
+        <div class="flex gap-2 mb-6 overflow-x-auto hide-scrollbar">
+            <button class="px-4 py-2 bg-primary text-white text-sm font-bold rounded-full whitespace-nowrap">All
+                Topics</button>
+            <button
+                class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-full whitespace-nowrap">Announcements</button>
+            <button
+                class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-full whitespace-nowrap">Q&A</button>
+            <button
+                class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium rounded-full whitespace-nowrap">Social</button>
+        </div>
+
+        <!-- Pinned Post -->
+        <div class="mb-6">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Pinned</h3>
+            <div
+                class="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-2xl border border-indigo-100 dark:border-indigo-800">
+                <div class="flex items-center gap-2 mb-2">
+                    <span
+                        class="bg-indigo-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase">Guidelines</span>
+                    <span class="text-xs text-indigo-800 dark:text-indigo-300 font-medium">Posted by Instructor</span>
+                </div>
+                <h4 class="font-bold text-indigo-900 dark:text-indigo-200 mb-1">Community Guidelines & Rules</h4>
+                <p class="text-sm text-indigo-800/80 dark:text-indigo-300/80 leading-relaxed">
+                    Please read our updated community guidelines before posting. Be respectful and help each other
+                    learn!
+                </p>
+            </div>
+        </div>
+
+        <!-- Discussion List -->
+        <div class="space-y-4">
+            <!-- Post -->
+            <div
+                class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsQBVtRDULc1AFvvpvxN5NlYmKBSHP6pQH0nk866O510Q3WkFARQ0XX1hyJl4qtuXo6lURnZx15svBUeQx60FDYSL-AujKZeIm__QCATyBkus-JGll-qICX48BhWnzN81WWuiMD4xoVEN5--Hbwbe-aLf-qm9OP6-qpX2Ic2jxEo8GEr0PTDhL3SA7lnK8Qzmierusd0am_dftjDfKCiSERUgu094E6TUKcqczBTov-68d9h6hk83duCEaHppDtfc8ZRHtCS7KhFE"
+                            class="w-8 h-8 rounded-full object-cover">
+                        <div>
+                            <p class="text-sm font-bold">Alex Johnson</p>
+                            <p class="text-[10px] text-slate-400">2 hours ago</p>
+                        </div>
+                    </div>
+                    <span class="material-icons-outlined text-slate-400">more_horiz</span>
+                </div>
+                <h3 class="font-bold text-lg mb-2">Question about Auto-Layout</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                    I'm struggling to get the nested frames to resize correctly when I change the parent frame width.
+                    Any tips?
+                </p>
+                <div class="flex items-center gap-4 text-slate-500 text-sm">
+                    <div class="flex items-center gap-1 cursor-pointer hover:text-primary">
+                        <span class="material-icons-outlined text-lg">favorite_border</span>
+                        <span>12</span>
+                    </div>
+                    <div class="flex items-center gap-1 cursor-pointer hover:text-primary">
+                        <span class="material-icons-outlined text-lg">chat_bubble_outline</span>
+                        <span>4 comments</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post -->
+            <div
+                class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-xs">
+                            M</div>
+                        <div>
+                            <p class="text-sm font-bold">Mike T.</p>
+                            <p class="text-[10px] text-slate-400">5 hours ago</p>
+                        </div>
+                    </div>
+                    <span class="material-icons-outlined text-slate-400">more_horiz</span>
+                </div>
+                <h3 class="font-bold text-lg mb-2">Favorite Figma Plugins?</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                    What are your top 3 plugins for productivity? I really like Unsplash and Iconify.
+                </p>
+                <div class="flex items-center gap-4 text-slate-500 text-sm">
+                    <div class="flex items-center gap-1 cursor-pointer hover:text-primary">
+                        <span class="material-icons-outlined text-lg">favorite_border</span>
+                        <span>45</span>
+                    </div>
+                    <div class="flex items-center gap-1 cursor-pointer hover:text-primary">
+                        <span class="material-icons-outlined text-lg">chat_bubble_outline</span>
+                        <span>18 comments</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div
+        class="fixed bottom-0 left-0 right-0 p-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800">
+        <button
+            class="w-full py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/30 flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+            <span class="material-icons-outlined">add</span>
+            Start New Topic
+        </button>
+    </div>
+</body>
+
+</html>
