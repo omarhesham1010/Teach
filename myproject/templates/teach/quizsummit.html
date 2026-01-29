@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Quiz Results Summary</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#4355c1", // Professional Blue as requested
+            "primary-dark": "#2563EB",
+            "background-light": "#111827", // Light grey/white mix
+            "background-dark": "#111827", // Dark grey/black
+            "card-light": "#FFFFFF",
+            "card-dark": "#1F2937",
+            "text-light": "#1F2937",
+            "text-dark": "#F9FAFB",
+            "secondary-text-light": "#6B7280",
+            "secondary-text-dark": "#9CA3AF",
+            "success": "#10B981",
+            "warning": "#F59E0B",
+          },
+          fontFamily: {
+            display: ["Inter", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.75rem",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .progress-ring__circle {
+      transition: stroke-dashoffset 0.35s;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark font-display antialiased min-h-screen flex flex-col items-center justify-center p-4">
+  <div
+    class="fixed top-0 w-full h-12 flex justify-between items-center px-6 text-sm font-medium text-text-light dark:text-text-dark z-20">
+
+  </div>
+  <main
+    class="w-full max-w-md bg-card-light dark:bg-card-dark shadow-xl rounded-3xl overflow-hidden relative flex flex-col h-[85vh] mt-6">
+    <header class="pt-8 pb-4 px-6 text-center border-b border-gray-100 dark:border-gray-700">
+      <h1 class="text-xl font-bold text-text-light dark:text-text-dark tracking-tight">Quiz Completed</h1>
+      <p class="text-sm text-secondary-text-light dark:text-secondary-text-dark mt-1">Introduction to UX Design</p>
+    </header>
+    <div class="flex-1 flex flex-col items-center justify-center px-6 py-8 space-y-8 overflow-y-auto">
+      <div class="relative flex items-center justify-center">
+        <div class="absolute inset-0 bg-blue-100 dark:bg-blue-900/20 blur-3xl rounded-full transform scale-150"></div>
+        <div class="relative w-48 h-48">
+          <svg class="w-full h-full" viewBox="0 0 120 120">
+            <circle class="text-gray-100 dark:text-gray-700 stroke-current" cx="60" cy="60" fill="transparent" r="52"
+              stroke-width="8"></circle>
+            <circle class="text-primary progress-ring__circle stroke-current" cx="60" cy="60" fill="transparent" r="52"
+              stroke-dasharray="326.72" stroke-dashoffset="49" stroke-linecap="round" stroke-width="8"></circle>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span class="text-5xl font-extrabold text-primary">85<span class="text-2xl align-top">%</span></span>
+            <span class="text-sm font-medium text-secondary-text-light dark:text-secondary-text-dark mt-1">Great
+              Job!</span>
+          </div>
+        </div>
+      </div>
+      <div class="w-full grid grid-cols-2 gap-4">
+        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl flex flex-col items-center text-center shadow-sm">
+          <div class="p-2 bg-blue-100 dark:bg-blue-900/50 rounded-full mb-2">
+            <span class="material-icons-round text-primary text-xl">quiz</span>
+          </div>
+          <span class="text-lg font-bold text-text-light dark:text-text-dark">20</span>
+          <span
+            class="text-xs text-secondary-text-light dark:text-secondary-text-dark uppercase tracking-wide font-semibold mt-1">Total
+            Questions</span>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-2xl flex flex-col items-center text-center shadow-sm">
+          <div class="p-2 bg-green-100 dark:bg-green-900/50 rounded-full mb-2">
+            <span class="material-icons-round text-success text-xl">check_circle</span>
+          </div>
+          <span class="text-lg font-bold text-text-light dark:text-text-dark">17</span>
+          <span
+            class="text-xs text-secondary-text-light dark:text-secondary-text-dark uppercase tracking-wide font-semibold mt-1">Correct
+            Answers</span>
+        </div>
+      </div>
+      <div class="w-full bg-gray-50 dark:bg-gray-800 rounded-2xl p-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="bg-yellow-100 dark:bg-yellow-900/40 p-2 rounded-xl text-warning">
+            <span class="material-icons-round">timer</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-semibold text-text-light dark:text-text-dark">Time Taken</span>
+            <span class="text-xs text-secondary-text-light dark:text-secondary-text-dark">You were fast!</span>
+          </div>
+        </div>
+        <span class="text-base font-bold text-text-light dark:text-text-dark">12m 45s</span>
+      </div>
+    </div>
+    <div class="p-6 bg-card-light dark:bg-card-dark border-t border-gray-100 dark:border-gray-700">
+      <div class="flex gap-4">
+        <a href="{% url 'quiz' %}"
+          class="flex-1 py-3.5 px-4 bg-transparent border border-gray-300 dark:border-gray-600 rounded-xl text-text-light dark:text-text-dark font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center justify-center gap-2 group">
+          <span
+            class="material-icons-round text-lg text-secondary-text-light dark:text-secondary-text-dark group-hover:text-text-light dark:group-hover:text-text-dark transition-colors">
+            visibility
+          </span>
+          Review Answers
+        </a>
+
+        <a href="{% url 'course_content' %}"
+          class="flex-1 py-3.5 px-4 bg-primary text-white rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/30 hover:bg-primary-dark transition-all transform active:scale-95 flex items-center justify-center gap-2">
+          Back to Course
+          <span class="material-icons-round text-lg">arrow_forward</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+</body>
+
+</html>

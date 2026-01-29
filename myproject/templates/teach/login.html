@@ -1,0 +1,181 @@
+<!doctype html>
+
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Education App Login</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#4355c1",
+            "background-light": "#f6f6f8",
+            "background-dark": "#14151e",
+          },
+          fontFamily: { display: "Lexend" },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: "Lexend", sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark text-[#0d121b] dark:text-white min-h-screen flex flex-col items-center justify-start">
+  <div class="w-full max-w-[480px] min-h-screen flex flex-col px-6 py-8">
+    <!-- Header Image / Illustration -->
+    <div class="mt-8 mb-6 flex justify-center">
+      <div class="w-full h-48 bg-primary/10 rounded-xl overflow-hidden flex items-center justify-center relative">
+        <!-- Abstract educational illustration placeholder -->
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
+        <span class="material-symbols-outlined text-primary text-[80px]">school</span>
+        <div class="absolute bottom-4 right-4 bg-white dark:bg-slate-800 p-2 rounded-lg shadow-sm">
+          <span class="material-symbols-outlined text-primary">auto_stories</span>
+        </div>
+      </div>
+    </div>
+    <!-- Welcome Text -->
+    <div class="text-center mb-8">
+      <h1 class="text-[#0d121b] dark:text-white tracking-tight text-[32px] font-bold leading-tight pb-2">
+        Welcome Back!
+      </h1>
+      <p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal">
+        Login to access your courses.
+      </p>
+    </div>
+    <!-- Login Form -->
+    <div class="space-y-4">
+      <!-- Email Field -->
+      <div class="flex flex-col w-full">
+        <p class="text-[#0d121b] dark:text-white text-base font-medium leading-normal pb-2">
+          Email or Student ID
+        </p>
+        <div class="relative group">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary">person</span>
+          </div>
+          <input
+            class="form-input flex w-full pl-11 rounded-lg text-[#0d121b] dark:text-white focus:outline-0 focus:ring-1 focus:ring-primary border border-[#cfd7e7] dark:border-slate-700 bg-white dark:bg-slate-800 focus:border-primary h-14 placeholder:text-slate-400 text-base font-normal leading-normal"
+            placeholder="name@school.com" type="text" value="" />
+        </div>
+      </div>
+      <!-- Password Field -->
+      <div class="flex flex-col w-full">
+        <p class="text-[#0d121b] dark:text-white text-base font-medium leading-normal pb-2">
+          Password
+        </p>
+        <div class="flex w-full items-stretch rounded-lg group">
+          <div
+            class="flex items-center px-3 border border-r-0 border-[#cfd7e7] dark:border-slate-700 bg-white dark:bg-slate-800 rounded-l-lg group-focus-within:border-primary">
+            <span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary">lock</span>
+          </div>
+          <input
+            class="form-input flex w-full min-w-0 flex-1 border-x-0 rounded-none text-[#0d121b] dark:text-white focus:outline-0 focus:ring-0 border-[#cfd7e7] dark:border-slate-700 bg-white dark:bg-slate-800 focus:border-primary h-14 placeholder:text-slate-400 p-[15px] pr-2 text-base font-normal leading-normal group-focus-within:border-y-primary"
+            placeholder="••••••••" type="password" value="" />
+          <div
+            class="text-slate-400 flex border border-l-0 border-[#cfd7e7] dark:border-slate-700 bg-white dark:bg-slate-800 items-center justify-center pr-3 rounded-r-lg group-focus-within:border-primary">
+            <span class="material-symbols-outlined cursor-pointer hover:text-primary">visibility</span>
+          </div>
+        </div>
+      </div>
+      <!-- Forgot Password Link -->
+      <div class="flex justify-end pt-1">
+        <a class="text-primary text-sm font-semibold hover:underline" href="#">Forgot Password?</a>
+      </div>
+    </div>
+    <!-- Sign In Button -->
+    <div class="mt-8">
+      <a href="{% url 'instructor' %}">
+        <button
+          class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-xl transition-colors text-lg shadow-lg shadow-primary/20">
+          Sign In
+        </button>
+      </a>
+    </div>
+    <!-- Divider -->
+    <div class="flex items-center my-8">
+      <div class="flex-grow border-t border-slate-300 dark:border-slate-700"></div>
+      <span class="px-4 text-slate-400 text-sm font-medium">Or continue with</span>
+      <div class="flex-grow border-t border-slate-300 dark:border-slate-700"></div>
+    </div>
+    <!-- Social Logins -->
+    <div class="grid grid-cols-2 gap-4">
+      <button
+        class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+        <img alt="Google Logo" class="w-5 h-5" data-alt="Google company logo"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD6t5v30KLSztCxErOgMNagnIzws9do9AbexDQoVoKkTKRVZAr5MovdSon95az4glYiEt09MBXBwdg1NoxL-FE1vIfuAZJyO7E-VyTEnR14mmE24iqE2t1UfEPBULzGGSn2lDeJoPC97l9ZlzDvl3XZwjcAWIMRwT4bLCKOUHepOMytHwFUvDBFYHjvgrrL2zkHXEFwfxhLCwFntRJ41vci90fb8DdzCy_OlTjEw55ns6B5h54Ht9ivRWYHfraRd_cbwmCiEKQcSU" />
+        <span class="text-sm font-semibold">Google</span>
+      </button>
+      <button
+        class="flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+        <span class="material-symbols-outlined text-[20px] dark:text-white">ios</span>
+        <span class="text-sm font-semibold">Apple</span>
+      </button>
+    </div>
+    <!-- Sign Up Link -->
+    <div class="mt-auto pt-10 pb-4 text-center">
+      <p class="text-slate-500 dark:text-slate-400 text-sm">
+        Don't have an account?
+        <a class="text-primary font-bold hover:underline" href="{% url 'signup' %}">Sign Up</a></a>
+      </p>
+    </div>
+  </div>
+  <!-- Background Decorative Elements -->
+  <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+    <div class="absolute top-[-10%] right-[-10%] w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-[-5%] left-[-5%] w-48 h-48 bg-primary/5 rounded-full blur-2xl"></div>
+  </div>
+</body>
+
+</html>
