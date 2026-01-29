@@ -1,153 +1,214 @@
 <!DOCTYPE html>
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Student My Courses Dashboard</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
-<script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#4355c1",
-                        "background-light": "#f8fafc",
-                        "background-dark": "#0f172a",
-                    },
-                    fontFamily: {
-                        display: ["Inter", "sans-serif"],
-                    },
-                    borderRadius: {
-                        DEFAULT: "12px",
-                    },
-                },
-            },
-        };
-    </script>
-<style>
-        .ios-blur {
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-    </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
-<div class="h-11 w-full bg-background-light dark:bg-background-dark sticky top-0 z-50 flex items-center justify-between px-6">
+<html class="light" lang="en">
 
-</div>
-<header class="px-6 py-4 flex items-center justify-between">
-<div class="flex items-center gap-2">
-<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
-<span class="material-symbols-outlined">auto_stories</span>
-</div>
-<span class="text-xl font-bold tracking-tight">EduFlow</span>
-</div>
-<button class="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700">
-<img alt="Student profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsQBVtRDULc1AFvvpvxN5NlYmKBSHP6pQH0nk866O510Q3WkFARQ0XX1hyJl4qtuXo6lURnZx15svBUeQx60FDYSL-AujKZeIm__QCATyBkus-JGll-qICX48BhWnzN81WWuiMD4xoVEN5--Hbwbe-aLf-qm9OP6-qpX2Ic2jxEo8GEr0PTDhL3SA7lnK8Qzmierusd0am_dftjDfKCiSERUgu094E6TUKcqczBTov-68d9h6hk83duCEaHppDtfc8ZRHtCS7KhFE"/>
-</button>
-</header>
-<main class="px-6 pb-32">
-<div class="mt-4 mb-8">
-<h1 class="text-3xl font-extrabold tracking-tight">My Courses</h1>
-<p class="text-slate-500 dark:text-slate-400 mt-1">Continue where you left off</p>
-</div>
-<div class="grid grid-cols-1 gap-6">
-<div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
-<div class="h-40 relative overflow-hidden">
-<img alt="Web Development Course" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfqURTaAfX2u82eTJQRM91NJpQKZHMZxivQeewErEb4KXzDKACuwcSZa8x4ZeYEAnAhV9zAW6QBUMgaBgvnxbTOR1zwQquNOvaTGRBfPaAraOA-WF2Rh2uxKxwywgUe7_91ohnrZ3N9fEvGSwEZ7PtOXXRRMcUkNd5jARyU8Fnu-F6opd9GoEC-1Fr-RGTNzhWm5WkvKhVhD964uDLO_aNGMpXzuVuN2l3qr6SuM1Z1Fk2L9aVYzDQyVKlhLqEQ_K0ikojJ0Wwg8U"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-<div class="absolute bottom-4 left-4">
-<span class="px-2 py-1 bg-primary text-white text-[10px] font-bold uppercase rounded">Intermediate</span>
-</div>
-</div>
-<div class="p-5">
-<h3 class="text-lg font-bold mb-3">Modern Fullstack Web Development</h3>
-<div class="mb-4">
-<div class="flex justify-between items-center mb-2">
-<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lesson 12 of 30</span>
-<span class="text-xs font-bold text-primary">40%</span>
-</div>
-<div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-<div class="h-full bg-primary" style="width: 40%"></div>
-</div>
-</div>
-<p class="text-sm text-slate-600 dark:text-slate-300 mb-5">Next: <span class="font-medium text-slate-900 dark:text-white">Setting up MongoDB Clusters</span></p>
-<div class="flex flex-col gap-3">
-<button class="w-full py-3 bg-primary hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors active:scale-[0.98]">
-                            Continue
-                        </button>
-<button class="w-full py-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-xl text-sm transition-colors">
-                            View course details
-                        </button>
-</div>
-</div>
-</div>
-<div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
-<div class="h-40 relative overflow-hidden">
-<img alt="UI UX Design Course" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-DeW7Cfu8eMPsORx5WN7uhWpcEvK4rXhVXtFGSGZNvgAYxhfEZYyoP1GK439c3f-WA7uW54Xs5kc_oaItzNw-eZaXZc4lkehYu5yKE7zo6YVG6cBVAgBHVnxcYCRoS5pCKM1PDyYelo0I90nyl75_PMfdI3GYX8A3EERSM6a8kMVFV0w8SjzcG9qaLxlsaBh6rikV6yW3nhhe6pqaxOnIlgCbulv8W9agrtdS-r1PzC2GrKfZc71xU5MIl3omVhp6fncdbO9wQCs"/>
-<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-<div class="absolute bottom-4 left-4">
-<span class="px-2 py-1 bg-emerald-500 text-white text-[10px] font-bold uppercase rounded">Beginner</span>
-</div>
-</div>
-<div class="p-5">
-<h3 class="text-lg font-bold mb-3">UI/UX Design Fundamentals</h3>
-<div class="mb-4">
-<div class="flex justify-between items-center mb-2">
-<span class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lesson 8 of 12</span>
-<span class="text-xs font-bold text-primary">65%</span>
-</div>
-<div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-<div class="h-full bg-primary" style="width: 65%"></div>
-</div>
-</div>
-<p class="text-sm text-slate-600 dark:text-slate-300 mb-5">Next: <span class="font-medium text-slate-900 dark:text-white">Prototyping Transitions</span></p>
-<div class="flex flex-col gap-3">
-<button class="w-full py-3 bg-primary hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors active:scale-[0.98]">
-                            Continue
-                        </button>
-<button class="w-full py-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-xl text-sm transition-colors">
-                            View course details
-                        </button>
-</div>
-</div>
-</div>
-<div class="mt-8 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-8 text-center opacity-40">
-<span class="material-symbols-outlined text-4xl mb-2 text-slate-400">school</span>
-<p class="text-sm text-slate-500 font-medium italic">You haven't enrolled in any courses yet</p>
-</div>
-</div>
-</main>
-<nav class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/80 ios-blur border-t border-slate-200 dark:border-slate-800 pb-8 pt-2 px-8 flex justify-between items-center z-50">
-<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined">explore</span>
-<span class="text-[10px] font-semibold">Courses</span>
-</a>
-<a class="flex flex-col items-center gap-1 text-primary" href="#">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">play_lesson</span>
-<span class="text-[10px] font-semibold">My Courses</span>
-</a>
-<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined">person</span>
-<span class="text-[10px] font-semibold">Profile</span>
-</a>
-</nav>
-<div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full z-[60]"></div>
-<script>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Student My Courses Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link rel="stylesheet" href="/static/teach/css/style.css">
+    <script src="/static/teach/js/script.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+    <div
+        class="h-11 w-full bg-background-light dark:bg-background-dark sticky top-0 z-50 flex items-center justify-between px-6">
+
+    </div>
+    <header class="px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">auto_stories</span>
+            </div>
+            <span class="text-xl font-bold tracking-tight">EduFlow</span>
+        </div>
+        <button class="w-10 h-10 rounded-full overflow-hidden border-2 border-slate-200 dark:border-slate-700">
+            <img alt="Student profile" class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsQBVtRDULc1AFvvpvxN5NlYmKBSHP6pQH0nk866O510Q3WkFARQ0XX1hyJl4qtuXo6lURnZx15svBUeQx60FDYSL-AujKZeIm__QCATyBkus-JGll-qICX48BhWnzN81WWuiMD4xoVEN5--Hbwbe-aLf-qm9OP6-qpX2Ic2jxEo8GEr0PTDhL3SA7lnK8Qzmierusd0am_dftjDfKCiSERUgu094E6TUKcqczBTov-68d9h6hk83duCEaHppDtfc8ZRHtCS7KhFE" />
+        </button>
+    </header>
+    <main class="px-6 pb-32">
+        <div class="mt-4 mb-8">
+            <h1 class="text-3xl font-extrabold tracking-tight">My Courses</h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-1">Continue where you left off</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Course 1 -->
+            <div
+                class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
+                <div class="h-40 relative overflow-hidden">
+                    <img alt="Web Development Course" class="w-full h-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfqURTaAfX2u82eTJQRM91NJpQKZHMZxivQeewErEb4KXzDKACuwcSZa8x4ZeYEAnAhV9zAW6QBUMgaBgvnxbTOR1zwQquNOvaTGRBfPaAraOA-WF2Rh2uxKxwywgUe7_91ohnrZ3N9fEvGSwEZ7PtOXXRRMcUkNd5jARyU8Fnu-F6opd9GoEC-1Fr-RGTNzhWm5WkvKhVhD964uDLO_aNGMpXzuVuN2l3qr6SuM1Z1Fk2L9aVYzDQyVKlhLqEQ_K0ikojJ0Wwg8U" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <span
+                            class="px-2 py-1 bg-primary text-white text-[10px] font-bold uppercase rounded">Intermediate</span>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="text-lg font-bold mb-3">Modern Fullstack Web Development</h3>
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span
+                                class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lesson
+                                12 of 30</span>
+                            <span class="text-xs font-bold text-primary">40%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: 40%"></div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-5">Next: <span
+                            class="font-medium text-slate-900 dark:text-white">Setting up MongoDB Clusters</span></p>
+                    <div class="flex flex-col gap-3">
+                        <button
+                            class="w-full py-3 bg-primary hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors active:scale-[0.98]">Continue</button>
+                        <button
+                            class="w-full py-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-xl text-sm transition-colors">View
+                            course details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 2 -->
+            <div
+                class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
+                <div class="h-40 relative overflow-hidden">
+                    <img alt="UI UX Design Course" class="w-full h-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-DeW7Cfu8eMPsORx5WN7uhWpcEvK4rXhVXtFGSGZNvgAYxhfEZYyoP1GK439c3f-WA7uW54Xs5kc_oaItzNw-eZaXZc4lkehYu5yKE7zo6YVG6cBVAgBHVnxcYCRoS5pCKM1PDyYelo0I90nyl75_PMfdI3GYX8A3EERSM6a8kMVFV0w8SjzcG9qaLxlsaBh6rikV6yW3nhhe6pqaxOnIlgCbulv8W9agrtdS-r1PzC2GrKfZc71xU5MIl3omVhp6fncdbO9wQCs" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <span
+                            class="px-2 py-1 bg-emerald-500 text-white text-[10px] font-bold uppercase rounded">Beginner</span>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="text-lg font-bold mb-3">UI/UX Design Fundamentals</h3>
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span
+                                class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lesson
+                                8 of 12</span>
+                            <span class="text-xs font-bold text-primary">65%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-5">Next: <span
+                            class="font-medium text-slate-900 dark:text-white">Prototyping Transitions</span></p>
+                    <div class="flex flex-col gap-3">
+                        <button
+                            class="w-full py-3 bg-primary hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors active:scale-[0.98]">Continue</button>
+                        <button
+                            class="w-full py-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-xl text-sm transition-colors">View
+                            course details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 3 (New) -->
+            <div
+                class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
+                <div class="h-40 relative overflow-hidden bg-purple-100 dark:bg-purple-900">
+                    <span
+                        class="material-symbols-outlined text-[80px] text-purple-200 absolute -bottom-4 -right-4">data_object</span>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <span
+                            class="px-2 py-1 bg-purple-500 text-white text-[10px] font-bold uppercase rounded">Advanced</span>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="text-lg font-bold mb-3">Data Science with Python</h3>
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span
+                                class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lesson
+                                5 of 45</span>
+                            <span class="text-xs font-bold text-primary">12%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: 12%"></div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-5">Next: <span
+                            class="font-medium text-slate-900 dark:text-white">Pandas DataFrame Basics</span></p>
+                    <div class="flex flex-col gap-3">
+                        <button
+                            class="w-full py-3 bg-primary hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors active:scale-[0.98]">Continue</button>
+                        <button
+                            class="w-full py-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-xl text-sm transition-colors">View
+                            course details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course 4 (New) -->
+            <div
+                class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-700">
+                <div class="h-40 relative overflow-hidden bg-orange-100 dark:bg-orange-900">
+                    <span
+                        class="material-symbols-outlined text-[80px] text-orange-200 absolute -bottom-4 -right-4">campaign</span>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <span
+                            class="px-2 py-1 bg-orange-500 text-white text-[10px] font-bold uppercase rounded">Beginner</span>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="text-lg font-bold mb-3">Digital Marketing Masterclass</h3>
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span
+                                class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Lesson
+                                2 of 15</span>
+                            <span class="text-xs font-bold text-primary">8%</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary" style="width: 8%"></div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-5">Next: <span
+                            class="font-medium text-slate-900 dark:text-white">SEO Fundamentals</span></p>
+                    <div class="flex flex-col gap-3">
+                        <button
+                            class="w-full py-3 bg-primary hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors active:scale-[0.98]">Continue</button>
+                        <button
+                            class="w-full py-3 bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium rounded-xl text-sm transition-colors">View
+                            course details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <nav
+        class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/80 ios-blur border-t border-slate-200 dark:border-slate-800 pb-8 pt-2 px-8 flex justify-between items-center z-50">
+        <a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+            <span class="material-symbols-outlined">explore</span>
+            <span class="text-[10px] font-semibold">Courses</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-primary" href="#">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">play_lesson</span>
+            <span class="text-[10px] font-semibold">My Courses</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary transition-colors" href="#">
+            <span class="material-symbols-outlined">person</span>
+            <span class="text-[10px] font-semibold">Profile</span>
+        </a>
+    </nav>
+    <div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-slate-300 dark:bg-slate-600 rounded-full z-[60]">
+    </div>
+    <script>
         // Check for system theme preference
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
             document.documentElement.classList.add('dark');
         }
     </script>
 
-</body></html>
+</body>
+
+</html>

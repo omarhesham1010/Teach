@@ -5,50 +5,10 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>Quiz Results Summary</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            primary: "#4355c1", // Professional Blue as requested
-            "primary-dark": "#2563EB",
-            "background-light": "#111827", // Light grey/white mix
-            "background-dark": "#111827", // Dark grey/black
-            "card-light": "#FFFFFF",
-            "card-dark": "#1F2937",
-            "text-light": "#1F2937",
-            "text-dark": "#F9FAFB",
-            "secondary-text-light": "#6B7280",
-            "secondary-text-dark": "#9CA3AF",
-            "success": "#10B981",
-            "warning": "#F59E0B",
-          },
-          fontFamily: {
-            display: ["Inter", "sans-serif"],
-          },
-          borderRadius: {
-            DEFAULT: "0.75rem",
-          },
-        },
-      },
-    };
-  </script>
-  <style>
-    .progress-ring__circle {
-      transition: stroke-dashoffset 0.35s;
-      transform: rotate(-90deg);
-      transform-origin: 50% 50%;
-    }
-  </style>
-  <style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
+  <link rel="stylesheet" href="/static/teach/css/style.css">
+  <script src="/static/teach/js/script.js"></script>
 </head>
 
 <body
