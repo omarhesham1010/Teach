@@ -118,3 +118,5 @@ class AssignmentSubmissionAdmin(admin.ModelAdmin):
     list_filter = ("assignment__course",)
     search_fields = ("student__username", "student__email", "assignment__title")
     ordering = ("-submitted_at",)
+
+
