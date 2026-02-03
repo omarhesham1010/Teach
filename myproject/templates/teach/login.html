@@ -42,66 +42,59 @@
       <p class="text-slate-500 dark:text-slate-400 text-sm">Sign in to continue your learning journey</p>
     </div>
 
-    <form class="space-y-4">
+    <form method="POST" action="{% url 'login' %}" class="space-y-4">
+      {% csrf_token %}
+    
       <div class="space-y-4">
         <div class="relative group">
           <span
-            class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">mail_outline</span>
-          <input type="email" placeholder="Email Address"
+            class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">person_outline</span>
+          <input type="text" name="username" placeholder="Username"
             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
             required>
         </div>
-
+    
         <div class="relative group">
           <span
             class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">lock_outline</span>
-          <input type="password" placeholder="Password"
+          <input type="password" name="password" placeholder="Password"
             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
             required>
         </div>
       </div>
-
+    
       <div class="flex items-center justify-between mt-2">
         <div class="flex items-center gap-2">
-          <input type="checkbox" id="remember" class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary">
-          <label for="remember" class="text-xs text-slate-500 dark:text-slate-400 cursor-pointer select-none">Remember
-            me</label>
+          <input type="checkbox" id="remember" name="remember"
+            class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary">
+          <label for="remember"
+            class="text-xs text-slate-500 dark:text-slate-400 cursor-pointer select-none">Remember me</label>
         </div>
         <a href="#" class="text-xs text-primary font-semibold hover:underline">Forgot Password?</a>
       </div>
-
-      <a href="{% url 'instructor' %}"
-        class="block w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg shadow-primary/30 transition-all transform active:scale-[0.98] text-center mt-6">
-        Log In
-      </a>
-
-      <div class="relative my-6 text-center">
-        <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
+    
+      <!-- Errors -->
+      {% if messages %}
+        <div class="space-y-2 mt-2">
+          {% for message in messages %}
+            <div class="text-sm rounded-xl px-4 py-3 bg-red-50 text-red-700 border border-red-200">
+              {{ message }}
+            </div>
+          {% endfor %}
         </div>
-        <span
-          class="relative bg-white dark:bg-slate-900 px-4 text-xs text-slate-400 uppercase tracking-widest font-semibold">Or
-          continue with</span>
-      </div>
-
-      <div class="grid grid-cols-2 gap-3">
-        <button type="button"
-          class="flex items-center justify-center gap-2 py-3 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
-          <span class="text-sm font-semibold">Google</span>
-        </button>
-        <button type="button"
-          class="flex items-center justify-center gap-2 py-3 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all">
-          <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" class="w-5 h-5" alt="Facebook">
-          <span class="text-sm font-semibold">Facebook</span>
-        </button>
-      </div>
-
+      {% endif %}
+    
+      <button type="submit"
+        class="w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg shadow-primary/30 transition-all transform active:scale-[0.98] text-center mt-6">
+        Log In
+      </button>
+    
       <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
         Don't have an account?
         <a href="{% url 'signup' %}" class="text-primary font-bold hover:underline">Sign Up</a>
       </p>
     </form>
+    
   </div>
 </body>
 
