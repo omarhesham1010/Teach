@@ -77,7 +77,9 @@ def submission_success(request):
 
 
 def profile_view(request):
-    return render(request, "teach/profile.html")
+    profile = request.user.profile 
+    return render(request, "teach/profile.html", {"profile": profile})
+
 
 
 def settings_view(request):

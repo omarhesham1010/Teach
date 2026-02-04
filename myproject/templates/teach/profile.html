@@ -162,7 +162,217 @@
       </button>
 
     </div>
+    <!-- ✅ User Information (Improved UI / spacing) -->
+<section class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl shadow-2xl
+border border-white/20 dark:border-slate-800/60
+p-5 sm:p-7 md:p-8">
+
+<div class="flex items-center justify-between gap-3 mb-6">
+<div>
+<h2 class="text-lg sm:text-xl font-bold tracking-tight">User Information</h2>
+<p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+
+</p>
+</div>
+
+<button type="button"
+class="shrink-0 px-4 py-2 rounded-xl text-sm font-semibold
+bg-slate-100 dark:bg-slate-800
+text-primary hover:opacity-90 transition">
+Edit
+</button>
+</div>
+
+<!-- ✅ Better responsive grid: 1 col on mobile, 2 cols on md+ -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
+
+<!-- Field component: label + value box -->
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+First Name
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ user.first_name|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Second Name
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.second_name|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Third Name
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.third_name|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Last Name
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ user.last_name|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Gender
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.gender|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Phone Number
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-semibold
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.phone_number|default:profile.phone|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Father Phone Number
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.father_phone_number|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Mother Phone Number
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.mother_phone_number|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+School Name
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.school_name|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Parent's Job
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.parents_job|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Government
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.government|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Grade
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.grade|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Division
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.division|default:"—" }}
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+Gmail
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium break-all
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.gmail|default:user.email|default:"—" }}
+</div>
+</div>
+
+<!-- Make National ID full width -->
+<div class="space-y-2 md:col-span-2">
+<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+National ID
+</label>
+<div class="rounded-2xl px-4 py-3.5 text-sm font-medium break-all
+   bg-slate-50/80 dark:bg-slate-900/40
+   border border-slate-200/60 dark:border-slate-700/50
+   shadow-sm">
+{{ profile.national_id|default:"—" }}
+</div>
+</div>
+
+</div>
+</section>
+
   </main>
+  
 
   <!-- Bottom Nav -->
   <div class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 pt-3 pb-8 flex items-center justify-between z-50">
