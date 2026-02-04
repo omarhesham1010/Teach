@@ -17,7 +17,7 @@
   <script src="{% static 'teach/js/script.js' %}"></script>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4 overflow-x-hidden">
 
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
     <div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[100px] opacity-30 animate-blob"></div>
@@ -25,24 +25,29 @@
     <div class="absolute bottom-[20%] right-[20%] w-[20%] h-[20%] bg-indigo-500/20 rounded-full blur-[80px] opacity-20 animate-blob animation-delay-4000"></div>
   </div>
 
-  <div class="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+  <!-- ✅ Responsive gap + max width -->
+  <div class="relative z-10 w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 items-center">
 
+    <!-- ✅ Image: responsive + no stretch -->
     <div class="hidden md:flex justify-center">
       <img
         src="{% static 'teach/img/Welcome.png' %}"
         alt="Welcome"
-        class="max-w-full h-auto rounded-3xl shadow-2xl"
+        class="max-w-full h-auto max-h-[520px] object-contain rounded-3xl shadow-2xl"
       />
     </div>
 
-    <div class="w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/50 p-8 transform transition-all hover:scale-[1.005]">
+    <!-- ✅ Responsive padding -->
+    <div class="w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/50 p-6 sm:p-8 transform transition-all hover:scale-[1.005]">
 
       <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
           <span class="material-symbols-outlined text-2xl">lock</span>
         </div>
-        <h1 class="text-2xl font-bold tracking-tight mb-2">Welcome Back</h1>
-        <p class="text-slate-500 dark:text-slate-400 text-sm">Sign in to continue your learning journey</p>
+
+        <!-- ✅ Responsive typography -->
+        <h1 class="text-xl sm:text-2xl font-bold tracking-tight mb-2">Welcome Back</h1>
+        <p class="text-slate-500 dark:text-slate-400 text-xs sm:text-sm">Sign in to continue your learning journey</p>
       </div>
 
       <div class="grid grid-cols-2 gap-2 mb-6 p-1 rounded-xl bg-slate-100 dark:bg-slate-800">
@@ -123,7 +128,7 @@
               required>
           </div>
 
-          <!-- 👇 هنخليها hidden في البداية -->
+          <!-- hidden initially -->
           <div class="relative group hidden" id="codeBox">
             <span class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
               pin
@@ -134,13 +139,13 @@
           </div>
         </div>
 
-        <!-- ✅ زرار Send Code هيبعت action=send -->
-        <button type="submit" name="action" value="send" id="btnSend"
+        <!-- ✅ Send Code (NO submit) -->
+        <button type="button" id="btnSend"
           class="w-full py-3.5 bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-bold rounded-xl">
           Send Code
         </button>
 
-        <!-- ✅ زرار Verify مخفي لحد ما نضغط Send -->
+        <!-- ✅ Verify (submit) -->
         <button type="submit" name="action" value="verify" id="btnVerify" class="hidden
           w-full py-3.5 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg">
           Verify & Login
@@ -165,11 +170,17 @@
     const btnSend = document.getElementById("btnSend");
     const btnVerify = document.getElementById("btnVerify");
 
+    function resetCodeUI() {
+      codeBox.classList.add("hidden");
+      btnVerify.classList.add("hidden");
+    }
+
     function activatePassword() {
       tabPassword.className = "py-2 rounded-lg text-sm font-semibold bg-white dark:bg-slate-900 shadow transition";
       tabCode.className = "py-2 rounded-lg text-sm font-semibold text-slate-500 dark:text-slate-300 transition";
       formPassword.classList.remove("hidden");
       formCode.classList.add("hidden");
+      resetCodeUI();
     }
 
     function activateCode() {
@@ -177,18 +188,22 @@
       tabPassword.className = "py-2 rounded-lg text-sm font-semibold text-slate-500 dark:text-slate-300 transition";
       formCode.classList.remove("hidden");
       formPassword.classList.add("hidden");
+      resetCodeUI();
     }
 
     tabPassword.addEventListener("click", activatePassword);
     tabCode.addEventListener("click", activateCode);
 
-    // ✅ بعد ما المستخدم يضغط Send Code
-    // هنظهر خانة الكود + زرار Verify
+    // ✅ Show code input + verify button
     btnSend.addEventListener("click", () => {
-      setTimeout(() => {
-        codeBox.classList.remove("hidden");
-        btnVerify.classList.remove("hidden");
-      }, 100);
+      codeBox.classList.remove("hidden");
+      btnVerify.classList.remove("hidden");
+
+      // OPTIONAL: focus on code input
+      const codeInput = codeBox.querySelector('input[name="code"]');
+      if (codeInput) codeInput.focus();
+
+      
     });
   </script>
 
