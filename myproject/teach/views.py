@@ -1,11 +1,21 @@
+import random
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings
+
+from .models import LoginCode
 
 
 def login_view(request):
-   
+    # لو مسجّل دخول قبل كده، ودّيه على المنصة
+    if request.user.is_authenticated:
+        return redirect("instructor")
+
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         password = request.POST.get("password", "")
@@ -14,6 +24,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return redirect("instructor")
+
         messages.error(request, "Invalid username or password.")
 
     return render(request, "teach/login.html")
@@ -22,6 +33,8 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("login")
+
+
 @login_required
 def instructor(request):
     return render(request, "teach/instructor.html")
@@ -81,3 +94,88 @@ def notes_view(request):
 
 def discussion_view(request):
     return render(request, "teach/discussion.html")
+
+
+def login_code_view(request):
+    """
+    Code Login from the same login page:
+    - action=send   -> send OTP to user's email
+    - action=verify -> verify OTP and login
+    """
+    if request.user.is_authenticated:
+        return redirect("instructor")
+
+    if request.method != "POST":
+        return redirect("login")
+
+    action = request.POST.get("action")
+    identifier = request.POST.get("identifier", "").strip().lower()
+    code_entered = request.POST.get("code", "").strip()
+
+    if not identifier:
+        messages.error(request, "Please enter your email.")
+        return redirect("login")
+
+    # identifier = Email
+    try:
+        user = User.objects.get(email__iexact=identifier)
+    except User.DoesNotExist:
+        messages.error(request, "No account found with this email.")
+        return redirect("login")
+
+    # ===== SEND CODE =====
+    if action == "send":
+        otp = f"{random.randint(0, 999999):06d}"
+
+        # deactivate old codes
+        LoginCode.objects.filter(user=user, is_used=False).update(is_used=True)
+
+        # create new code
+        LoginCode.objects.create(user=user, code=otp)
+
+        # send email (real send if EMAIL settings configured)
+        send_mail(
+            subject="Your Login Code",
+            message=f"Your login code is: {otp}\nThis code expires in 10 minutes.",
+            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+
+        messages.success(request, "Code sent to your email. Please check inbox/spam.")
+        return redirect("login")
+
+    # ===== VERIFY CODE =====
+    if action == "verify":
+        if not code_entered or len(code_entered) != 6:
+            messages.error(request, "Please enter the 6-digit code.")
+            return redirect("login")
+
+        latest = (
+            LoginCode.objects.filter(user=user, is_used=False)
+            .order_by("-created_at")
+            .first()
+        )
+
+        if not latest:
+            messages.error(request, "No active code found. Please request a new one.")
+            return redirect("login")
+
+        if latest.is_expired(minutes=10):
+            latest.is_used = True
+            latest.save(update_fields=["is_used"])
+            messages.error(request, "Code expired. Please request a new code.")
+            return redirect("login")
+
+        if latest.code != code_entered:
+            messages.error(request, "Invalid code. Please try again.")
+            return redirect("login")
+
+        latest.is_used = True
+        latest.save(update_fields=["is_used"])
+
+        login(request, user)
+        return redirect("instructor")
+
+    messages.error(request, "Invalid action.")
+    return redirect("login")

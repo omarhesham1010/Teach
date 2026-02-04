@@ -1,10 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
-# =========================
-# Roles / Profile
-# =========================
+class LoginCode(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="login_codes")
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    def is_expired(self, minutes=10):
+        return timezone.now() > (self.created_at + timezone.timedelta(minutes=minutes))
+
+    def __str__(self):
+        return f"{self.user.username} - {self.code}"
+
+
 class Profile(models.Model):
     ROLE_CHOICES = [
         ("student", "Student"),
@@ -19,10 +30,6 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username} ({self.role})"
 
-
-# =========================
-# Courses / Content
-# =========================
 
 class Course(models.Model):
     title = models.CharField(max_length=200)
@@ -49,14 +56,12 @@ class Section(models.Model):
 class Lesson(models.Model):
     section = models.ForeignKey(Section, related_name="lessons", on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)    
-    content = models.TextField(blank=True)         
+    description = models.TextField(blank=True)
+    content = models.TextField(blank=True)
     order = models.PositiveIntegerField(default=1)
 
-   
     video_url = models.URLField(blank=True)
     video_file = models.FileField(upload_to="lessons/videos/", blank=True, null=True)
-
 
     duration_minutes = models.PositiveIntegerField(blank=True, null=True)
 
@@ -80,10 +85,6 @@ class LessonMaterial(models.Model):
         return self.title or self.file.name
 
 
-
-# =========================
-# Enrollment
-# =========================
 class Enrollment(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="enrollments")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="enrollments")
@@ -97,9 +98,6 @@ class Enrollment(models.Model):
         return f"{self.student.username} enrolled in {self.course.title}"
 
 
-# =========================
-# Quizzes
-# =========================
 class Quiz(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="quizzes")
     title = models.CharField(max_length=200)
@@ -142,7 +140,6 @@ class QuizSubmission(models.Model):
         return f"{self.student.username} - {self.quiz.title}"
 
 
-# Optional: store answers 
 class QuizAnswer(models.Model):
     submission = models.ForeignKey(QuizSubmission, on_delete=models.CASCADE, related_name="answers")
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="answers")
@@ -155,9 +152,6 @@ class QuizAnswer(models.Model):
         return f"{self.submission.student.username} - Q:{self.question.id}"
 
 
-# =========================
-# Assignments
-# =========================
 class Assignment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="assignments")
     title = models.CharField(max_length=200)

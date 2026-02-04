@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html class="light" lang="en">
 
@@ -5,97 +6,191 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap"
-    rel="stylesheet" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-  <link rel="stylesheet" href="/static/teach/css/style.css">
-  <script src="/static/teach/js/script.js"></script>
+
+  <link rel="stylesheet" href="{% static 'teach/css/style.css' %}">
+  <script src="{% static 'teach/js/script.js' %}"></script>
 </head>
 
-<body
-  class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
 
-  <!-- Background decorations -->
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-    <div
-      class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[100px] opacity-30 animate-blob">
-    </div>
-    <div
-      class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-[100px] opacity-30 animate-blob animation-delay-2000">
-    </div>
-    <div
-      class="absolute bottom-[20%] right-[20%] w-[20%] h-[20%] bg-indigo-500/20 rounded-full blur-[80px] opacity-20 animate-blob animation-delay-4000">
-    </div>
+    <div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[100px] opacity-30 animate-blob"></div>
+    <div class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-[100px] opacity-30 animate-blob animation-delay-2000"></div>
+    <div class="absolute bottom-[20%] right-[20%] w-[20%] h-[20%] bg-indigo-500/20 rounded-full blur-[80px] opacity-20 animate-blob animation-delay-4000"></div>
   </div>
 
-  <div
-    class="w-full max-w-md bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/50 p-8 transform transition-all hover:scale-[1.005]">
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
-        <span class="material-symbols-outlined text-2xl">lock</span>
-      </div>
-      <h1 class="text-2xl font-bold tracking-tight mb-2">Welcome Back</h1>
-      <p class="text-slate-500 dark:text-slate-400 text-sm">Sign in to continue your learning journey</p>
+  <div class="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+
+    <div class="hidden md:flex justify-center">
+      <img
+        src="{% static 'teach/img/Welcome.png' %}"
+        alt="Welcome"
+        class="max-w-full h-auto rounded-3xl shadow-2xl"
+      />
     </div>
 
-    <form method="POST" action="{% url 'login' %}" class="space-y-4">
-      {% csrf_token %}
-    
-      <div class="space-y-4">
-        <div class="relative group">
-          <span
-            class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">person_outline</span>
-          <input type="text" name="username" placeholder="Username"
-            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
-            required>
+    <div class="w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/50 p-8 transform transition-all hover:scale-[1.005]">
+
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
+          <span class="material-symbols-outlined text-2xl">lock</span>
         </div>
-    
-        <div class="relative group">
-          <span
-            class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">lock_outline</span>
-          <input type="password" name="password" placeholder="Password"
-            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
-            required>
-        </div>
+        <h1 class="text-2xl font-bold tracking-tight mb-2">Welcome Back</h1>
+        <p class="text-slate-500 dark:text-slate-400 text-sm">Sign in to continue your learning journey</p>
       </div>
-    
-      <div class="flex items-center justify-between mt-2">
-        <div class="flex items-center gap-2">
-          <input type="checkbox" id="remember" name="remember"
-            class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary">
-          <label for="remember"
-            class="text-xs text-slate-500 dark:text-slate-400 cursor-pointer select-none">Remember me</label>
-        </div>
-        <a href="#" class="text-xs text-primary font-semibold hover:underline">Forgot Password?</a>
+
+      <div class="grid grid-cols-2 gap-2 mb-6 p-1 rounded-xl bg-slate-100 dark:bg-slate-800">
+        <button type="button" id="tabPassword"
+          class="py-2 rounded-lg text-sm font-semibold bg-white dark:bg-slate-900 shadow transition">
+          Password
+        </button>
+        <button type="button" id="tabCode"
+          class="py-2 rounded-lg text-sm font-semibold text-slate-500 dark:text-slate-300 transition">
+          Code
+        </button>
       </div>
-    
-      <!-- Errors -->
+
       {% if messages %}
-        <div class="space-y-2 mt-2">
+        <div class="space-y-2 mb-4">
           {% for message in messages %}
-            <div class="text-sm rounded-xl px-4 py-3 bg-red-50 text-red-700 border border-red-200">
+            <div class="text-sm rounded-xl px-4 py-3 border
+              {% if message.tags == 'error' %}
+                bg-red-50 text-red-700 border-red-200
+              {% elif message.tags == 'success' %}
+                bg-green-50 text-green-700 border-green-200
+              {% else %}
+                bg-slate-50 text-slate-700 border-slate-200
+              {% endif %}
+            ">
               {{ message }}
             </div>
           {% endfor %}
         </div>
       {% endif %}
-    
-      <button type="submit"
-        class="w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg shadow-primary/30 transition-all transform active:scale-[0.98] text-center mt-6">
-        Log In
-      </button>
-    
-      <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
-        Don't have an account?
-        <a href="{% url 'signup' %}" class="text-primary font-bold hover:underline">Sign Up</a>
-      </p>
-    </form>
-    
-  </div>
-</body>
 
+      <!-- FORM 1: Password Login -->
+      <form id="formPassword" method="POST" action="{% url 'login' %}" class="space-y-4">
+        {% csrf_token %}
+
+        <div class="space-y-4">
+          <div class="relative group">
+            <span class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
+              person_outline
+            </span>
+            <input type="text" name="username" placeholder="Username"
+              class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl py-3.5 pl-11 pr-4 focus:ring-2 focus:ring-primary/50"
+              required>
+          </div>
+
+          <div class="relative group">
+            <span class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
+              lock_outline
+            </span>
+            <input type="password" name="password" placeholder="Password"
+              class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl py-3.5 pl-11 pr-4 focus:ring-2 focus:ring-primary/50"
+              required>
+          </div>
+        </div>
+
+        <button type="submit"
+          class="w-full py-3.5 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg">
+          Log In
+        </button>
+
+        <p class="text-center text-sm text-slate-500 mt-6">
+          Don't have an account?
+          <a href="{% url 'signup' %}" class="text-primary font-bold hover:underline">Sign Up</a>
+        </p>
+      </form>
+
+      <!-- FORM 2: Code Login -->
+      <form id="formCode" method="POST" action="{% url 'login_code' %}" class="space-y-4 hidden">
+        {% csrf_token %}
+
+        <div class="space-y-4">
+          <div class="relative group">
+            <span class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
+              mail_outline
+            </span>
+            <input type="text" name="identifier" placeholder="Email"
+              class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl py-3.5 pl-11 pr-4 focus:ring-2 focus:ring-primary/50"
+              required>
+          </div>
+
+          <!-- 👇 هنخليها hidden في البداية -->
+          <div class="relative group hidden" id="codeBox">
+            <span class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
+              pin
+            </span>
+            <input type="text" name="code" placeholder="Enter 6-digit code"
+              class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl py-3.5 pl-11 pr-4 focus:ring-2 focus:ring-primary/50"
+              inputmode="numeric" maxlength="6">
+          </div>
+        </div>
+
+        <!-- ✅ زرار Send Code هيبعت action=send -->
+        <button type="submit" name="action" value="send" id="btnSend"
+          class="w-full py-3.5 bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-bold rounded-xl">
+          Send Code
+        </button>
+
+        <!-- ✅ زرار Verify مخفي لحد ما نضغط Send -->
+        <button type="submit" name="action" value="verify" id="btnVerify" class="hidden
+          w-full py-3.5 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg">
+          Verify & Login
+        </button>
+
+        <p class="text-center text-sm text-slate-500 mt-6">
+          Don't have an account?
+          <a href="{% url 'signup' %}" class="text-primary font-bold hover:underline">Sign Up</a>
+        </p>
+      </form>
+
+    </div>
+  </div>
+
+  <script>
+    const tabPassword = document.getElementById("tabPassword");
+    const tabCode = document.getElementById("tabCode");
+    const formPassword = document.getElementById("formPassword");
+    const formCode = document.getElementById("formCode");
+
+    const codeBox = document.getElementById("codeBox");
+    const btnSend = document.getElementById("btnSend");
+    const btnVerify = document.getElementById("btnVerify");
+
+    function activatePassword() {
+      tabPassword.className = "py-2 rounded-lg text-sm font-semibold bg-white dark:bg-slate-900 shadow transition";
+      tabCode.className = "py-2 rounded-lg text-sm font-semibold text-slate-500 dark:text-slate-300 transition";
+      formPassword.classList.remove("hidden");
+      formCode.classList.add("hidden");
+    }
+
+    function activateCode() {
+      tabCode.className = "py-2 rounded-lg text-sm font-semibold bg-white dark:bg-slate-900 shadow transition";
+      tabPassword.className = "py-2 rounded-lg text-sm font-semibold text-slate-500 dark:text-slate-300 transition";
+      formCode.classList.remove("hidden");
+      formPassword.classList.add("hidden");
+    }
+
+    tabPassword.addEventListener("click", activatePassword);
+    tabCode.addEventListener("click", activateCode);
+
+    // ✅ بعد ما المستخدم يضغط Send Code
+    // هنظهر خانة الكود + زرار Verify
+    btnSend.addEventListener("click", () => {
+      setTimeout(() => {
+        codeBox.classList.remove("hidden");
+        btnVerify.classList.remove("hidden");
+      }, 100);
+    });
+  </script>
+
+</body>
 </html>
