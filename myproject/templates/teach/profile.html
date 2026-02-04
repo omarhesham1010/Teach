@@ -14,7 +14,6 @@
   <script src="/static/teach/js/script.js"></script>
 
   <style>
-    /* optional: smoother horizontal scroll */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -42,12 +41,10 @@
 
   <!-- MAIN -->
   <main class="px-4 py-6">
-    <!-- ✅ Centered modern card (Responsive container) -->
     <div class="max-w-3xl mx-auto space-y-6">
 
-      <!-- ✅ Profile Card -->
+      <!-- Profile Card -->
       <section class="bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-white/30 dark:border-slate-800/60 rounded-3xl shadow-2xl p-6 sm:p-8">
-        <!-- Avatar Top Center -->
         <div class="flex flex-col items-center text-center">
           <div class="relative mb-4">
             <img
@@ -65,14 +62,18 @@
             </button>
           </div>
 
-          <!-- Full name under avatar -->
-          <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Alex Johnson</h1>
+          <!-- ✅ Dynamic Name -->
+          <h1 class="text-xl sm:text-2xl font-bold tracking-tight">
+            {{ user.first_name|default:"" }} {{ user.last_name|default:"" }}
+          </h1>
+
+          <!-- ✅ Dynamic Role -->
           <p class="mt-1 text-sm sm:text-base text-slate-500 dark:text-slate-400">
-            Senior Student • Computer Science
+            {{ profile.role|default:"—"|title }}
           </p>
         </div>
 
-        <!-- ✅ Stats (Responsive) -->
+        <!-- Stats (still static as you had it) -->
         <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl text-center shadow-sm border border-slate-100 dark:border-slate-700/60">
             <span class="block text-2xl font-bold text-primary">12</span>
@@ -91,7 +92,7 @@
         </div>
       </section>
 
-      <!-- ✅ Achievements Card -->
+      <!-- Achievements -->
       <section class="bg-white dark:bg-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700/60">
         <div class="flex items-center justify-between mb-4">
           <h2 class="font-bold text-lg">Achievements</h2>
@@ -129,7 +130,7 @@
         </div>
       </section>
 
-      <!-- ✅ Learning Activity Card -->
+      <!-- Learning Activity -->
       <section class="bg-white dark:bg-slate-800 rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-100 dark:border-slate-700/60">
         <h3 class="font-bold mb-4">Learning Activity</h3>
 
@@ -156,223 +157,145 @@
         </div>
       </section>
 
-      <!-- ✅ Logout -->
+      <!-- Logout -->
       <button class="w-full py-4 bg-slate-100 dark:bg-slate-800 text-red-500 font-bold rounded-2xl hover:opacity-90 transition">
         Log Out
       </button>
 
     </div>
-    <!-- ✅ User Information (Improved UI / spacing) -->
-<section class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl shadow-2xl
-border border-white/20 dark:border-slate-800/60
-p-5 sm:p-7 md:p-8">
 
-<div class="flex items-center justify-between gap-3 mb-6">
-<div>
-<h2 class="text-lg sm:text-xl font-bold tracking-tight">User Information</h2>
-<p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+    <!-- User Information -->
+    <section class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl shadow-2xl
+      border border-white/20 dark:border-slate-800/60
+      p-5 sm:p-7 md:p-8 mt-6">
 
-</p>
-</div>
+      <div class="flex items-center justify-between gap-3 mb-6">
+        <div>
+          <h2 class="text-lg sm:text-xl font-bold tracking-tight">User Information</h2>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1"></p>
+        </div>
 
-<button type="button"
-class="shrink-0 px-4 py-2 rounded-xl text-sm font-semibold
-bg-slate-100 dark:bg-slate-800
-text-primary hover:opacity-90 transition">
-Edit
-</button>
-</div>
+        <a href="{% url 'edit_user_profile' %}"
+           class="flex items-center gap-1 px-4 py-2 rounded-xl
+                  bg-slate-100 dark:bg-slate-800
+                  text-primary text-sm font-semibold hover:opacity-90 transition">
+          <span class="material-icons-outlined text-base">edit</span>
+          <span class="hidden sm:inline">Edit</span>
+        </a>
+      </div>
 
-<!-- ✅ Better responsive grid: 1 col on mobile, 2 cols on md+ -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 md:gap-6">
 
-<!-- Field component: label + value box -->
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-First Name
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ user.first_name|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">First Name</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ user.first_name|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Second Name
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.second_name|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Second Name</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.second_name|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Third Name
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.third_name|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Third Name</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.third_name|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Last Name
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ user.last_name|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Last Name</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ user.last_name|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Gender
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.gender|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Gender</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.gender|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Phone Number
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-semibold
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.phone_number|default:profile.phone|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Phone Number</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-semibold bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            <!-- ✅ FIXED -->
+            {{ profile.phone_number|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Father Phone Number
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.father_phone_number|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Father Phone Number</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.father_phone_number|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Mother Phone Number
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.mother_phone_number|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Mother Phone Number</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.mother_phone_number|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-School Name
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.school_name|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">School Name</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.school_name|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Parent's Job
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.parents_job|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Parent's Job</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.parents_job|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Government
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.government|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Government</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.government|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Grade
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.grade|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Grade</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.grade|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Division
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.division|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Division</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.division|default:"—" }}
+          </div>
+        </div>
 
-<div class="space-y-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-Gmail
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium break-all
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.gmail|default:user.email|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Gmail</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium break-all bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.gmail|default:user.email|default:"—" }}
+          </div>
+        </div>
 
-<!-- Make National ID full width -->
-<div class="space-y-2 md:col-span-2">
-<label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
-National ID
-</label>
-<div class="rounded-2xl px-4 py-3.5 text-sm font-medium break-all
-   bg-slate-50/80 dark:bg-slate-900/40
-   border border-slate-200/60 dark:border-slate-700/50
-   shadow-sm">
-{{ profile.national_id|default:"—" }}
-</div>
-</div>
+        <div class="space-y-2 md:col-span-2">
+          <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">National ID</label>
+          <div class="rounded-2xl px-4 py-3.5 text-sm font-medium break-all bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
+            {{ profile.national_id|default:"—" }}
+          </div>
+        </div>
 
-</div>
-</section>
+      </div>
+    </section>
 
   </main>
-  
 
   <!-- Bottom Nav -->
   <div class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 pt-3 pb-8 flex items-center justify-between z-50">

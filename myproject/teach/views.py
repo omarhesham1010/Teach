@@ -7,12 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
-
+from .models import Profile
 from .models import LoginCode
 
 
 def login_view(request):
-    # لو مسجّل دخول قبل كده، ودّيه على المنصة
+    
     if request.user.is_authenticated:
         return redirect("instructor")
 
@@ -76,10 +76,11 @@ def submission_success(request):
     return render(request, "teach/submissionsuccess.html")
 
 
-def profile_view(request):
-    profile = request.user.profile 
-    return render(request, "teach/profile.html", {"profile": profile})
 
+@login_required
+def profile_view(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    return render(request, "teach/profile.html", {"profile": profile})
 
 
 def settings_view(request):
@@ -181,3 +182,32 @@ def login_code_view(request):
 
     messages.error(request, "Invalid action.")
     return redirect("login")
+
+
+@login_required
+def edit_user_profile(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        request.user.first_name = request.POST.get("first_name", "")
+        request.user.last_name  = request.POST.get("last_name", "")
+        request.user.save()
+
+        profile.second_name = request.POST.get("second_name", "")
+        profile.third_name = request.POST.get("third_name", "")
+        profile.gender = request.POST.get("gender", "")
+        profile.phone_number = request.POST.get("phone_number", "")
+        profile.father_phone_number = request.POST.get("father_phone_number", "")
+        profile.mother_phone_number = request.POST.get("mother_phone_number", "")
+        profile.school_name = request.POST.get("school_name", "")
+        profile.parents_job = request.POST.get("parents_job", "")
+        profile.government = request.POST.get("government", "")
+        profile.grade = request.POST.get("grade", "")
+        profile.division = request.POST.get("division", "")
+        profile.gmail = request.POST.get("gmail", "")
+        profile.national_id = request.POST.get("national_id", "")
+        profile.save()
+
+        return redirect("profile")
+
+    return render(request, "teach/edit_user_profile.html", {"profile": profile})
