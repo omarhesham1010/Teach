@@ -59,9 +59,11 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                 'django.template.context_processors.csrf',
             ],
         },
     },
@@ -145,3 +147,8 @@ EMAIL_HOST_PASSWORD = "YOUR_APP_PASSWORD"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# =========================
+# Custom User Model
+# =========================
+AUTH_USER_MODEL = 'teach.User'

@@ -2,32 +2,35 @@ import random
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_protect
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import Profile
 from .models import LoginCode
 
+User = get_user_model()
 
+
+@csrf_protect
 def login_view(request):
     
     if request.user.is_authenticated:
         return redirect("instructor")
 
     if request.method == "POST":
-        username = request.POST.get("username", "").strip()
+        national_id = request.POST.get("username", "").strip()  # Form field is still "username" but contains national_id
         password = request.POST.get("password", "")
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=national_id, password=password)
         if user is not None:
             login(request, user)
             return redirect("instructor")
 
-        messages.error(request, "Invalid username or password.")
+        messages.error(request, "Invalid National ID or password.")
 
     return render(request, "teach/login.html")
+
 
 
 def logout_view(request):
@@ -79,8 +82,8 @@ def submission_success(request):
 
 @login_required
 def profile_view(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
-    return render(request, "teach/profile.html", {"profile": profile})
+    # User model now contains all profile fields directly
+    return render(request, "teach/profile.html", {"user": request.user})
 
 
 def settings_view(request):
@@ -99,6 +102,7 @@ def discussion_view(request):
     return render(request, "teach/discussion.html")
 
 
+@csrf_protect
 def login_code_view(request):
     """
     Code Login from the same login page:
@@ -186,28 +190,24 @@ def login_code_view(request):
 
 @login_required
 def edit_user_profile(request):
-    profile, created = Profile.objects.get_or_create(user=request.user)
-
     if request.method == "POST":
-        request.user.first_name = request.POST.get("first_name", "")
-        request.user.last_name  = request.POST.get("last_name", "")
-        request.user.save()
+        user = request.user
+        user.first_name = request.POST.get("first_name", "")
+        user.second_name = request.POST.get("second_name", "")
+        user.third_name = request.POST.get("third_name", "")
+        user.gender = request.POST.get("gender", "")
+        user.phone_number = request.POST.get("phone_number", "")
+        user.father_phone_number = request.POST.get("father_phone_number", "")
+        user.mother_phone_number = request.POST.get("mother_phone_number", "")
+        user.school_name = request.POST.get("school_name", "")
+        user.parents_job = request.POST.get("parents_job", "")
+        user.government = request.POST.get("government", "")
+        user.grade = request.POST.get("grade", "")
+        user.division = request.POST.get("division", "")
+        user.email = request.POST.get("gmail", user.email)  # Update email if provided
+        user.save()
 
-        profile.second_name = request.POST.get("second_name", "")
-        profile.third_name = request.POST.get("third_name", "")
-        profile.gender = request.POST.get("gender", "")
-        profile.phone_number = request.POST.get("phone_number", "")
-        profile.father_phone_number = request.POST.get("father_phone_number", "")
-        profile.mother_phone_number = request.POST.get("mother_phone_number", "")
-        profile.school_name = request.POST.get("school_name", "")
-        profile.parents_job = request.POST.get("parents_job", "")
-        profile.government = request.POST.get("government", "")
-        profile.grade = request.POST.get("grade", "")
-        profile.division = request.POST.get("division", "")
-        profile.gmail = request.POST.get("gmail", "")
-        profile.national_id = request.POST.get("national_id", "")
-        profile.save()
-
+        messages.success(request, "Profile updated successfully.")
         return redirect("profile")
 
-    return render(request, "teach/edit_user_profile.html", {"profile": profile})
+    return render(request, "teach/edit_user_profile.html", {"user": request.user})
