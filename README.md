@@ -1,7 +1,7 @@
 # 🧑‍🎓 Teach Management System
 
 A web-based clinic management system built with **Django** to manage patients, appointments, and clinic operations.
-
+ 
 ---
 
 ## 📌 Project Requirements
