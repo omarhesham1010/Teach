@@ -196,9 +196,7 @@
       </section>
 
       <!-- Logout -->
-      <button class="w-full py-4 bg-slate-100 dark:bg-slate-800 text-red-500 font-bold rounded-2xl hover:opacity-90 transition">
-        Log Out
-      </button>
+     
 
     </div>
 
@@ -351,7 +349,19 @@
 
       </div>
     </section>
-
+    <div class="mt-10 flex justify-center">
+      <form method="post" action="{% url 'logout' %}" class="w-[80%]">
+        {% csrf_token %}
+        <button type="submit"
+          class="w-full py-4 rounded-2xl
+                 bg-slate-100 dark:bg-slate-800
+                 text-red-500 font-bold
+                 hover:opacity-90 transition">
+          Log Out
+        </button>
+      </form>
+    </div>
+    
   </main>
 
   <!-- Bottom Nav -->
@@ -373,6 +383,7 @@
       <span class="text-[10px] font-bold">Profile</span>
     </a>
   </div>
+  
 
 </body>
 </html>
