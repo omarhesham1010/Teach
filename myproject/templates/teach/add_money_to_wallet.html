@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Add Money</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+
+  <link rel="stylesheet" href="/static/teach/css/style.css">
+  <script src="/static/teach/js/script.js"></script>
+
+  <style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* keep inputs readable (password dots issue style idea) */
+    input[type="number"], input[type="text"]{
+      color:#0f172a;
+      background: rgba(255,255,255,.9);
+    }
+    .dark input[type="number"], .dark input[type="text"]{
+      color:#0f172a;
+      background: rgba(255,255,255,.9);
+    }
+  </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 pb-24">
+
+  <!-- TOP NAV (same style) -->
+  <nav class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <a href="{% url 'profile' %}" class="flex items-center gap-2">
+        <span class="material-icons-outlined text-primary">arrow_back</span>
+        <span class="font-bold text-lg tracking-tight">Add Money</span>
+      </a>
+    </div>
+
+    <div class="flex gap-4 items-center">
+      <button onclick="toggleDarkMode()" class="text-slate-500 hover:text-primary">
+        <span class="material-icons-outlined">dark_mode</span>
+      </button>
+      <a href="{% url 'settings' %}" class="text-slate-500 hover:text-primary">
+        <span class="material-icons-outlined">settings</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="px-4 py-6">
+    <div class="max-w-3xl mx-auto space-y-6">
+
+      <!-- Wallet Highlight Card -->
+      <section class="bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-white/30 dark:border-slate-800/60 rounded-3xl shadow-2xl p-6 sm:p-8">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+              <span class="material-icons-outlined text-emerald-600 dark:text-emerald-400">account_balance_wallet</span>
+            </div>
+            <div>
+              <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Wallet Top Up</h1>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Add money to your wallet in EGP</p>
+            </div>
+          </div>
+
+          <div class="text-right">
+            <p class="text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Current Balance</p>
+            <p class="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 leading-tight">
+              {{ wallet_balance|default:"0"|floatformat:2 }} <span class="text-sm font-bold">EGP</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Add Money Form Card (same style cards) -->
+      <section class="bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/60 p-5 sm:p-7 md:p-8">
+        <div class="flex items-center justify-between gap-3 mb-6">
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold tracking-tight">Add Amount</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Choose how much you want to add</p>
+          </div>
+
+          <a href="{% url 'profile' %}"
+             class="flex items-center gap-1 px-4 py-2 rounded-xl
+                    bg-slate-100 dark:bg-slate-800
+                    text-primary text-sm font-semibold hover:opacity-90 transition">
+            <span class="material-icons-outlined text-base">close</span>
+            <span class="hidden sm:inline">Cancel</span>
+          </a>
+        </div>
+
+        <!-- ✅ Placeholder form (for now) -->
+        <form method="post" class="space-y-5">
+          {% csrf_token %}
+
+          <div class="space-y-2">
+            <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+              Amount (EGP)
+            </label>
+
+            <input
+              type="number"
+              name="amount"
+              min="1"
+              step="1"
+              placeholder="e.g. 200"
+              class="w-full rounded-2xl px-4 py-3.5 text-sm font-semibold
+                     bg-slate-50/80 dark:bg-slate-900/40
+                     border border-slate-200/60 dark:border-slate-700/50
+                     shadow-sm focus:ring-2 focus:ring-primary/30 focus:border-primary/40"
+              required
+            />
+          </div>
+
+          <!-- Quick chips -->
+          <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+            <button type="button" onclick="document.querySelector('input[name=amount]').value=50"
+              class="px-4 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-200 hover:opacity-90 transition">
+              +50
+            </button>
+            <button type="button" onclick="document.querySelector('input[name=amount]').value=100"
+              class="px-4 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-200 hover:opacity-90 transition">
+              +100
+            </button>
+            <button type="button" onclick="document.querySelector('input[name=amount]').value=200"
+              class="px-4 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-200 hover:opacity-90 transition">
+              +200
+            </button>
+            <button type="button" onclick="document.querySelector('input[name=amount]').value=500"
+              class="px-4 py-2 rounded-2xl bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-200 hover:opacity-90 transition">
+              +500
+            </button>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit"
+            class="w-full py-4 rounded-2xl bg-emerald-600 text-white font-bold hover:opacity-90 transition flex items-center justify-center gap-2">
+            <span class="material-icons-outlined text-base">add_circle</span>
+            Add Money
+          </button>
+
+          <p class="text-xs text-slate-500 dark:text-slate-400 text-center">
+            (Later) this button will connect to payment gateway.
+          </p>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Bottom Nav (same as profile) -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 pt-3 pb-8 flex items-center justify-between z-50">
+    <a href="{% url 'instructor' %}" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary">
+      <span class="material-icons-outlined">home</span>
+      <span class="text-[10px]">Home</span>
+    </a>
+    <a href="{% url 'instructor' %}" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary">
+      <span class="material-icons-outlined">people</span>
+      <span class="text-[10px]">Instructors</span>
+    </a>
+    <a href="{% url 'messages' %}" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary">
+      <span class="material-icons-outlined">chat_bubble_outline</span>
+      <span class="text-[10px]">Messages</span>
+    </a>
+    <a href="{% url 'profile' %}" class="flex flex-col items-center gap-1 text-primary">
+      <span class="material-icons-outlined">person</span>
+      <span class="text-[10px] font-bold">Profile</span>
+    </a>
+  </div>
+
+</body>
+</html>

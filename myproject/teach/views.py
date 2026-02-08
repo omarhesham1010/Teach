@@ -88,23 +88,16 @@ def submission_success(request):
     return render(request, "teach/submissionsuccess.html")
 
 
-
+    
 @login_required
 def profile_view(request):
-    wallet, created = Wallet.objects.get_or_create(user=request.user)
+    wallet, _ = Wallet.objects.get_or_create(user=request.user)
 
-    return render(
-        request,
-        "teach/profile.html",
-        {
-            "user": request.user,
-            "wallet_balance": wallet.balance,
-            "wallet_updated_at": wallet.updated_at,
-        }
-    )
-
-    
-
+    return render(request, "teach/profile.html", {
+        "user": request.user,
+        "wallet_balance": wallet.balance,
+        "wallet_updated_at": wallet.updated_at,
+    })
 
 def settings_view(request):
     return render(request, "teach/settings.html")
@@ -244,3 +237,33 @@ def reset_password(request):
 
     return render(request, "teach/reset_password.html", {"form": form})
 
+from decimal import Decimal
+from .models import Wallet
+
+@login_required
+def add_money_to_wallet(request):
+    wallet, _ = Wallet.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        amount_str = request.POST.get("amount", "").strip()
+
+        try:
+            amount = Decimal(amount_str)
+        except:
+            messages.error(request, "Please enter a valid amount.")
+            return redirect("add_money_to_wallet")
+
+        if amount <= 0:
+            messages.error(request, "Amount must be greater than 0.")
+            return redirect("add_money_to_wallet")
+
+        # ✅ Add money
+        wallet.balance = wallet.balance + amount
+        wallet.save()
+
+        messages.success(request, f"Added {amount} EGP to your wallet.")
+        return redirect("profile")
+
+    return render(request, "teach/add_money_to_wallet.html", {
+        "wallet_balance": wallet.balance,
+    })

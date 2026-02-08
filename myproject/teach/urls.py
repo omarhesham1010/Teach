@@ -23,4 +23,6 @@ urlpatterns = [
     path("messages/", views.messages_view, name="messages"),
     path("notes/", views.notes_view, name="notes"),
     path("discussion/", views.discussion_view, name="discussion"),
+    path("wallet/add/", views.add_money_to_wallet, name="add_money_to_wallet"),
+
 ]
