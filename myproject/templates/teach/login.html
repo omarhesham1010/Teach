@@ -25,15 +25,17 @@
     <div class="absolute bottom-[20%] right-[20%] w-[20%] h-[20%] bg-indigo-500/20 rounded-full blur-[80px] opacity-20 animate-blob animation-delay-4000"></div>
   </div>
 
-  <div class="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+  <div class="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
 
-    <div class="hidden md:flex justify-center">
-      <img
-        src="{% static 'teach/img/Welcome.png' %}"
-        alt="Welcome"
-        class="max-w-full h-auto rounded-3xl shadow-2xl"
-      />
-    </div>
+<div class="relative w-full h-56 md:h-full rounded-3xl overflow-hidden shadow-2xl">
+  <img
+    src="{% static 'teach/img/Welcome.png' %}"
+    alt="Welcome"
+    class="absolute inset-0 w-full h-full object-cover"
+  />
+  <div class="absolute inset-0 bg-black/20"></div>
+</div>
+
 
     <div class="w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/50 p-8 transform transition-all hover:scale-[1.005]">
 
