@@ -10,6 +10,8 @@ from django.conf import settings
 from .models import LoginCode
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from .models import LoginCode, Wallet
+
 
 
 
@@ -89,8 +91,19 @@ def submission_success(request):
 
 @login_required
 def profile_view(request):
-    # User model now contains all profile fields directly
-    return render(request, "teach/profile.html", {"user": request.user})
+    wallet, created = Wallet.objects.get_or_create(user=request.user)
+
+    return render(
+        request,
+        "teach/profile.html",
+        {
+            "user": request.user,
+            "wallet_balance": wallet.balance,
+            "wallet_updated_at": wallet.updated_at,
+        }
+    )
+
+    
 
 
 def settings_view(request):

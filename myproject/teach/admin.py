@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.html import format_html
+
 from .models import (
     User,
     UserCash,
@@ -20,6 +21,7 @@ from .models import (
     QuizResult,
     Lesson,
     LessonFile,
+    Wallet,
 )
 
 
@@ -258,3 +260,9 @@ class LessonFileAdmin(admin.ModelAdmin):
     list_filter = ('file_type', 'lesson__content__course')
     search_fields = ('file_name', 'lesson__content__title')
     ordering = ('lesson', 'file_name')
+
+
+
+@admin.register(Wallet)
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ("user", "balance", "updated_at")
