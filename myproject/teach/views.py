@@ -8,6 +8,13 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import LoginCode
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
+
+
+
+
 
 User = get_user_model()
 
@@ -211,3 +218,16 @@ def edit_user_profile(request):
         return redirect("profile")
 
     return render(request, "teach/edit_user_profile.html", {"user": request.user})
+@login_required
+def reset_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user) 
+            return redirect("profile")  
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    return render(request, "teach/reset_password.html", {"form": form})
+
