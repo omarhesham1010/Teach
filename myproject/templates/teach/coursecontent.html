@@ -56,6 +56,37 @@
   <main class="flex-1 overflow-y-auto no-scrollbar pb-28 lg:pb-10">
     <div class="mx-auto w-full max-w-6xl">
 
+      <!-- ✅ Lesson Header (Title + Duration optional + Mark as completed) -->
+      <section class="p-4 pb-0">
+        <div
+          class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <p class="text-xs font-bold uppercase tracking-wider text-primary mb-1">Lesson</p>
+
+              <!-- Lesson title -->
+              <h2 id="lessonHeaderTitle" class="text-lg font-bold truncate">
+                Introduction to User Research
+              </h2>
+
+              <!-- Duration (optional) -->
+              <div id="lessonHeaderDurationRow"
+                class="mt-2 flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-rounded text-base">schedule</span>
+                <span id="lessonHeaderDuration">12:45</span>
+              </div>
+            </div>
+
+            <!-- Mark as completed -->
+            <button id="lessonHeaderCompleteBtn" type="button"
+              class="shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/25 active:scale-95 transition">
+              <span class="material-symbols-rounded text-xl">check_circle</span>
+              <span id="lessonHeaderCompleteText">Mark as completed</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       <!-- Responsive layout: Video + Side panel -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 p-4">
 
@@ -204,7 +235,8 @@
             </button>
 
             <div class="accordion-content px-3">
-              <div class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+              <div
+                class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
                 <div class="grid grid-cols-2 gap-3 text-sm">
                   <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
                     <div class="text-xs text-slate-500">Status</div>
@@ -255,7 +287,8 @@
             </button>
 
             <div class="accordion-content px-3">
-              <div class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+              <div
+                class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
                 <div class="grid grid-cols-2 gap-3 text-sm">
                   <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
                     <div class="text-xs text-slate-500">Questions</div>
@@ -296,7 +329,8 @@
       <span id="markCompleteText">Mark Complete</span>
     </button>
 
-    <a href="{% url 'course_content' %}"
+    <!-- ✅ Next Lesson -> course_details -->
+    <a href="{% url 'course_details' %}"
       class="flex-1 py-4 px-6 rounded-2xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/30 transition-transform active:scale-95 flex items-center justify-center gap-2">
       Next Lesson
       <span class="material-symbols-rounded text-xl">arrow_forward</span>
@@ -312,6 +346,10 @@
 
     const progressText = document.getElementById("courseProgressText");
     const progressBar = document.getElementById("courseProgressBar");
+
+    // ✅ Header button refs
+    const headerBtn = document.getElementById("lessonHeaderCompleteBtn");
+    const headerText = document.getElementById("lessonHeaderCompleteText");
 
     const COURSE_KEY = "ux-design-masterclass";
     const LESSON_PREFIX = `${COURSE_KEY}-lesson-`;
@@ -378,14 +416,36 @@
       }
     }
 
+    function updateHeaderButton() {
+      const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
+      if (!currentLesson) return;
+
+      const currentId = currentLesson.getAttribute("data-lesson-id");
+      const done = isLessonCompleted(currentId);
+
+      if (!headerBtn || !headerText) return;
+
+      if (done) {
+        headerBtn.classList.remove("bg-primary", "shadow-primary/25");
+        headerBtn.classList.add("bg-green-600", "text-white");
+        headerText.textContent = "Completed";
+      } else {
+        headerBtn.classList.remove("bg-green-600", "text-white");
+        headerBtn.classList.add("bg-primary", "text-white");
+        headerText.textContent = "Mark as completed";
+      }
+    }
+
     function refreshAll() {
       getAllLessonItems().forEach(updateLessonUI);
       updateCourseProgress();
       updateMarkButton();
+      updateHeaderButton();
     }
 
     refreshAll();
 
+    // Footer button
     markBtn.addEventListener("click", () => {
       const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
       if (!currentLesson) return;
@@ -394,6 +454,18 @@
       setLessonCompleted(currentId);
       refreshAll();
     });
+
+    // Header button
+    if (headerBtn) {
+      headerBtn.addEventListener("click", () => {
+        const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
+        if (!currentLesson) return;
+
+        const currentId = currentLesson.getAttribute("data-lesson-id");
+        setLessonCompleted(currentId);
+        refreshAll();
+      });
+    }
   </script>
 
   <!-- Accordion behavior -->
@@ -459,5 +531,4 @@
   </script>
 
 </body>
-
 </html>
