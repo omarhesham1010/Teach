@@ -24,5 +24,5 @@ urlpatterns = [
     path("notes/", views.notes_view, name="notes"),
     path("discussion/", views.discussion_view, name="discussion"),
     path("wallet/add/", views.add_money_to_wallet, name="add_money_to_wallet"),
-
+    path("course-content/", views.course_content, name="course_content_static"),
 ]

@@ -1,4 +1,6 @@
+# teach/views.py
 import random
+from decimal import Decimal
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -7,15 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import LoginCode
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+
 from .models import LoginCode, Wallet
-
-
-
-
-
+from .models import Course, Enrollment  # ✅ ADD THIS
 
 
 User = get_user_model()
@@ -23,12 +21,11 @@ User = get_user_model()
 
 @csrf_protect
 def login_view(request):
-    
     if request.user.is_authenticated:
         return redirect("instructor")
 
     if request.method == "POST":
-        national_id = request.POST.get("username", "").strip()  # Form field is still "username" but contains national_id
+        national_id = request.POST.get("username", "").strip()
         password = request.POST.get("password", "")
 
         user = authenticate(request, username=national_id, password=password)
@@ -41,7 +38,6 @@ def login_view(request):
     return render(request, "teach/login.html")
 
 
-
 def logout_view(request):
     logout(request)
     return redirect("login")
@@ -52,8 +48,19 @@ def instructor(request):
     return render(request, "teach/instructor.html")
 
 
-def courses(request):
-    return render(request, "teach/courses.html")
+# ✅ NEW: My Courses (Dynamic)
+@login_required
+def my_courses_view(request):
+    enrollments = (
+        Enrollment.objects
+        .filter(user=request.user)
+        .select_related("course")
+        .order_by("-created_at")
+    )
+
+    return render(request, "teach/my_courses.html", {
+        "enrollments": enrollments
+    })
 
 
 def course_details(request):
@@ -88,16 +95,15 @@ def submission_success(request):
     return render(request, "teach/submissionsuccess.html")
 
 
-    
 @login_required
 def profile_view(request):
     wallet, _ = Wallet.objects.get_or_create(user=request.user)
-
     return render(request, "teach/profile.html", {
         "user": request.user,
         "wallet_balance": wallet.balance,
         "wallet_updated_at": wallet.updated_at,
     })
+
 
 def settings_view(request):
     return render(request, "teach/settings.html")
@@ -117,11 +123,6 @@ def discussion_view(request):
 
 @csrf_protect
 def login_code_view(request):
-    """
-    Code Login from the same login page:
-    - action=send   -> send OTP to user's email
-    - action=verify -> verify OTP and login
-    """
     if request.user.is_authenticated:
         return redirect("instructor")
 
@@ -136,24 +137,17 @@ def login_code_view(request):
         messages.error(request, "Please enter your email.")
         return redirect("login")
 
-    # identifier = Email
     try:
         user = User.objects.get(email__iexact=identifier)
     except User.DoesNotExist:
         messages.error(request, "No account found with this email.")
         return redirect("login")
 
-    # ===== SEND CODE =====
     if action == "send":
         otp = f"{random.randint(0, 999999):06d}"
-
-        # deactivate old codes
         LoginCode.objects.filter(user=user, is_used=False).update(is_used=True)
-
-        # create new code
         LoginCode.objects.create(user=user, code=otp)
 
-        # send email (real send if EMAIL settings configured)
         send_mail(
             subject="Your Login Code",
             message=f"Your login code is: {otp}\nThis code expires in 10 minutes.",
@@ -165,7 +159,6 @@ def login_code_view(request):
         messages.success(request, "Code sent to your email. Please check inbox/spam.")
         return redirect("login")
 
-    # ===== VERIFY CODE =====
     if action == "verify":
         if not code_entered or len(code_entered) != 6:
             messages.error(request, "Please enter the 6-digit code.")
@@ -217,28 +210,28 @@ def edit_user_profile(request):
         user.government = request.POST.get("government", "")
         user.grade = request.POST.get("grade", "")
         user.division = request.POST.get("division", "")
-        user.email = request.POST.get("gmail", user.email)  # Update email if provided
+        user.email = request.POST.get("gmail", user.email)
         user.save()
 
         messages.success(request, "Profile updated successfully.")
         return redirect("profile")
 
     return render(request, "teach/edit_user_profile.html", {"user": request.user})
+
+
 @login_required
 def reset_password(request):
     if request.method == "POST":
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user) 
-            return redirect("profile")  
+            update_session_auth_hash(request, user)
+            return redirect("profile")
     else:
         form = PasswordChangeForm(user=request.user)
 
     return render(request, "teach/reset_password.html", {"form": form})
 
-from decimal import Decimal
-from .models import Wallet
 
 @login_required
 def add_money_to_wallet(request):
@@ -257,7 +250,6 @@ def add_money_to_wallet(request):
             messages.error(request, "Amount must be greater than 0.")
             return redirect("add_money_to_wallet")
 
-        # ✅ Add money
         wallet.balance = wallet.balance + amount
         wallet.save()
 
@@ -267,3 +259,7 @@ def add_money_to_wallet(request):
     return render(request, "teach/add_money_to_wallet.html", {
         "wallet_balance": wallet.balance,
     })
+@login_required
+def courses(request):
+    courses = Course.objects.filter(is_active=True).order_by("-created_at")
+    return render(request, "teach/courses.html", {"courses": courses})
