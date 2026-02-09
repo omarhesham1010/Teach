@@ -751,6 +751,124 @@
       if (open) open.style.maxHeight = open.scrollHeight + "px";
     });
   </script>
+  <script>
+    
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  
+   
+    function parseInlineFormatting(text) {
+      // bold: **text**
+      text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  
+      text = text.replace(/(^|[^*])\*(?!\s)(.+?)(?<!\s)\*(?!\*)/g, "$1<em>$2</em>");
+  
+      return text;
+    }
+  
+    function isSafeUrl(url) {
+      try {
+        const u = new URL(url, window.location.origin);
+        return ["http:", "https:"].includes(u.protocol);
+      } catch {
+        return false;
+      }
+    }
+  
+    // ✅ Main parser
+    function renderRawToHtml(raw) {
+      if (!raw) return "<p>No content available.</p>";
+  
+      // 1) escape any raw HTML first (security)
+      let safe = escapeHtml(raw);
+  
+      // 2) split lines, build blocks
+      const lines = safe.split(/\r?\n/);
+  
+      let out = "";
+      for (let line of lines) {
+        line = line.trim();
+        if (!line) {
+          out += `<div class="h-3"></div>`;
+          continue;
+        }
+  
+        // [[video:URL]]
+        const videoMatch = line.match(/^\[\[video:(.+?)\]\]$/i);
+        if (videoMatch) {
+          const url = videoMatch[1].trim();
+          if (isSafeUrl(url)) {
+            out += `
+              <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div class="relative aspect-video bg-black">
+                  <iframe
+                    class="absolute inset-0 w-full h-full"
+                    src="${url}"
+                    title="Lesson Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              </div>
+            `;
+          } else {
+            out += `<p class="text-sm text-red-500">Invalid video URL.</p>`;
+          }
+          continue;
+        }
+  
+     
+        const fileMatch = line.match(/^\[\[file:(.+?)\]\]$/i);
+        if (fileMatch) {
+          const payload = fileMatch[1].trim();
+          const [urlRaw, nameRaw] = payload.split("|");
+          const url = (urlRaw || "").trim();
+          const name = (nameRaw || "").trim() || "Download file";
+  
+          if (url) {
+            const ext = (url.split("?")[0].split("#")[0].split(".").pop() || "").toUpperCase();
+            out += `
+              <a href="${url}"
+                 download
+                 class="mt-3 flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                    <span class="material-symbols-rounded">download</span>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2 min-w-0">
+                      <div class="font-semibold text-sm truncate">${name}</div>
+                      ${ext ? `<span class="shrink-0 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">${ext}</span>` : ""}
+                    </div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 truncate">${url}</div>
+                  </div>
+                </div>
+                <span class="material-symbols-rounded text-slate-400">arrow_forward</span>
+              </a>
+            `;
+          } else {
+            out += `<p class="text-sm text-red-500">Invalid file tag.</p>`;
+          }
+          continue;
+        }
+  
+        line = parseInlineFormatting(line);
+        out += `<p>${line}</p>`;
+      }
+  
+      return out;
+    }
+  
+    
+  
+  </script>
+  
 
 </body>
 </html>
