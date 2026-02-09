@@ -113,15 +113,15 @@
             </a>
           </nav>
 
-          <!-- Progress -->
+          <!-- ✅ Progress (Dynamic) -->
           <div
             class="bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
             <div class="flex justify-between items-center mb-3">
               <span class="text-sm font-semibold">Course Progress</span>
-              <span class="text-sm font-bold text-primary">45%</span>
+              <span id="courseProgressText" class="text-sm font-bold text-primary">0%</span>
             </div>
             <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-              <div class="bg-primary h-full w-[45%] rounded-full"></div>
+              <div id="courseProgressBar" class="bg-primary h-full w-[0%] rounded-full"></div>
             </div>
           </div>
 
@@ -134,8 +134,8 @@
         <div class="space-y-3 pb-24">
           <h3 class="text-sm font-bold text-slate-500 uppercase tracking-widest px-1">Curriculum</h3>
 
-          <!-- ✅ LESSON (Open by default) -->
-          <div class="accordion-item" data-type="lesson" data-open="true">
+          <!-- ✅ LESSON (Current Lesson) -->
+          <div class="accordion-item" data-type="lesson" data-lesson-id="04" data-current="true" data-open="true">
             <button type="button"
               class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-primary/10 border border-primary/20 hover:bg-primary/15 transition text-left">
               <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center text-lg">🎥</div>
@@ -143,7 +143,7 @@
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between gap-2">
                   <h4 class="text-sm sm:text-base font-bold text-primary truncate">User Research Intro</h4>
-                  <span class="text-sm font-semibold text-green-500">Completed</span>
+                  <span class="status-text text-sm font-semibold text-slate-400">Not Completed</span>
                 </div>
 
                 <div class="flex items-center gap-2 mt-1">
@@ -305,27 +305,95 @@
 
   <div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-900/10 dark:bg-white/10 rounded-full"></div>
 
+  <!-- ✅ Progress Tracking Script -->
   <script>
     const markBtn = document.getElementById("markCompleteBtn");
     const markText = document.getElementById("markCompleteText");
 
-    const lessonKey = "lesson-04-completed";
+    const progressText = document.getElementById("courseProgressText");
+    const progressBar = document.getElementById("courseProgressBar");
 
-    if (localStorage.getItem(lessonKey) === "true") {
-      setCompletedUI();
+    const COURSE_KEY = "ux-design-masterclass";
+    const LESSON_PREFIX = `${COURSE_KEY}-lesson-`;
+
+    function getAllLessonItems() {
+      return Array.from(document.querySelectorAll('.accordion-item[data-type="lesson"][data-lesson-id]'));
     }
+
+    function isLessonCompleted(lessonId) {
+      return localStorage.getItem(LESSON_PREFIX + lessonId) === "true";
+    }
+
+    function setLessonCompleted(lessonId) {
+      localStorage.setItem(LESSON_PREFIX + lessonId, "true");
+    }
+
+    function updateLessonUI(item) {
+      const lessonId = item.getAttribute("data-lesson-id");
+      const statusEl = item.querySelector(".status-text");
+      if (!statusEl) return;
+
+      if (isLessonCompleted(lessonId)) {
+        statusEl.textContent = "Completed";
+        statusEl.classList.remove("text-slate-400");
+        statusEl.classList.add("text-green-500");
+      } else {
+        statusEl.textContent = "Not Completed";
+        statusEl.classList.remove("text-green-500");
+        statusEl.classList.add("text-slate-400");
+      }
+    }
+
+    function updateCourseProgress() {
+      const lessons = getAllLessonItems();
+      const total = lessons.length || 1;
+
+      let completed = 0;
+      lessons.forEach((item) => {
+        const id = item.getAttribute("data-lesson-id");
+        if (isLessonCompleted(id)) completed++;
+      });
+
+      const pct = Math.round((completed / total) * 100);
+
+      if (progressText) progressText.textContent = `${pct}%`;
+      if (progressBar) progressBar.style.width = `${pct}%`;
+    }
+
+    function updateMarkButton() {
+      const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
+      if (!currentLesson) return;
+
+      const currentId = currentLesson.getAttribute("data-lesson-id");
+      const done = isLessonCompleted(currentId);
+
+      if (done) {
+        markBtn.classList.remove("bg-slate-100", "dark:bg-slate-700");
+        markBtn.classList.add("bg-green-600", "text-white");
+        markText.textContent = "Completed";
+      } else {
+        markBtn.classList.remove("bg-green-600", "text-white");
+        markBtn.classList.add("bg-slate-100", "dark:bg-slate-700");
+        markText.textContent = "Mark Complete";
+      }
+    }
+
+    function refreshAll() {
+      getAllLessonItems().forEach(updateLessonUI);
+      updateCourseProgress();
+      updateMarkButton();
+    }
+
+    refreshAll();
 
     markBtn.addEventListener("click", () => {
-      localStorage.setItem(lessonKey, "true");
-      setCompletedUI();
-    });
+      const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
+      if (!currentLesson) return;
 
-    function setCompletedUI() {
-      markBtn.classList.remove("bg-slate-100", "dark:bg-slate-700");
-      markBtn.classList.add("bg-green-600");
-      markBtn.classList.add("text-white");
-      markText.textContent = "Completed";
-    }
+      const currentId = currentLesson.getAttribute("data-lesson-id");
+      setLessonCompleted(currentId);
+      refreshAll();
+    });
   </script>
 
   <!-- Accordion behavior -->
