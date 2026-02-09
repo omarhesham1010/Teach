@@ -129,108 +129,171 @@
 
       </div>
 
-      <!-- Curriculum full width -->
+      <!-- ✅ Curriculum padded -->
       <div class="p-4 pt-0">
         <div class="space-y-3 pb-24">
           <h3 class="text-sm font-bold text-slate-500 uppercase tracking-widest px-1">Curriculum</h3>
 
-          <!-- Item: Currently Playing (Lesson) -->
-          <a href="{% url 'course_content' %}"
-            class="flex items-start gap-4 p-3 rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/15 transition">
-            <div class="w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center text-lg">
-              🎥
-            </div>
+          <!-- Item 1 (open) -->
+          <div class="accordion-item" data-open="true">
+            <button type="button"
+              class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-primary/10 border border-primary/20 hover:bg-primary/15 transition text-left">
+              <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center text-lg">🎥</div>
 
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between gap-2">
-                <h4 class="text-sm font-bold text-primary truncate">User Research Intro</h4>
-                <span class="text-xs font-semibold text-green-600 dark:text-green-400">Completed</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="text-sm sm:text-base font-bold text-primary truncate">User Research Intro</h4>
+                  <span class="text-sm font-semibold text-green-500">Completed</span>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary">Lesson</span>
+                  <span class="text-xs text-primary/80 font-medium">Currently Playing</span>
+                </div>
               </div>
 
-              <div class="flex items-center gap-2 mt-1">
-                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary">
-                  Lesson
-                </span>
-                <span class="text-xs text-primary/80 font-medium">Currently Playing</span>
+              <span class="accordion-arrow material-symbols-rounded text-primary transition-transform">expand_more</span>
+            </button>
+
+            <div class="accordion-content px-3">
+              <div
+                class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-600 dark:text-slate-400">Duration</span>
+                  <span class="font-semibold">12:45</span>
+                </div>
+
+                <div class="mt-3 flex gap-2">
+                  <a href="{% url 'course_content' %}"
+                    class="flex-1 py-2.5 rounded-xl bg-primary text-white font-semibold text-sm text-center active:scale-95 transition">
+                    Open Lesson
+                  </a>
+                  <button type="button"
+                    class="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 font-semibold text-sm active:scale-95 transition">
+                    Notes
+                  </button>
+                </div>
               </div>
             </div>
-
-            <span class="material-symbols-rounded text-primary mt-1">equalizer</span>
-          </a>
-
-          <!-- Item: Locked (Lesson) -->
-          <div
-            class="flex items-start gap-4 p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 opacity-90">
-            <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">
-              🎥
-            </div>
-
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between gap-2">
-                <h4 class="text-sm font-semibold truncate">Interview Techniques</h4>
-                <span class="text-xs font-semibold text-slate-400">Locked</span>
-              </div>
-
-              <div class="flex items-center gap-2 mt-1">
-                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500">
-                  Lesson
-                </span>
-                <span class="text-xs text-slate-500">15:20 min</span>
-              </div>
-            </div>
-
-            <span class="material-symbols-rounded text-slate-300 dark:text-slate-600 mt-1">lock</span>
           </div>
 
-          <!-- Item: Locked (Assignment) -->
-          <div
-            class="flex items-start gap-4 p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 opacity-90">
-            <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">
-              📝
-            </div>
+          <!-- Item 2 -->
+          <div class="accordion-item">
+            <button type="button"
+              class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition text-left">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">🎥</div>
 
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between gap-2">
-                <h4 class="text-sm font-semibold truncate">Persona Worksheet</h4>
-                <span class="text-xs font-semibold text-slate-400">Locked</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="text-sm sm:text-base font-semibold truncate">Interview Techniques</h4>
+                  <span class="text-sm font-semibold text-slate-400">Locked</span>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500">Lesson</span>
+                  <span class="text-xs text-slate-500">15:20 min</span>
+                </div>
               </div>
 
-              <div class="flex items-center gap-2 mt-1">
-                <span
-                  class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-violet-100/70 dark:bg-slate-700 text-violet-700 dark:text-slate-300">
-                  Assignment
-                </span>
-                <span class="text-xs text-slate-500">Due soon</span>
+              <span class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
+            </button>
+
+            <div class="accordion-content px-3">
+              <div
+                class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+                <p class="text-sm text-slate-500 dark:text-slate-400">
+                  This item is locked. Complete the previous lesson to unlock it.
+                </p>
               </div>
             </div>
-
-            <span class="material-symbols-rounded text-slate-300 dark:text-slate-600 mt-1">lock</span>
           </div>
 
-          <!-- Item: Completed (Quiz) -->
-          <a href="{% url 'quiz' %}"
-            class="flex items-start gap-4 p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
-            <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">
-              ❓
-            </div>
+          <!-- Item 3 -->
+          <div class="accordion-item">
+            <button type="button"
+              class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition text-left">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">🎥</div>
 
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between gap-2">
-                <h4 class="text-sm font-semibold truncate">User Research Basics Quiz</h4>
-                <span class="text-xs font-semibold text-green-600 dark:text-green-400">Completed</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="text-sm sm:text-base font-semibold truncate">Survey Design Basics</h4>
+                  <span class="text-sm font-semibold text-slate-400">Locked</span>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500">Lesson</span>
+                  <span class="text-xs text-slate-500">08:45 min</span>
+                </div>
               </div>
 
-              <div class="flex items-center gap-2 mt-1">
-                <span
-                  class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-orange-100/80 dark:bg-slate-700 text-orange-700 dark:text-slate-300">
-                  Quiz
-                </span>
-                <span class="text-xs text-slate-500">Score: 8/10</span>
+              <span class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
+            </button>
+
+            <div class="accordion-content px-3">
+              <div class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+                <p class="text-sm text-slate-500 dark:text-slate-400">Locked until you complete the previous lesson.</p>
               </div>
             </div>
+          </div>
 
-            <span class="material-symbols-rounded text-slate-300 dark:text-slate-600 mt-1">arrow_forward_ios</span>
-          </a>
+          <!-- Item 4 (Assignment) -->
+          <div class="accordion-item">
+            <button type="button"
+              class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition text-left">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">📝</div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="text-sm sm:text-base font-semibold truncate">Persona Worksheet</h4>
+                  <span class="text-sm font-semibold text-slate-400">Locked</span>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-violet-100/70 dark:bg-slate-700 text-violet-700 dark:text-slate-300">Assignment</span>
+                  <span class="text-xs text-slate-500">Due soon</span>
+                </div>
+              </div>
+
+              <span class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
+            </button>
+
+            <div class="accordion-content px-3">
+              <div class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+                <p class="text-sm text-slate-500 dark:text-slate-400">Complete Lesson 05 to unlock this assignment.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 5 (Quiz) -->
+          <div class="accordion-item">
+            <button type="button"
+              class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition text-left">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">❓</div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="text-sm sm:text-base font-semibold truncate">User Research Basics Quiz</h4>
+                  <span class="text-sm font-semibold text-green-500">Completed</span>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-orange-100/80 dark:bg-slate-700 text-orange-700 dark:text-slate-300">Quiz</span>
+                  <span class="text-xs text-slate-500">Score: 8/10</span>
+                </div>
+              </div>
+
+              <span class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
+            </button>
+
+            <div class="accordion-content px-3">
+              <div class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+                <a href="{% url 'quiz' %}"
+                  class="w-full block py-2.5 rounded-xl bg-primary text-white font-semibold text-sm text-center active:scale-95 transition">
+                  Open Quiz
+                </a>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
@@ -277,6 +340,68 @@
       markBtn.classList.add("text-white");
       markText.textContent = "Completed";
     }
+  </script>
+
+  <!-- ✅ Accordion behavior: opens one, closes others + smooth animation -->
+  <script>
+    const items = Array.from(document.querySelectorAll(".accordion-item"));
+
+    function closeItem(item) {
+      const content = item.querySelector(".accordion-content");
+      const arrow = item.querySelector(".accordion-arrow");
+      if (!content) return;
+
+      item.classList.remove("is-open");
+      content.style.maxHeight = "0px";
+      content.style.opacity = "0";
+      content.style.marginTop = "0";
+      if (arrow) arrow.style.transform = "rotate(0deg)";
+    }
+
+    function openItem(item) {
+      const content = item.querySelector(".accordion-content");
+      const arrow = item.querySelector(".accordion-arrow");
+      if (!content) return;
+
+      item.classList.add("is-open");
+      content.style.maxHeight = content.scrollHeight + "px";
+      content.style.opacity = "1";
+      content.style.marginTop = "8px";
+      if (arrow) arrow.style.transform = "rotate(180deg)";
+    }
+
+    items.forEach((item) => {
+      const content = item.querySelector(".accordion-content");
+      if (content) {
+        content.style.overflow = "hidden";
+        content.style.maxHeight = "0px";
+        content.style.opacity = "0";
+        content.style.transition = "max-height 320ms ease, opacity 240ms ease, margin-top 320ms ease";
+      }
+
+      const shouldOpen = item.getAttribute("data-open") === "true";
+      if (shouldOpen) openItem(item);
+      else closeItem(item);
+
+      const trigger = item.querySelector(".accordion-trigger");
+      if (!trigger) return;
+
+      trigger.addEventListener("click", () => {
+        const isOpen = item.classList.contains("is-open");
+
+        items.forEach((it) => {
+          if (it !== item) closeItem(it);
+        });
+
+        if (isOpen) closeItem(item);
+        else openItem(item);
+      });
+    });
+
+    window.addEventListener("resize", () => {
+      const open = document.querySelector(".accordion-item.is-open .accordion-content");
+      if (open) open.style.maxHeight = open.scrollHeight + "px";
+    });
   </script>
 
 </body>
