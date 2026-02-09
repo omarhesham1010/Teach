@@ -53,14 +53,15 @@
   </header>
 
   <!-- Main -->
-  <main class="flex-1 overflow-y-auto no-scrollbar pb-28 lg:pb-10">
+  <main class="flex-1 overflow-y-auto no-scrollbar pb-32 lg:pb-10">
     <div class="mx-auto w-full max-w-6xl">
 
       <!-- ✅ Lesson Header -->
       <section class="p-4 pb-0">
         <div
           class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-          <div class="flex items-start justify-between gap-4">
+          <!-- ✅ Responsive header row -->
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div class="min-w-0">
               <p class="text-xs font-bold uppercase tracking-wider text-primary mb-1">Lesson</p>
               <h2 id="lessonHeaderTitle" class="text-lg font-bold truncate">
@@ -74,8 +75,9 @@
               </div>
             </div>
 
+            <!-- ✅ Full width on mobile -->
             <button id="lessonHeaderCompleteBtn" type="button"
-              class="shrink-0 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/25 active:scale-95 transition">
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/25 active:scale-95 transition">
               <span class="material-symbols-rounded text-xl">check_circle</span>
               <span id="lessonHeaderCompleteText">Mark as completed</span>
             </button>
@@ -160,18 +162,18 @@
             </p>
           </section>
 
-          <nav class="flex border-b border-slate-200 dark:border-slate-800">
-            <a href="{% url 'courses' %}" class="px-4 py-2 text-sm font-semibold border-b-2 border-primary text-primary">
+          <nav class="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar">
+            <a href="{% url 'courses' %}" class="px-4 py-2 text-sm font-semibold border-b-2 border-primary text-primary whitespace-nowrap">
               Lessons
             </a>
 
             <a href="{% url 'quiz' %}"
-              class="px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary">
+              class="px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary whitespace-nowrap">
               Quizzes
             </a>
 
             <a href="{% url 'assignment' %}"
-              class="px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary">
+              class="px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary whitespace-nowrap">
               Assignment
             </a>
           </nav>
@@ -231,6 +233,7 @@
                 </div>
 
                 <div class="mt-4">
+                  <!-- ✅ NOTE: if you later add lesson_id in URL, pass it here -->
                   <a href="{% url 'course_content' %}"
                     class="w-full block py-3 rounded-2xl bg-primary text-white font-bold text-sm text-center shadow-lg shadow-primary/20 active:scale-95 transition">
                     Open Lesson Viewer
@@ -361,7 +364,7 @@
       <span id="markCompleteText">Mark Complete</span>
     </button>
 
-    <a href="{% url 'course_details' %}"
+    <a href="{% url 'course_content' %}"
       class="flex-1 py-4 px-6 rounded-2xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/30 transition-transform active:scale-95 flex items-center justify-center gap-2">
       Next Lesson
       <span class="material-symbols-rounded text-xl">arrow_forward</span>
@@ -469,7 +472,7 @@
       }
     }
 
-    // ===== ✅ Files Section Renderer (Download PDF / Attachments / File size shown) =====
+    // ===== ✅ Files Section Renderer (Responsive) =====
     const filesSection = document.getElementById("filesSection");
 
     async function renderFilesSection(files) {
@@ -481,7 +484,6 @@
         return;
       }
 
-      // Pre-calc sizes (parallel)
       const sizes = await Promise.all(files.map(f => fetchFileSize(f.url)));
 
       files.forEach((f, idx) => {
@@ -490,7 +492,7 @@
 
         const card = document.createElement("div");
         card.className =
-          "flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40";
+          "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40";
 
         card.innerHTML = `
           <div class="flex items-center gap-3 min-w-0">
@@ -507,17 +509,19 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-2 shrink-0">
-            <a href="${f.url}" target="_blank" rel="noopener"
-              class="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs font-bold">
-              <span class="material-symbols-rounded text-base">picture_as_pdf</span>
-              Download PDF
-            </a>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 w-full sm:w-auto">
+            ${ext === "PDF" ? `
+              <a href="${f.url}" target="_blank" rel="noopener"
+                class="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs font-bold">
+                <span class="material-symbols-rounded text-base">picture_as_pdf</span>
+                Download PDF
+              </a>
+            ` : ""}
 
             <a href="${f.url}" download
-              class="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-primary text-white hover:opacity-95 transition text-xs font-bold shadow-lg shadow-primary/20">
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl bg-primary text-white hover:opacity-95 transition text-xs font-bold shadow-lg shadow-primary/20">
               <span class="material-symbols-rounded text-base">download</span>
-              Download attachments
+              ${ext === "PDF" ? "Download" : "Download attachments"}
             </a>
           </div>
         `;
@@ -751,8 +755,9 @@
       if (open) open.style.maxHeight = open.scrollHeight + "px";
     });
   </script>
+
+  <!-- ✅ Raw Text Parser (kept as-is) -->
   <script>
-    
     function escapeHtml(str) {
       return String(str)
         .replaceAll("&", "&amp;")
@@ -761,17 +766,13 @@
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
     }
-  
-   
+
     function parseInlineFormatting(text) {
-      // bold: **text**
       text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-  
       text = text.replace(/(^|[^*])\*(?!\s)(.+?)(?<!\s)\*(?!\*)/g, "$1<em>$2</em>");
-  
       return text;
     }
-  
+
     function isSafeUrl(url) {
       try {
         const u = new URL(url, window.location.origin);
@@ -780,17 +781,12 @@
         return false;
       }
     }
-  
-    // ✅ Main parser
+
     function renderRawToHtml(raw) {
       if (!raw) return "<p>No content available.</p>";
-  
-      // 1) escape any raw HTML first (security)
       let safe = escapeHtml(raw);
-  
-      // 2) split lines, build blocks
       const lines = safe.split(/\r?\n/);
-  
+
       let out = "";
       for (let line of lines) {
         line = line.trim();
@@ -798,8 +794,7 @@
           out += `<div class="h-3"></div>`;
           continue;
         }
-  
-        // [[video:URL]]
+
         const videoMatch = line.match(/^\[\[video:(.+?)\]\]$/i);
         if (videoMatch) {
           const url = videoMatch[1].trim();
@@ -807,13 +802,11 @@
             out += `
               <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
                 <div class="relative aspect-video bg-black">
-                  <iframe
-                    class="absolute inset-0 w-full h-full"
+                  <iframe class="absolute inset-0 w-full h-full"
                     src="${url}"
                     title="Lesson Video"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen>
-                  </iframe>
+                    allowfullscreen></iframe>
                 </div>
               </div>
             `;
@@ -822,21 +815,19 @@
           }
           continue;
         }
-  
-     
+
         const fileMatch = line.match(/^\[\[file:(.+?)\]\]$/i);
         if (fileMatch) {
           const payload = fileMatch[1].trim();
           const [urlRaw, nameRaw] = payload.split("|");
           const url = (urlRaw || "").trim();
           const name = (nameRaw || "").trim() || "Download file";
-  
+
           if (url) {
             const ext = (url.split("?")[0].split("#")[0].split(".").pop() || "").toUpperCase();
             out += `
-              <a href="${url}"
-                 download
-                 class="mt-3 flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+              <a href="${url}" download
+                class="mt-3 flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
                 <div class="flex items-center gap-3 min-w-0">
                   <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                     <span class="material-symbols-rounded">download</span>
@@ -857,18 +848,15 @@
           }
           continue;
         }
-  
+
         line = parseInlineFormatting(line);
         out += `<p>${line}</p>`;
       }
-  
+
       return out;
     }
-  
-    
-  
   </script>
-  
 
 </body>
+
 </html>
