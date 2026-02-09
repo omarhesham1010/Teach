@@ -25,4 +25,5 @@ urlpatterns = [
     path("discussion/", views.discussion_view, name="discussion"),
     path("wallet/add/", views.add_money_to_wallet, name="add_money_to_wallet"),
     path("course-content/", views.course_content, name="course_content_static"),
+    path("api/toggle-theme/", views.toggle_theme, name="toggle_theme"),
 ]

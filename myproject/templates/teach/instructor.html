@@ -1,290 +1,206 @@
-<!doctype html>
+{% extends 'teach/base.html' %}
 
-<html class="light" lang="en">
+{% block title %}All Instructors - EduPlatform{% endblock %}
 
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>All Instructors Directory</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-  <link rel="stylesheet" href="/static/teach/css/style.css">
-  <script src="/static/teach/js/script.js"></script>
-</head>
-
-<body
-  class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-200">
-  <div class="h-11 w-full bg-background-light dark:bg-background-dark sticky top-0 z-50"></div>
-  <nav
-    class="sticky top-11 z-40 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-4 py-3 border-b border-slate-200 dark:border-slate-800">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-          <span class="material-icons-outlined text-white text-lg">school</span>
-        </div>
-        <span class="font-bold text-lg tracking-tight">EduPlatform</span>
-      </div>
-      <div class="flex items-center gap-2">
-        <button onclick="toggleDarkMode()"
-          class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400">
-          <span class="material-icons-outlined">dark_mode</span>
-        </button>
-      </div>
-      <div class="flex gap-4">
-        <a href="{% url 'courses' %}"
-          class="flex flex-col items-center gap-0.5 text-slate-500 dark:text-slate-400 hover:text-primary">
-          <span class="material-icons-outlined text-xl">auto_stories</span>
-          <span class="text-[10px] font-medium">Courses</span>
-        </a>
-
-        <a href="{% url 'course_details' %}"
-          class="flex flex-col items-center gap-0.5 text-slate-500 dark:text-slate-400 hover:text-primary">
-          <span class="material-icons-outlined text-xl">bookmark_border</span>
-          <span class="text-[10px] font-medium">My Courses</span>
-        </a>
-
-        <a href="#" class="flex flex-col items-center gap-0.5 text-slate-500 dark:text-slate-400 hover:text-primary">
-          <span class="material-icons-outlined text-xl">person_outline</span>
-          <span class="text-[10px] font-medium">Profile</span>
-        </a>
-      </div>
-
+{% block content %}
+<header class="py-6">
+  <h1 class="text-3xl font-extrabold tracking-tight mb-6">
+    All Instructors
+  </h1>
+  <div class="flex gap-3">
+    <div class="relative flex-grow">
+      <span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+      <input
+        class="w-full bg-white dark:bg-slate-800 border-none rounded-xl pl-10 pr-4 py-3 shadow-sm focus:ring-2 focus:ring-primary ring-1 ring-slate-200 dark:ring-slate-700 transition-all outline-none"
+        placeholder="Search instructors..." type="text" />
     </div>
-  </nav>
-  <main class="px-4 pb-24">
-    <header class="py-6">
-      <h1 class="text-3xl font-extrabold tracking-tight mb-6">
-        All Instructors
-      </h1>
-      <div class="flex gap-3">
-        <div class="relative flex-grow">
-          <span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-          <input
-            class="w-full bg-white dark:bg-slate-800 border-none rounded-xl pl-10 pr-4 py-3 shadow-sm focus:ring-2 focus:ring-primary ring-1 ring-slate-200 dark:ring-slate-700 transition-all outline-none"
-            placeholder="Search instructors..." type="text" />
-        </div>
-        <button
-          class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300">
-          <span class="material-icons-outlined">tune</span>
-        </button>
-      </div>
-    </header>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Instructor 1 -->
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
-        <div class="relative mb-4">
-          <img alt="Eng. Noureen Mohammed"
-            class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
-            src="/static/teach/img/noureen (2).jpeg" />
-          <div
-            class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-800">
-          </div>
-        </div>
-        <h3 class="font-bold text-lg">Eng. Noureen Mohammed</h3>
-        <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Software Engineering</p>
-        <div class="flex items-center gap-1 mb-3">
-          <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
-          <span class="text-sm font-medium">4.9</span>
-          <span class="text-slate-400 text-sm">(124 reviews)</span>
-        </div>
-        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Expert in Machine
-          Learning and Data Science with 10+ years of academic research.</p>
-        <button
-          class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
-          Profile</button>
-      </div>
-
-      <!-- Instructor 2 -->
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
-        <div class="relative mb-4">
-          <img alt="Eng. Omar Hesham"
-            class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
-            src="/static/teach/img/omar.jpeg" />
-        </div>
-        <h3 class="font-bold text-lg">Eng. Omar Hesham</h3>
-        <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
-        <div class="flex items-center gap-1 mb-3">
-          <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
-          <span class="text-sm font-medium">4.8</span>
-          <span class="text-slate-400 text-sm">(98 reviews)</span>
-        </div>
-        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Contemporary artist
-          specializing in digital mediums and classical oil painting.</p>
-        <a href="{% url 'profile' %}"
-          class="block w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform text-center">View
-          Profile</a>
-      </div>
-
-      <!-- Instructor 3 -->
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
-        <div class="relative mb-4">
-          <img alt="Eng. Jana Mohamed"
-            class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
-            src="/static/teach/img/jana.jpeg" />
-        </div>
-        <h3 class="font-bold text-lg">Eng. Jana Mohamed</h3>
-        <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
-        <div class="flex items-center gap-1 mb-3">
-          <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
-          <span class="text-sm font-medium">5.0</span>
-          <span class="text-slate-400 text-sm">(210 reviews)</span>
-        </div>
-        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Focusing on modern
-          poetry and narrative structures across diverse cultures.</p>
-        <button
-          class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
-          Profile</button>
-      </div>
-
-      <!-- Instructor 4 -->
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
-        <div class="relative mb-4">
-          <img alt="Eng. Mahmoud Abdelkreem"
-            class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
-            src="/static/teach/img/mahmoud.jpeg" />
-          <div
-            class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-800">
-          </div>
-        </div>
-        <h3 class="font-bold text-lg">Eng. Mahmoud Abdelkreem</h3>
-        <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
-        <div class="flex items-center gap-1 mb-3">
-          <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
-          <span class="text-sm font-medium">4.7</span>
-          <span class="text-slate-400 text-sm">(86 reviews)</span>
-        </div>
-        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Former Wall Street
-          analyst teaching behavioral economics and market trends.</p>
-        <button
-          class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
-          Profile</button>
-      </div>
-
-      <!-- Instructor 5 -->
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
-        <div class="relative mb-4">
-          <img alt="Eng. Lekaa Osama"
-            class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
-            src="/static/teach/img/lekaa.jpeg" />
-        </div>
-        <h3 class="font-bold text-lg">Eng. Lekaa Osama</h3>
-        <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
-        <div class="flex items-center gap-1 mb-3">
-          <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
-          <span class="text-sm font-medium">4.9</span>
-          <span class="text-slate-400 text-sm">(156 reviews)</span>
-        </div>
-        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Theoretical
-          physicist exploring quantum mechanics and astrophysics concepts.</p>
-        <button
-          class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
-          Profile</button>
-      </div>
-
-      <!-- Instructor 6 -->
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
-        <div class="relative mb-4">
-          <img alt="Eng. Ahmed Salah"
-            class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
-            src="/static/teach/img/ahmed.jpeg" />
-        </div>
-        <h3 class="font-bold text-lg">Eng. Ahmed Salah</h3>
-        <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
-        <div class="flex items-center gap-1 mb-3">
-          <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
-          <span class="text-sm font-medium">4.6</span>
-          <span class="text-slate-400 text-sm">(52 reviews)</span>
-        </div>
-        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Professional
-          cellist specializing in orchestral arrangements and composition.</p>
-        <button
-          class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
-          Profile</button>
-      </div>
-
-      <!-- Instructor 7 (New) -->
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
-        <div class="relative mb-4">
-          <div
-            class="w-24 h-24 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-3xl font-bold ring-4 ring-slate-50 dark:ring-slate-700">
-            JS</div>
-          <div
-            class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-800">
-          </div>
-        </div>
-        <h3 class="font-bold text-lg">Eng. John Smith</h3>
-        <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Web Development</p>
-        <div class="flex items-center gap-1 mb-3">
-          <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
-          <span class="text-sm font-medium">4.5</span>
-          <span class="text-slate-400 text-sm">(45 reviews)</span>
-        </div>
-        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Senior Frontend
-          Engineer specializing in React and Vue.js ecosystems.</p>
-        <button
-          class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
-          Profile</button>
-      </div>
-
-      <!-- Instructor 8 (New) -->
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
-        <div class="relative mb-4">
-          <div
-            class="w-24 h-24 rounded-full bg-purple-100 text-purple-500 flex items-center justify-center text-3xl font-bold ring-4 ring-slate-50 dark:ring-slate-700">
-            AL</div>
-        </div>
-        <h3 class="font-bold text-lg">Dr. Ada Lovelace</h3>
-        <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Algorithms</p>
-        <div class="flex items-center gap-1 mb-3">
-          <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
-          <span class="text-sm font-medium">5.0</span>
-          <span class="text-slate-400 text-sm">(500+ reviews)</span>
-        </div>
-        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Pioneer in computer
-          science, focusing on complex algorithms and history.</p>
-        <button
-          class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
-          Profile</button>
-      </div>
-    </div>
-  </main>
-  <div
-    class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 pt-3 pb-8 flex items-center justify-between z-50">
-    <div
-      class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-6 pt-3 pb-8 flex items-center justify-between z-50">
-
-      <a href="{% url 'instructor' %}" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary">
-        <span class="material-icons-outlined">home</span>
-        <span class="text-[10px]">Home</span>
-      </a>
-
-      <a href="{% url 'instructor' %}" class="flex flex-col items-center gap-1 text-primary">
-        <span class="material-icons-outlined">people</span>
-        <span class="text-[10px] font-bold">Instructors</span>
-      </a>
-
-      <a href="{% url 'messages' %}" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary">
-        <span class="material-icons-outlined">chat_bubble_outline</span>
-        <span class="text-[10px]">Messages</span>
-      </a>
-
-      <a href="{% url 'profile' %}" class="flex flex-col items-center gap-1 text-slate-400 hover:text-primary">
-        <span class="material-icons-outlined">person</span>
-        <span class="text-[10px]">Profile</span>
-      </a>
-
-    </div>
-
+    <button
+      class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300">
+      <span class="material-icons-outlined">tune</span>
+    </button>
   </div>
-</body>
+</header>
 
-</html>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <!-- Instructor 1 -->
+  <div
+    class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
+    <div class="relative mb-4">
+      <img alt="Eng. Noureen Mohammed"
+        class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
+        src="/static/teach/img/noureen (2).jpeg" />
+      <div
+        class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-800">
+      </div>
+    </div>
+    <h3 class="font-bold text-lg">Eng. Noureen Mohammed</h3>
+    <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Software Engineering</p>
+    <div class="flex items-center gap-1 mb-3">
+      <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
+      <span class="text-sm font-medium">4.9</span>
+      <span class="text-slate-400 text-sm">(124 reviews)</span>
+    </div>
+    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Expert in Machine
+      Learning and Data Science with 10+ years of academic research.</p>
+    <button
+      class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
+      Profile</button>
+  </div>
+
+  <!-- Instructor 2 -->
+  <div
+    class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
+    <div class="relative mb-4">
+      <img alt="Eng. Omar Hesham" class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
+        src="/static/teach/img/omar.jpeg" />
+    </div>
+    <h3 class="font-bold text-lg">Eng. Omar Hesham</h3>
+    <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
+    <div class="flex items-center gap-1 mb-3">
+      <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
+      <span class="text-sm font-medium">4.8</span>
+      <span class="text-slate-400 text-sm">(98 reviews)</span>
+    </div>
+    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Contemporary artist
+      specializing in digital mediums and classical oil painting.</p>
+    <a href="{% url 'profile' %}"
+      class="block w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform text-center">View
+      Profile</a>
+  </div>
+
+  <!-- Instructor 3 -->
+  <div
+    class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
+    <div class="relative mb-4">
+      <img alt="Eng. Jana Mohamed" class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
+        src="/static/teach/img/jana.jpeg" />
+    </div>
+    <h3 class="font-bold text-lg">Eng. Jana Mohamed</h3>
+    <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
+    <div class="flex items-center gap-1 mb-3">
+      <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
+      <span class="text-sm font-medium">5.0</span>
+      <span class="text-slate-400 text-sm">(210 reviews)</span>
+    </div>
+    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Focusing on modern
+      poetry and narrative structures across diverse cultures.</p>
+    <button
+      class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
+      Profile</button>
+  </div>
+
+  <!-- Instructor 4 -->
+  <div
+    class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
+    <div class="relative mb-4">
+      <img alt="Eng. Mahmoud Abdelkreem"
+        class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
+        src="/static/teach/img/mahmoud.jpeg" />
+      <div
+        class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-800">
+      </div>
+    </div>
+    <h3 class="font-bold text-lg">Eng. Mahmoud Abdelkreem</h3>
+    <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
+    <div class="flex items-center gap-1 mb-3">
+      <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
+      <span class="text-sm font-medium">4.7</span>
+      <span class="text-slate-400 text-sm">(86 reviews)</span>
+    </div>
+    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Former Wall Street
+      analyst teaching behavioral economics and market trends.</p>
+    <button
+      class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
+      Profile</button>
+  </div>
+
+  <!-- Instructor 5 -->
+  <div
+    class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
+    <div class="relative mb-4">
+      <img alt="Eng. Lekaa Osama" class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
+        src="/static/teach/img/lekaa.jpeg" />
+    </div>
+    <h3 class="font-bold text-lg">Eng. Lekaa Osama</h3>
+    <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
+    <div class="flex items-center gap-1 mb-3">
+      <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
+      <span class="text-sm font-medium">4.9</span>
+      <span class="text-slate-400 text-sm">(156 reviews)</span>
+    </div>
+    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Theoretical
+      physicist exploring quantum mechanics and astrophysics concepts.</p>
+    <button
+      class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
+      Profile</button>
+  </div>
+
+  <!-- Instructor 6 -->
+  <div
+    class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
+    <div class="relative mb-4">
+      <img alt="Eng. Ahmed Salah" class="w-24 h-24 rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-700"
+        src="/static/teach/img/ahmed.jpeg" />
+    </div>
+    <h3 class="font-bold text-lg">Eng. Ahmed Salah</h3>
+    <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Computer Science</p>
+    <div class="flex items-center gap-1 mb-3">
+      <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
+      <span class="text-sm font-medium">4.6</span>
+      <span class="text-slate-400 text-sm">(52 reviews)</span>
+    </div>
+    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Professional
+      cellist specializing in orchestral arrangements and composition.</p>
+    <button
+      class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
+      Profile</button>
+  </div>
+
+  <!-- Instructor 7 -->
+  <div
+    class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
+    <div class="relative mb-4">
+      <div
+        class="w-24 h-24 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-3xl font-bold ring-4 ring-slate-50 dark:ring-slate-700">
+        JS</div>
+      <div
+        class="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white dark:border-slate-800">
+      </div>
+    </div>
+    <h3 class="font-bold text-lg">Eng. John Smith</h3>
+    <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Web Development</p>
+    <div class="flex items-center gap-1 mb-3">
+      <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
+      <span class="text-sm font-medium">4.5</span>
+      <span class="text-slate-400 text-sm">(45 reviews)</span>
+    </div>
+    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Senior Frontend
+      Engineer specializing in React and Vue.js ecosystems.</p>
+    <button
+      class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
+      Profile</button>
+  </div>
+
+  <!-- Instructor 8 -->
+  <div
+    class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 flex flex-col items-center text-center">
+    <div class="relative mb-4">
+      <div
+        class="w-24 h-24 rounded-full bg-purple-100 text-purple-500 flex items-center justify-center text-3xl font-bold ring-4 ring-slate-50 dark:ring-slate-700">
+        AL</div>
+    </div>
+    <h3 class="font-bold text-lg">Dr. Ada Lovelace</h3>
+    <p class="text-primary text-sm font-semibold mb-2 uppercase tracking-wide">Algorithms</p>
+    <div class="flex items-center gap-1 mb-3">
+      <span class="material-icons-outlined text-yellow-400 text-sm">star</span>
+      <span class="text-sm font-medium">5.0</span>
+      <span class="text-slate-400 text-sm">(500+ reviews)</span>
+    </div>
+    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 leading-relaxed px-2">Pioneer in computer
+      science, focusing on complex algorithms and history.</p>
+    <button
+      class="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold rounded-xl active:scale-95 transition-transform">View
+      Profile</button>
+  </div>
+</div>
+{% endblock %}

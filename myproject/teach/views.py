@@ -1,5 +1,6 @@
 # teach/views.py
 import random
+import json
 from decimal import Decimal
 
 from django.shortcuts import render, redirect
@@ -7,16 +8,34 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_POST
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.http import JsonResponse
 
 from .models import LoginCode, Wallet
 from .models import Course, Enrollment  # ✅ ADD THIS
 
 
 User = get_user_model()
+
+
+@login_required
+@require_POST
+def toggle_theme(request):
+    """API endpoint to save user's theme preference to database."""
+    try:
+        data = json.loads(request.body)
+        mode = data.get('mode', 'Light')
+        if mode in ['Dark', 'Light']:
+            request.user.mode = mode
+            request.user.save(update_fields=['mode'])
+            return JsonResponse({'status': 'success', 'mode': mode})
+        return JsonResponse({'status': 'error', 'message': 'Invalid mode'}, status=400)
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
 
 
 @csrf_protect

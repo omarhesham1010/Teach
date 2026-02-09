@@ -1,0 +1,107 @@
+{% load static %}
+
+<!-- Header -->
+<header class="sticky top-0 z-50 w-full">
+  <!-- Glassmorphism Header -->
+  <nav class="bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-700/50 px-4 md:px-6 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Left: Logo + Theme Toggle -->
+      <div class="flex items-center gap-4">
+        <!-- Logo (clickable, links to home) -->
+        <a href="{% url 'instructor' %}" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg ring-2 ring-white/50 dark:ring-slate-700/50 group-hover:ring-primary/50 transition-all duration-300">
+            <img src="{% static 'teach/img/logo.png' %}" alt="EduPlatform Logo" class="w-full h-full object-cover" />
+          </div>
+          <span class="font-bold text-lg tracking-tight hidden sm:block group-hover:text-primary transition-colors">EduPlatform</span>
+        </a>
+
+        <!-- Theme Toggle Button -->
+        <button 
+          onclick="toggleTheme()" 
+          class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300 group"
+          aria-label="Toggle theme"
+        >
+          <!-- Sun Icon (shown in dark mode) -->
+          <span class="material-icons-outlined text-amber-500 hidden dark:block group-hover:rotate-12 transition-transform">light_mode</span>
+          <!-- Moon Icon (shown in light mode) -->
+          <span class="material-icons-outlined text-slate-600 dark:hidden group-hover:-rotate-12 transition-transform">dark_mode</span>
+        </button>
+      </div>
+
+      <!-- Right: Navigation Items -->
+      <div class="flex items-center gap-3">
+        
+        {% if user.is_authenticated %}
+          <!-- Authenticated User: Icons + Avatar -->
+          
+          <!-- Desktop Navigation Links -->
+          <div class="hidden md:flex items-center gap-1">
+            <!-- My Courses -->
+            <a href="{% url 'courses' %}" 
+               class="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 group"
+               title="My Courses">
+              <span class="material-icons-outlined text-slate-500 group-hover:text-primary transition-colors">auto_stories</span>
+              <span class="text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors">Courses</span>
+            </a>
+            
+            <!-- Messages -->
+            <a href="{% url 'messages' %}" 
+               class="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 group"
+               title="Messages">
+              <span class="material-icons-outlined text-slate-500 group-hover:text-primary transition-colors">chat_bubble_outline</span>
+              <span class="text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors">Messages</span>
+            </a>
+          </div>
+
+          <!-- Avatar (links to profile) -->
+          <a href="{% url 'profile' %}" class="relative group" title="View Profile">
+            <div class="w-10 h-10 rounded-full overflow-hidden ring-2 ring-slate-200 dark:ring-slate-700 group-hover:ring-primary transition-all duration-300 shadow-md">
+              <img 
+                src="{% if user.gender == 'Female' %}{% static 'teach/img/female-avatar.png' %}{% else %}{% static 'teach/img/male-avatar.png' %}{% endif %}" 
+                alt="{{ user.first_name }}'s avatar" 
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <!-- Online indicator -->
+            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-900"></div>
+          </a>
+
+          <!-- Mobile Menu Button (hamburger) -->
+          <button 
+            onclick="openMobileMenu()" 
+            class="md:hidden p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            aria-label="Open menu"
+          >
+            <span class="material-icons-outlined">menu</span>
+          </button>
+
+        {% else %}
+          <!-- Unauthenticated User: Login/Signup Buttons -->
+          
+          <!-- Desktop Buttons -->
+          <div class="hidden sm:flex items-center gap-3">
+            <a href="{% url 'login' %}" 
+               class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200">
+              Login
+            </a>
+            <a href="{% url 'signup' %}" 
+               class="px-5 py-2.5 rounded-xl text-sm font-bold bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 hover:scale-105">
+              Sign Up
+            </a>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <button 
+            onclick="openMobileMenu()" 
+            class="sm:hidden p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            aria-label="Open menu"
+          >
+            <span class="material-icons-outlined">menu</span>
+          </button>
+        {% endif %}
+        
+      </div>
+    </div>
+  </nav>
+</header>
