@@ -584,8 +584,12 @@ class Lesson(models.Model):
         related_name='lessons',
         to_field='content_id'
     )
-    lesson_body = models.TextField()
-    video_url = models.URLField(blank=True, null=True)
+
+    
+    raw_content = models.TextField(blank=True, default='')
+
+    video_embed_url = models.URLField(blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -593,6 +597,7 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"Lesson {self.lesson_id} - {self.content.title}"
+
 
 
 class LessonFile(models.Model):

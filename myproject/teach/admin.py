@@ -241,17 +241,20 @@ class QuizResultAdmin(admin.ModelAdmin):
 # =========================
 # Lessons Admin
 # =========================
+
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ('lesson_id', 'content', 'has_video', 'created_at')
-    list_filter = ('created_at', 'content__course')
-    search_fields = ('content__title', 'lesson_body')
-    readonly_fields = ('lesson_id', 'created_at')
-    
+    list_display = ("lesson_id", "content", "has_video", "created_at")
+    list_filter = ("created_at", "content__course", "content__content_type")
+    search_fields = ("content__title", "raw_content")
+    readonly_fields = ("lesson_id", "created_at")
+    ordering = ("-created_at",)
+
     def has_video(self, obj):
-        return bool(obj.video_url)
+        return bool(getattr(obj, "video_embed_url", None))
     has_video.boolean = True
-    has_video.short_description = 'Has Video'
+    has_video.short_description = "Has Video"
+
 
 
 @admin.register(LessonFile)
@@ -260,6 +263,7 @@ class LessonFileAdmin(admin.ModelAdmin):
     list_filter = ('file_type', 'lesson__content__course')
     search_fields = ('file_name', 'lesson__content__title')
     ordering = ('lesson', 'file_name')
+
 
 
 

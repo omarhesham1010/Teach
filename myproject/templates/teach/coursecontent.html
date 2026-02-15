@@ -5,15 +5,21 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
   <title>Course Content Player</title>
+
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Material+Symbols+Rounded:opsz,wght@20..48,100..700"
     rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+
   <link rel="stylesheet" href="/static/teach/css/style.css">
   <script src="/static/teach/js/script.js"></script>
 </head>
 
 <body
   class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased min-h-screen flex flex-col">
+
+  <!-- Header -->
   <header
     class="flex items-center justify-between px-4 py-3 bg-surface-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800">
     <div class="flex items-center gap-3">
@@ -22,7 +28,9 @@
         <span class="material-symbols-rounded text-2xl">arrow_back_ios_new</span>
       </a>
 
-      <h1 class="text-lg font-semibold truncate max-w-[180px]">UX Design Masterclass</h1>
+      <h1 class="text-lg font-semibold truncate max-w-[180px] sm:max-w-[260px] lg:max-w-none">
+        UX Design Masterclass
+      </h1>
     </div>
 
     <div class="flex items-center gap-1">
@@ -44,99 +52,312 @@
     </div>
   </header>
 
-  <main class="flex-1 overflow-y-auto no-scrollbar pb-28">
-    <div class="relative aspect-video bg-black flex items-center justify-center">
-      <img alt="Video Player Placeholder" class="absolute inset-0 w-full h-full object-cover opacity-60"
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuJA1atc7gPI_ZrmtAJwWueC5qHNyfdxFUKmGwcX9-Hrl_bHtlZQv_I4IaUbH-JxXu_YQ6K-Qw-_NFDg6lsuzGMZrOVD9rd4zIVWRbZKppU3c9ANeLtXG1_Wbka6ok9N1me8VavOQdoy8-ofL9pDW5MPIf2IYW0PfzltWisyEEathdnQKcdVUuo1u1jie5MNLhIB6PLVTtjvqKdI8spLSy_EzglPDaozn2HlvNBAKLh0BQS6cz3fGzToBKskSOI7Kn40mePur6Zqc" />
-      <button
-        class="relative z-10 w-16 h-16 bg-white/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center text-white transition-transform active:scale-95">
-        <span class="material-symbols-rounded text-4xl ml-1">play_arrow</span>
-      </button>
-      <div class="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
-        <div class="h-full bg-primary w-1/3"></div>
-      </div>
-    </div>
-    <div class="p-4 space-y-6">
-      <section>
-        <div class="flex justify-between items-start mb-2">
-          <span class="text-xs font-bold uppercase tracking-wider text-primary">Lesson 04</span>
-          <div class="flex items-center gap-1 text-xs font-medium text-slate-500">
-            <span class="material-symbols-rounded text-sm">schedule</span> 12:45
+  <!-- Main -->
+  <main class="flex-1 overflow-y-auto no-scrollbar pb-32 lg:pb-10">
+    <div class="mx-auto w-full max-w-6xl">
+
+      <!-- ✅ Lesson Header -->
+      <section class="p-4 pb-0">
+        <div
+          class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+          <!-- ✅ Responsive header row -->
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div class="min-w-0">
+              <p class="text-xs font-bold uppercase tracking-wider text-primary mb-1">Lesson</p>
+              <h2 id="lessonHeaderTitle" class="text-lg font-bold truncate">
+                Introduction to User Research
+              </h2>
+
+              <div id="lessonHeaderDurationRow"
+                class="mt-2 flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-rounded text-base">schedule</span>
+                <span id="lessonHeaderDuration">12:45</span>
+              </div>
+            </div>
+
+            <!-- ✅ Full width on mobile -->
+            <button id="lessonHeaderCompleteBtn" type="button"
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/25 active:scale-95 transition">
+              <span class="material-symbols-rounded text-xl">check_circle</span>
+              <span id="lessonHeaderCompleteText">Mark as completed</span>
+            </button>
           </div>
         </div>
-        <h2 class="text-2xl font-bold mb-2">Introduction to User Research</h2>
-        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-          In this module, we'll dive deep into the fundamental principles of user-centric research. Learn how to
-          identify user needs, pain points, and behaviors to inform your design decisions effectively.
-        </p>
       </section>
-      <nav class="flex border-b border-slate-200 dark:border-slate-800">
-        <a href="{% url 'courses' %}" class="px-4 py-2 text-sm font-semibold border-b-2 border-primary text-primary">
-          Lessons
-        </a>
 
-        <a href="{% url 'quiz' %}"
-          class="px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary">
-          Quizzes
-        </a>
+      <!-- Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 p-4">
 
-        <a href="{% url 'assignment' %}"
-          class="px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary">
-          Assignment
-        </a>
-      </nav>
+        <!-- Player + Content Renderer -->
+        <div class="lg:col-span-2 space-y-6">
 
-      <div
-        class="bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <div class="flex justify-between items-center mb-3">
-          <span class="text-sm font-semibold">Course Progress</span>
-          <span class="text-sm font-bold text-primary">45%</span>
+          <!-- ✅ Video Embed Player -->
+          <section class="bg-black rounded-2xl overflow-hidden border border-black/10 dark:border-white/10">
+            <div class="relative aspect-video">
+              <div id="videoEmbedHost" class="absolute inset-0 w-full h-full"></div>
+
+              <div id="videoFallbackCover"
+                class="absolute inset-0 w-full h-full flex items-center justify-center bg-black hidden">
+                <img alt="Video Placeholder" class="absolute inset-0 w-full h-full object-cover opacity-60"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuJA1atc7gPI_ZrmtAJwWueC5qHNyfdxFUKmGwcX9-Hrl_bHtlZQv_I4IaUbH-JxXu_YQ6K-Qw-_NFDg6lsuzGMZrOVD9rd4zIVWRbZKppU3c9ANeLtXG1_Wbka6ok9N1me8VavOQdoy8-ofL9pDW5MPIf2IYW0PfzltWisyEEathdnQKcdVUuo1u1jie5MNLhIB6PLVTtjvqKdI8spLSy_EzglPDaozn2HlvNBAKLh0BQS6cz3fGzToBKskSOI7Kn40mePur6Zqc" />
+                <button
+                  class="relative z-10 w-16 h-16 bg-white/20 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center text-white transition-transform active:scale-95"
+                  aria-label="Play">
+                  <span class="material-symbols-rounded text-4xl ml-1">play_arrow</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ✅ Lesson Content Renderer -->
+          <section
+            class="bg-surface-light dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-base font-bold">Lesson Content</h3>
+              <span class="text-xs font-bold uppercase tracking-widest text-slate-400"
+                id="contentTypeBadge">Renderer</span>
+            </div>
+
+            <article id="lessonText"
+              class="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-a:text-primary">
+            </article>
+
+            <!-- ✅ Files Section (NEW UI) -->
+            <div class="mt-8">
+              <h4 class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-3">Files</h4>
+
+              <div class="space-y-2" id="filesSection">
+                <!-- injected -->
+              </div>
+
+              <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                File size shown where available.
+              </p>
+            </div>
+
+            <!-- External links -->
+            <div class="mt-8">
+              <h4 class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-3">External links</h4>
+              <div id="linksList" class="space-y-2"></div>
+            </div>
+          </section>
+
         </div>
-        <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-          <div class="bg-primary h-full w-[45%] rounded-full"></div>
+
+        <!-- Side Panel -->
+        <aside class="lg:col-span-1 space-y-6">
+
+          <section>
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-primary">Lesson 04</span>
+              <div class="flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400">
+                <span class="material-symbols-rounded text-sm">schedule</span> 12:45
+              </div>
+            </div>
+
+            <h2 class="text-2xl font-bold mb-2">Introduction to User Research</h2>
+            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+              In this module, we'll dive deep into the fundamental principles of user-centric research. Learn how to
+              identify user needs, pain points, and behaviors to inform your design decisions effectively.
+            </p>
+          </section>
+
+          <nav class="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar">
+            <a href="{% url 'courses' %}" class="px-4 py-2 text-sm font-semibold border-b-2 border-primary text-primary whitespace-nowrap">
+              Lessons
+            </a>
+
+            <a href="{% url 'quiz' %}"
+              class="px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary whitespace-nowrap">
+              Quizzes
+            </a>
+
+            <a href="{% url 'assignment' %}"
+              class="px-4 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-primary whitespace-nowrap">
+              Assignment
+            </a>
+          </nav>
+
+          <div
+            class="bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-sm font-semibold">Course Progress</span>
+              <span id="courseProgressText" class="text-sm font-bold text-primary">0%</span>
+            </div>
+            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+              <div id="courseProgressBar" class="bg-primary h-full w-[0%] rounded-full"></div>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+      <!-- Curriculum -->
+      <div class="p-4 pt-0">
+        <div class="space-y-3 pb-24">
+          <h3 class="text-sm font-bold text-slate-500 uppercase tracking-widest px-1">Curriculum</h3>
+
+          <div class="accordion-item" data-type="lesson" data-lesson-id="04" data-current="true" data-open="true">
+            <button type="button"
+              class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-primary/10 border border-primary/20 hover:bg-primary/15 transition text-left">
+              <div class="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center text-lg">🎥</div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="text-sm sm:text-base font-bold text-primary truncate">User Research Intro</h4>
+                  <span class="status-text text-sm font-semibold text-slate-400">Not Completed</span>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-primary/15 text-primary">Lesson</span>
+                  <span class="text-xs text-primary/80 font-medium">Currently Playing</span>
+                </div>
+              </div>
+
+              <span class="accordion-arrow material-symbols-rounded text-primary transition-transform">expand_more</span>
+            </button>
+
+            <div class="accordion-content px-3">
+              <div
+                class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
+                    <div class="text-xs text-slate-500">Duration</div>
+                    <div class="font-semibold">12:45</div>
+                  </div>
+                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
+                    <div class="text-xs text-slate-500">Progress</div>
+                    <div class="font-semibold">33%</div>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <!-- ✅ NOTE: if you later add lesson_id in URL, pass it here -->
+                  <a href="{% url 'course_content' %}"
+                    class="w-full block py-3 rounded-2xl bg-primary text-white font-bold text-sm text-center shadow-lg shadow-primary/20 active:scale-95 transition">
+                    Open Lesson Viewer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-type="assignment">
+            <button type="button"
+              class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition text-left">
+              <div
+                class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">📝
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="text-sm sm:text-base font-semibold truncate">Persona Worksheet</h4>
+                  <span class="text-sm font-semibold text-slate-400">Locked</span>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1">
+                  <span
+                    class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-violet-100/70 dark:bg-slate-700 text-violet-700 dark:text-slate-300">
+                    Assignment
+                  </span>
+                  <span class="text-xs text-slate-500">Due soon</span>
+                </div>
+              </div>
+
+              <span class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
+            </button>
+
+            <div class="accordion-content px-3">
+              <div
+                class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
+                    <div class="text-xs text-slate-500">Status</div>
+                    <div class="font-semibold">Not Submitted</div>
+                  </div>
+                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
+                    <div class="text-xs text-slate-500">Due Date</div>
+                    <div class="font-semibold">Feb 22</div>
+                  </div>
+                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3 col-span-2">
+                    <div class="text-xs text-slate-500">Points</div>
+                    <div class="font-semibold">10 pts</div>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <a href="{% url 'assignment' %}"
+                    class="w-full block py-3 rounded-2xl bg-primary text-white font-bold text-sm text-center shadow-lg shadow-primary/20 active:scale-95 transition">
+                    Go to Assignment Page
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" data-type="quiz">
+            <button type="button"
+              class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition text-left">
+              <div
+                class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">❓
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h4 class="text-sm sm:text-base font-semibold truncate">User Research Basics Quiz</h4>
+                  <span class="text-sm font-semibold text-green-500">Completed</span>
+                </div>
+
+                <div class="flex items-center gap-2 mt-1">
+                  <span
+                    class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-orange-100/80 dark:bg-slate-700 text-orange-700 dark:text-slate-300">
+                    Quiz
+                  </span>
+                  <span class="text-xs text-slate-500">Score: 8/10</span>
+                </div>
+              </div>
+
+              <span class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
+            </button>
+
+            <div class="accordion-content px-3">
+              <div
+                class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
+                    <div class="text-xs text-slate-500">Questions</div>
+                    <div class="font-semibold">10</div>
+                  </div>
+                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
+                    <div class="text-xs text-slate-500">Time Limit</div>
+                    <div class="font-semibold">10 min</div>
+                  </div>
+                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3 col-span-2">
+                    <div class="text-xs text-slate-500">Attempts</div>
+                    <div class="font-semibold">1 / 3</div>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <a href="{% url 'quiz' %}"
+                    class="w-full block py-3 rounded-2xl bg-primary text-white font-bold text-sm text-center shadow-lg shadow-primary/20 active:scale-95 transition">
+                    Go to Quiz Page
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-      <div class="space-y-3 pb-24">
-        <h3 class="text-sm font-bold text-slate-500 uppercase tracking-widest px-1">Curriculum</h3>
-        <div class="flex items-center gap-4 p-3 rounded-xl bg-primary/10 border border-primary/20">
-          <div class="w-10 h-10 rounded-lg bg-primary text-white flex items-center justify-center font-bold">
-            04
-          </div>
-          <div class="flex-1">
-            <h4 class="text-sm font-bold text-primary">User Research Intro</h4>
-            <span class="text-xs text-primary/80 font-medium">Currently Playing</span>
-          </div>
-          <span class="material-symbols-rounded text-primary">equalizer</span>
-        </div>
-        <div
-          class="flex items-center gap-4 p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800">
-          <div
-            class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold">
-            05
-          </div>
-          <div class="flex-1">
-            <h4 class="text-sm font-semibold">Interview Techniques</h4>
-            <span class="text-xs text-slate-500">15:20 min</span>
-          </div>
-          <span class="material-symbols-rounded text-slate-300 dark:text-slate-600">lock</span>
-        </div>
-        <div
-          class="flex items-center gap-4 p-3 rounded-xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800">
-          <div
-            class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold">
-            06
-          </div>
-          <div class="flex-1">
-            <h4 class="text-sm font-semibold">Survey Design Basics</h4>
-            <span class="text-xs text-slate-500">08:45 min</span>
-          </div>
-          <span class="material-symbols-rounded text-slate-300 dark:text-slate-600">lock</span>
-        </div>
-      </div>
+
     </div>
   </main>
+
+  <!-- Footer -->
   <footer
-    class="fixed bottom-0 left-0 right-0 p-4 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 flex gap-3">
+    class="fixed lg:static bottom-0 left-0 right-0 p-4 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 flex gap-3">
     <button id="markCompleteBtn" type="button"
       class="flex-1 py-4 px-6 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm transition-transform active:scale-95 flex items-center justify-center gap-2">
       <span class="material-symbols-rounded text-xl">check_circle</span>
@@ -148,34 +369,493 @@
       Next Lesson
       <span class="material-symbols-rounded text-xl">arrow_forward</span>
     </a>
-
   </footer>
+
   <div class="fixed bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-900/10 dark:bg-white/10 rounded-full"></div>
+
+  <!-- ✅ Lesson Renderer + Progress Tracking -->
   <script>
+    const LESSON_DATA = {
+      lesson_id: "04",
+      title: "Introduction to User Research",
+      duration: "12:45",
+      video_embed_url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      html_text: `
+        <h2>What you’ll learn</h2>
+        <p>This lesson introduces the foundations of user research and why it matters in product design.</p>
+        <ul>
+          <li>How to identify user needs</li>
+          <li>How to collect insights (qualitative &amp; quantitative)</li>
+          <li>How to turn research into decisions</li>
+        </ul>
+        <p><strong>Tip:</strong> Always document your findings and validate them with real users.</p>
+      `,
+      files: [
+        { name: "User Research Checklist", url: "/media/files/user-research-checklist.pdf" },
+        { name: "Interview Questions Template", url: "/media/files/interview-questions.docx" },
+        { name: "Attachments Pack", url: "/media/files/lesson-04-attachments.zip" }
+      ],
+      links: [
+        { name: "Nielsen Norman Group - User Research", url: "https://www.nngroup.com/articles/which-ux-research-methods/" },
+        { name: "Google UX Guide", url: "https://developers.google.com/learn/pathways/ux-design" }
+      ],
+    };
+
+    // ===== Lesson Header Populate =====
+    const headerTitleEl = document.getElementById("lessonHeaderTitle");
+    const headerDurationEl = document.getElementById("lessonHeaderDuration");
+    const headerDurationRow = document.getElementById("lessonHeaderDurationRow");
+
+    if (headerTitleEl) headerTitleEl.textContent = LESSON_DATA.title || "Lesson";
+    if (headerDurationEl) headerDurationEl.textContent = LESSON_DATA.duration || "";
+    if (headerDurationRow && (!LESSON_DATA.duration || !String(LESSON_DATA.duration).trim())) {
+      headerDurationRow.classList.add("hidden");
+    }
+
+    // ===== Video Embed Renderer =====
+    const videoHost = document.getElementById("videoEmbedHost");
+    const fallback = document.getElementById("videoFallbackCover");
+
+    function renderVideo(embedUrl) {
+      if (!videoHost) return;
+
+      videoHost.innerHTML = "";
+      if (embedUrl && String(embedUrl).trim()) {
+        const iframe = document.createElement("iframe");
+        iframe.src = embedUrl;
+        iframe.className = "absolute inset-0 w-full h-full";
+        iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
+        iframe.setAttribute("allowfullscreen", "true");
+        iframe.setAttribute("title", "Lesson Video");
+        videoHost.appendChild(iframe);
+
+        if (fallback) fallback.classList.add("hidden");
+      } else {
+        if (fallback) fallback.classList.remove("hidden");
+      }
+    }
+
+    renderVideo(LESSON_DATA.video_embed_url);
+
+    // ===== Text Renderer =====
+    const lessonTextEl = document.getElementById("lessonText");
+    if (lessonTextEl) {
+      lessonTextEl.innerHTML = LESSON_DATA.html_text || `<p>No content available for this lesson.</p>`;
+    }
+
+    // ===== Helpers (File size + Extension) =====
+    function getExt(url = "") {
+      const clean = url.split("?")[0].split("#")[0];
+      const part = clean.split(".").pop();
+      return (part && part !== clean) ? part.toUpperCase() : "";
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes || isNaN(bytes)) return "—";
+      const units = ["B", "KB", "MB", "GB"];
+      let i = 0;
+      let n = Number(bytes);
+      while (n >= 1024 && i < units.length - 1) {
+        n = n / 1024;
+        i++;
+      }
+      return `${n.toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
+    }
+
+    async function fetchFileSize(url) {
+      try {
+        const res = await fetch(url, { method: "HEAD" });
+        const len = res.headers.get("content-length");
+        return len ? formatBytes(len) : "—";
+      } catch (e) {
+        return "—";
+      }
+    }
+
+    // ===== ✅ Files Section Renderer (Responsive) =====
+    const filesSection = document.getElementById("filesSection");
+
+    async function renderFilesSection(files) {
+      if (!filesSection) return;
+      filesSection.innerHTML = "";
+
+      if (!files || !files.length) {
+        filesSection.innerHTML = `<div class="text-sm text-slate-500 dark:text-slate-400">No files for this lesson.</div>`;
+        return;
+      }
+
+      const sizes = await Promise.all(files.map(f => fetchFileSize(f.url)));
+
+      files.forEach((f, idx) => {
+        const ext = getExt(f.url);
+        const sizeText = sizes[idx] || "—";
+
+        const card = document.createElement("div");
+        card.className =
+          "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40";
+
+        card.innerHTML = `
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+              <span class="material-symbols-rounded">attach_file</span>
+            </div>
+
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 min-w-0">
+                <div class="font-semibold text-sm truncate">${f.name || "File"}</div>
+                ${ext ? `<span class="shrink-0 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">${ext}</span>` : ""}
+              </div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 truncate">Size: ${sizeText}</div>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 w-full sm:w-auto">
+            ${ext === "PDF" ? `
+              <a href="${f.url}" target="_blank" rel="noopener"
+                class="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition text-xs font-bold">
+                <span class="material-symbols-rounded text-base">picture_as_pdf</span>
+                Download PDF
+              </a>
+            ` : ""}
+
+            <a href="${f.url}" download
+              class="w-full sm:w-auto inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl bg-primary text-white hover:opacity-95 transition text-xs font-bold shadow-lg shadow-primary/20">
+              <span class="material-symbols-rounded text-base">download</span>
+              ${ext === "PDF" ? "Download" : "Download attachments"}
+            </a>
+          </div>
+        `;
+
+        filesSection.appendChild(card);
+      });
+    }
+
+    renderFilesSection(LESSON_DATA.files);
+
+    // ===== External Links Renderer =====
+    const linksList = document.getElementById("linksList");
+    function renderLinks(links) {
+      if (!linksList) return;
+      linksList.innerHTML = "";
+
+      if (!links || !links.length) {
+        linksList.innerHTML = `<div class="text-sm text-slate-500 dark:text-slate-400">No external links for this lesson.</div>`;
+        return;
+      }
+
+      links.forEach((l) => {
+        const card = document.createElement("a");
+        card.href = l.url;
+        card.target = "_blank";
+        card.rel = "noopener noreferrer";
+        card.className = "flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition";
+
+        card.innerHTML = `
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center">
+              <span class="material-symbols-rounded">link</span>
+            </div>
+            <div class="min-w-0">
+              <div class="font-semibold text-sm truncate">${l.name || "External link"}</div>
+              <div class="text-xs text-slate-500 dark:text-slate-400 truncate">${l.url || ""}</div>
+            </div>
+          </div>
+          <span class="material-symbols-rounded text-slate-400">open_in_new</span>
+        `;
+        linksList.appendChild(card);
+      });
+    }
+    renderLinks(LESSON_DATA.links);
+
+    // ===== Progress Tracking (unchanged) =====
     const markBtn = document.getElementById("markCompleteBtn");
     const markText = document.getElementById("markCompleteText");
 
+    const progressText = document.getElementById("courseProgressText");
+    const progressBar = document.getElementById("courseProgressBar");
 
-    const lessonKey = "lesson-04-completed";
+    const headerBtn = document.getElementById("lessonHeaderCompleteBtn");
+    const headerText = document.getElementById("lessonHeaderCompleteText");
 
+    const COURSE_KEY = "ux-design-masterclass";
+    const LESSON_PREFIX = `${COURSE_KEY}-lesson-`;
 
-    if (localStorage.getItem(lessonKey) === "true") {
-      setCompletedUI();
+    function getAllLessonItems() {
+      return Array.from(document.querySelectorAll('.accordion-item[data-type="lesson"][data-lesson-id]'));
     }
 
-    markBtn.addEventListener("click", () => {
-      localStorage.setItem(lessonKey, "true");
-      setCompletedUI();
-    });
+    function isLessonCompleted(lessonId) {
+      return localStorage.getItem(LESSON_PREFIX + lessonId) === "true";
+    }
 
-    function setCompletedUI() {
-      markBtn.classList.remove("bg-slate-100", "dark:bg-slate-700");
-      markBtn.classList.add("bg-green-600");
-      markBtn.classList.add("text-white");
-      markText.textContent = "Completed";
+    function setLessonCompleted(lessonId) {
+      localStorage.setItem(LESSON_PREFIX + lessonId, "true");
+    }
+
+    function updateLessonUI(item) {
+      const lessonId = item.getAttribute("data-lesson-id");
+      const statusEl = item.querySelector(".status-text");
+      if (!statusEl) return;
+
+      if (isLessonCompleted(lessonId)) {
+        statusEl.textContent = "Completed";
+        statusEl.classList.remove("text-slate-400");
+        statusEl.classList.add("text-green-500");
+      } else {
+        statusEl.textContent = "Not Completed";
+        statusEl.classList.remove("text-green-500");
+        statusEl.classList.add("text-slate-400");
+      }
+    }
+
+    function updateCourseProgress() {
+      const lessons = getAllLessonItems();
+      const total = lessons.length || 1;
+
+      let completed = 0;
+      lessons.forEach((item) => {
+        const id = item.getAttribute("data-lesson-id");
+        if (isLessonCompleted(id)) completed++;
+      });
+
+      const pct = Math.round((completed / total) * 100);
+
+      if (progressText) progressText.textContent = `${pct}%`;
+      if (progressBar) progressBar.style.width = `${pct}%`;
+    }
+
+    function updateMarkButton() {
+      const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
+      if (!currentLesson) return;
+
+      const currentId = currentLesson.getAttribute("data-lesson-id");
+      const done = isLessonCompleted(currentId);
+
+      if (done) {
+        markBtn.classList.remove("bg-slate-100", "dark:bg-slate-700");
+        markBtn.classList.add("bg-green-600", "text-white");
+        markText.textContent = "Completed";
+      } else {
+        markBtn.classList.remove("bg-green-600", "text-white");
+        markBtn.classList.add("bg-slate-100", "dark:bg-slate-700");
+        markText.textContent = "Mark Complete";
+      }
+    }
+
+    function updateHeaderButton() {
+      const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
+      if (!currentLesson) return;
+
+      const currentId = currentLesson.getAttribute("data-lesson-id");
+      const done = isLessonCompleted(currentId);
+
+      if (!headerBtn || !headerText) return;
+
+      if (done) {
+        headerBtn.classList.remove("bg-primary", "shadow-primary/25");
+        headerBtn.classList.add("bg-green-600", "text-white");
+        headerText.textContent = "Completed";
+      } else {
+        headerBtn.classList.remove("bg-green-600", "text-white");
+        headerBtn.classList.add("bg-primary", "text-white");
+        headerText.textContent = "Mark as completed";
+      }
+    }
+
+    function refreshAll() {
+      getAllLessonItems().forEach(updateLessonUI);
+      updateCourseProgress();
+      updateMarkButton();
+      updateHeaderButton();
+    }
+
+    refreshAll();
+
+    if (markBtn) {
+      markBtn.addEventListener("click", () => {
+        const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
+        if (!currentLesson) return;
+
+        const currentId = currentLesson.getAttribute("data-lesson-id");
+        setLessonCompleted(currentId);
+        refreshAll();
+      });
+    }
+
+    if (headerBtn) {
+      headerBtn.addEventListener("click", () => {
+        const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
+        if (!currentLesson) return;
+
+        const currentId = currentLesson.getAttribute("data-lesson-id");
+        setLessonCompleted(currentId);
+        refreshAll();
+      });
     }
   </script>
 
+  <!-- Accordion behavior -->
+  <script>
+    const items = Array.from(document.querySelectorAll(".accordion-item"));
+
+    function closeItem(item) {
+      const content = item.querySelector(".accordion-content");
+      const arrow = item.querySelector(".accordion-arrow");
+      if (!content) return;
+
+      item.classList.remove("is-open");
+      content.style.maxHeight = "0px";
+      content.style.opacity = "0";
+      content.style.marginTop = "0";
+      if (arrow) arrow.style.transform = "rotate(0deg)";
+    }
+
+    function openItem(item) {
+      const content = item.querySelector(".accordion-content");
+      const arrow = item.querySelector(".accordion-arrow");
+      if (!content) return;
+
+      item.classList.add("is-open");
+      content.style.maxHeight = content.scrollHeight + "px";
+      content.style.opacity = "1";
+      content.style.marginTop = "8px";
+      if (arrow) arrow.style.transform = "rotate(180deg)";
+    }
+
+    items.forEach((item) => {
+      const content = item.querySelector(".accordion-content");
+      if (content) {
+        content.style.overflow = "hidden";
+        content.style.maxHeight = "0px";
+        content.style.opacity = "0";
+        content.style.transition = "max-height 320ms ease, opacity 240ms ease, margin-top 320ms ease";
+      }
+
+      const shouldOpen = item.getAttribute("data-open") === "true";
+      if (shouldOpen) openItem(item);
+      else closeItem(item);
+
+      const trigger = item.querySelector(".accordion-trigger");
+      if (!trigger) return;
+
+      trigger.addEventListener("click", () => {
+        const isOpen = item.classList.contains("is-open");
+
+        items.forEach((it) => {
+          if (it !== item) closeItem(it);
+        });
+
+        if (isOpen) closeItem(item);
+        else openItem(item);
+      });
+    });
+
+    window.addEventListener("resize", () => {
+      const open = document.querySelector(".accordion-item.is-open .accordion-content");
+      if (open) open.style.maxHeight = open.scrollHeight + "px";
+    });
+  </script>
+
+  <!-- ✅ Raw Text Parser (kept as-is) -->
+  <script>
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function parseInlineFormatting(text) {
+      text = text.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+      text = text.replace(/(^|[^*])\*(?!\s)(.+?)(?<!\s)\*(?!\*)/g, "$1<em>$2</em>");
+      return text;
+    }
+
+    function isSafeUrl(url) {
+      try {
+        const u = new URL(url, window.location.origin);
+        return ["http:", "https:"].includes(u.protocol);
+      } catch {
+        return false;
+      }
+    }
+
+    function renderRawToHtml(raw) {
+      if (!raw) return "<p>No content available.</p>";
+      let safe = escapeHtml(raw);
+      const lines = safe.split(/\r?\n/);
+
+      let out = "";
+      for (let line of lines) {
+        line = line.trim();
+        if (!line) {
+          out += `<div class="h-3"></div>`;
+          continue;
+        }
+
+        const videoMatch = line.match(/^\[\[video:(.+?)\]\]$/i);
+        if (videoMatch) {
+          const url = videoMatch[1].trim();
+          if (isSafeUrl(url)) {
+            out += `
+              <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div class="relative aspect-video bg-black">
+                  <iframe class="absolute inset-0 w-full h-full"
+                    src="${url}"
+                    title="Lesson Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
+                </div>
+              </div>
+            `;
+          } else {
+            out += `<p class="text-sm text-red-500">Invalid video URL.</p>`;
+          }
+          continue;
+        }
+
+        const fileMatch = line.match(/^\[\[file:(.+?)\]\]$/i);
+        if (fileMatch) {
+          const payload = fileMatch[1].trim();
+          const [urlRaw, nameRaw] = payload.split("|");
+          const url = (urlRaw || "").trim();
+          const name = (nameRaw || "").trim() || "Download file";
+
+          if (url) {
+            const ext = (url.split("?")[0].split("#")[0].split(".").pop() || "").toUpperCase();
+            out += `
+              <a href="${url}" download
+                class="mt-3 flex items-center justify-between gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/40 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                    <span class="material-symbols-rounded">download</span>
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2 min-w-0">
+                      <div class="font-semibold text-sm truncate">${name}</div>
+                      ${ext ? `<span class="shrink-0 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">${ext}</span>` : ""}
+                    </div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 truncate">${url}</div>
+                  </div>
+                </div>
+                <span class="material-symbols-rounded text-slate-400">arrow_forward</span>
+              </a>
+            `;
+          } else {
+            out += `<p class="text-sm text-red-500">Invalid file tag.</p>`;
+          }
+          continue;
+        }
+
+        line = parseInlineFormatting(line);
+        out += `<p>${line}</p>`;
+      }
+
+      return out;
+    }
+  </script>
 
 </body>
 
