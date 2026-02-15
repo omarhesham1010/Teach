@@ -60,15 +60,18 @@
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">First
                   Name</label>
-                <input name="first_name" value="{{ user.first_name|default:'' }}"
-                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <input name="first_name" value="{{ request.POST.first_name|default:user.first_name|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.first_name %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+                {% if errors.first_name %}
+                <p class="text-red-500 text-xs mt-1">{{ errors.first_name }}</p>
+                {% endif %}
               </div>
 
               <!-- Second Name -->
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Second
                   Name</label>
-                <input name="second_name" value="{{ user.second_name|default:'' }}"
+                <input name="second_name" value="{{ request.POST.second_name|default:user.second_name|default:'' }}"
                   class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
               </div>
 
@@ -76,52 +79,59 @@
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Third
                   Name</label>
-                <input name="third_name" value="{{ user.third_name|default:'' }}"
+                <input name="third_name" value="{{ request.POST.third_name|default:user.third_name|default:'' }}"
                   class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
               </div>
 
               <!-- Gender -->
               <div class="space-y-2">
-                <label
-                  class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Gender</label>
-                <select name="gender"
-                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-                  <option value="" {% if not user.gender %}selected{% endif %}>—</option>
-                  {% for val, label in user.GENDER_CHOICES %}
-                  <option value="{{ val }}" {% if user.gender == val %}selected{% endif %}>{{ label }}</option>
-                  {% endfor %}
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Gender</label>
+                <select name="gender" 
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.gender %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+    
+                <option value="" {% if not user.gender and not request.POST.gender %}selected{% endif %}>—</option>
+    
+                {% for val, label in user.GENDER_CHOICES %}
+                <option value="{{ val }}" {% if request.POST.gender == val or not request.POST and user.gender == val %}selected{% endif %}>
+                  {{ label }}
+                </option>
+                {% endfor %}
                 </select>
+
+                {% if errors.gender %}
+                <p class="text-red-500 text-xs mt-1">{{ errors.gender }}</p>
+                {% endif %}
               </div>
 
               <!-- Phone -->
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Phone
                   Number</label>
-                <input name="phone_number" value="{{ user.phone_number|default:'' }}"
-                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <input name="phone_number" value="{{ request.POST.phone_number|default:user.phone_number|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.phone_number %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+                {% if errors.phone_number %}
+                <p class="text-red-500 text-xs mt-1">{{ errors.phone_number }}</p>
+                {% endif %}
               </div>
 
               <!-- Father Phone -->
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Parent
                   Phone Number</label>
-                <input name="father_phone_number" value="{{ user.father_phone_number|default:'' }}"
+                <input name="father_phone_number"
+                  value="{{ request.POST.father_phone_number|default:user.father_phone_number|default:'' }}"
                   class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-              </div>
 
-              <!-- Mother Phone
-              <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Mother
-                  Phone Number</label>
-                <input name="mother_phone_number" value="{{ user.mother_phone_number|default:'' }}"
-                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-              </div> -->
+                  {% if errors.father_phone_number %}
+                    <p class="text-red-500 text-xs mt-1">{{ errors.father_phone_number }}</p>
+                  {% endif %}
+              </div>
 
               <!-- School -->
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">School
                   Name</label>
-                <input name="school_name" value="{{ user.school_name|default:'' }}"
+                <input name="school_name" value="{{ request.POST.school_name|default:user.school_name|default:'' }}"
                   class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
               </div>
 
@@ -130,55 +140,82 @@
                 <label
                   class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Parent's
                   Job</label>
-                <input name="parents_job" value="{{ user.parents_job|default:'' }}"
+                <input name="parents_job" value="{{ request.POST.parents_job|default:user.parents_job|default:'' }}"
                   class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
               </div>
 
               <!-- Government -->
               <div class="space-y-2">
-                <label
-                  class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Government</label>
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Government</label>
+  
                 <select name="government"
-                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-                  <option value="" {% if not user.government %}selected{% endif %}>—</option>
-                  {% for val, label in user.GOVERNMENT_CHOICES %}
-                  <option value="{{ val }}" {% if user.government == val %}selected{% endif %}>{{ label }}</option>
-                  {% endfor %}
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.government %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+    
+                <option value="" {% if not user.government and not request.POST.government %}selected{% endif %}>—</option>
+    
+                {% for val, label in user.GOVERNMENT_CHOICES %}
+                  <option value="{{ val }}" {% if request.POST.government == val or not request.POST and user.government == val %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                {% endfor %}
                 </select>
-              </div>
 
+                {% if errors.government %}
+                  <p class="text-red-500 text-xs mt-1">{{ errors.government }}</p>
+                {% endif %}
+              </div>
+            
               <!-- Grade -->
               <div class="space-y-2">
-                <label
-                  class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Grade</label>
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Grade</label>
+  
                 <select name="grade"
-                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-                  <option value="" {% if not user.grade %}selected{% endif %}>—</option>
-                  {% for val, label in user.GRADE_CHOICES %}
-                  <option value="{{ val }}" {% if user.grade == val %}selected{% endif %}>{{ label }}</option>
-                  {% endfor %}
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.grade %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+    
+                <option value="" {% if not user.grade and not request.POST.grade %}selected{% endif %}>—</option>
+    
+                {% for val, label in user.GRADE_CHOICES %}
+                  <option value="{{ val }}" {% if request.POST.grade == val or not request.POST and user.grade == val %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                {% endfor %}
                 </select>
+
+                {% if errors.grade %}
+                  <p class="text-red-500 text-xs mt-1">{{ errors.grade }}</p>
+                {% endif %}
               </div>
 
               <!-- Division -->
               <div class="space-y-2">
-                <label
-                  class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Division</label>
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Division</label>
+  
                 <select name="division"
-                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-                  <option value="" {% if not user.division %}selected{% endif %}>—</option>
-                  {% for val, label in user.DIVISION_CHOICES %}
-                  <option value="{{ val }}" {% if user.division == val %}selected{% endif %}>{{ label }}</option>
-                  {% endfor %}
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.division %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+    
+                <option value="" {% if not user.division and not request.POST.division %}selected{% endif %}>—</option>
+    
+                {% for val, label in user.DIVISION_CHOICES %}
+                  <option value="{{ val }}" {% if request.POST.division == val or not request.POST and user.division == val %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                {% endfor %}
                 </select>
+
+                {% if errors.division %}
+                  <p class="text-red-500 text-xs mt-1">{{ errors.division }}</p>
+                {% endif %}
               </div>
 
               <!-- Gmail -->
               <div class="space-y-2">
                 <label
                   class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Gmail</label>
-                <input name="gmail" value="{{ user.email|default:'' }}"
-                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <input name="gmail" value="{{ request.POST.gmail|default:user.email|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.gmail %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+                {% if errors.gmail %}
+                <p class="text-red-500 text-xs mt-1">{{ errors.gmail }}</p>
+                {% endif %}
               </div>
 
               <!-- National ID -->
@@ -211,6 +248,7 @@
     </div>
   </main>
 
+  
 </body>
 
 </html>

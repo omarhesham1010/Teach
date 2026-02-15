@@ -215,27 +215,68 @@ def login_code_view(request):
 
 @login_required
 def edit_user_profile(request):
+    user = request.user
+    errors = {}
+
     if request.method == "POST":
-        user = request.user
-        user.first_name = request.POST.get("first_name", "")
-        user.second_name = request.POST.get("second_name", "")
-        user.third_name = request.POST.get("third_name", "")
-        user.gender = request.POST.get("gender", "")
-        user.phone_number = request.POST.get("phone_number", "")
-        user.father_phone_number = request.POST.get("father_phone_number", "")
-        # user.mother_phone_number = request.POST.get("mother_phone_number", "")
-        user.school_name = request.POST.get("school_name", "")
-        user.parents_job = request.POST.get("parents_job", "")
-        user.government = request.POST.get("government", "")
-        user.grade = request.POST.get("grade", "")
-        user.division = request.POST.get("division", "")
-        user.email = request.POST.get("gmail", user.email)
-        user.save()
+        first_name = request.POST.get("first_name", "").strip()
+        second_name = request.POST.get("second_name", "").strip()
+        third_name = request.POST.get("third_name", "").strip()
+        gender = request.POST.get("gender", "")
+        phone_number = request.POST.get("phone_number", "").strip()
+        father_phone_number = request.POST.get("father_phone_number", "").strip()
+        school_name = request.POST.get("school_name", "").strip()
+        parents_job = request.POST.get("parents_job", "").strip()
+        government = request.POST.get("government", "")
+        grade = request.POST.get("grade", "")
+        division = request.POST.get("division", "")
+        gmail = request.POST.get("gmail", "").strip()
 
-        messages.success(request, "Profile updated successfully.")
-        return redirect("profile")
+        # Validation Logic
+        if not first_name:
+            errors['first_name'] = "First name is required."
+        
+        if not gmail:
+            errors['gmail'] = "Email is required."
+        elif "@" not in gmail or "." not in gmail:
+            errors['gmail'] = "Enter a valid email address."
+        elif User.objects.filter(email__iexact=gmail).exclude(national_id=user.national_id).exists():
+            errors['gmail'] = "This email is already in use by another account."
 
-    return render(request, "teach/edit_user_profile.html", {"user": request.user})
+
+        prefixes = ['010', '011', '012', '015']
+        if phone_number:
+            is_valid_phone = phone_number.isdigit() and len(phone_number) == 11 and any(phone_number.startswith(p) for p in prefixes)
+            if not is_valid_phone:
+                errors['phone_number'] = "Please enter a valid phone number."
+
+        if father_phone_number:
+            is_valid_father = father_phone_number.isdigit() and len(father_phone_number) == 11 and any(father_phone_number.startswith(p) for p in prefixes)
+            if not is_valid_father:
+                errors['father_phone_number'] = "Please enter a valid phone number."
+
+        if not errors:
+            user.first_name = first_name
+            user.second_name = second_name
+            user.third_name = third_name
+            user.gender = gender
+            user.phone_number = phone_number
+            user.father_phone_number = father_phone_number
+            user.school_name = school_name
+            user.parents_job = parents_job
+            user.government = government
+            user.grade = grade
+            user.division = division
+            user.email = gmail
+            user.save()
+
+            messages.success(request, "Profile updated successfully.")
+            return redirect("profile")
+
+    return render(request, "teach/edit_user_profile.html", {
+        "user": user,
+        "errors": errors,
+    })
 
 
 @login_required
