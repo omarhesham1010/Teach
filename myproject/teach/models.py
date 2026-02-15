@@ -108,7 +108,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # Contact
     phone_number = models.CharField(max_length=20, blank=True, default='')
     father_phone_number = models.CharField(max_length=20, blank=True, default='')
-    mother_phone_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
+    # mother_phone_number = models.CharField(max_length=20, blank=True, default='')
     
     # School info
     school_name = models.CharField(max_length=120, blank=True, default='')

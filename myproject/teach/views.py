@@ -223,7 +223,7 @@ def edit_user_profile(request):
         user.gender = request.POST.get("gender", "")
         user.phone_number = request.POST.get("phone_number", "")
         user.father_phone_number = request.POST.get("father_phone_number", "")
-        user.mother_phone_number = request.POST.get("mother_phone_number", "")
+        # user.mother_phone_number = request.POST.get("mother_phone_number", "")
         user.school_name = request.POST.get("school_name", "")
         user.parents_job = request.POST.get("parents_job", "")
         user.government = request.POST.get("government", "")

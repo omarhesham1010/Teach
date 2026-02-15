@@ -11,7 +11,7 @@ urlpatterns = [
     path("instructor/", views.instructor, name="instructor"),
     path("courses/", views.courses, name="courses"),
     path("course-details/", views.course_details, name="course_details"),
-    path("course-content/", views.course_content, name="course_content"),
+    path("course-content/", views.course_content, name="course_content"),##################
     path("assignment/", views.assignment, name="assignment"),
     path("enrollment/", views.enrollment, name="enrollment"),
     path("signup/", views.signup, name="signup"),
@@ -24,6 +24,6 @@ urlpatterns = [
     path("notes/", views.notes_view, name="notes"),
     path("discussion/", views.discussion_view, name="discussion"),
     path("wallet/add/", views.add_money_to_wallet, name="add_money_to_wallet"),
-    path("course-content/", views.course_content, name="course_content_static"),
+    path("course-content/", views.course_content, name="course_content_static"), ##################
     path("api/toggle-theme/", views.toggle_theme, name="toggle_theme"),
 ]
