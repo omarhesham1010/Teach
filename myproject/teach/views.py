@@ -281,16 +281,38 @@ def edit_user_profile(request):
 
 @login_required
 def reset_password(request):
+    errors = {}
     if request.method == "POST":
-        form = PasswordChangeForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            return redirect("profile")
-    else:
-        form = PasswordChangeForm(user=request.user)
+        old_password = request.POST.get("old_password", "")
+        new_password = request.POST.get("new_password", "")
+        confirm_password = request.POST.get("confirm_password", "")
 
-    return render(request, "teach/reset_password.html", {"form": form})
+        # Validation Logic
+        if not old_password:
+            errors['old_password'] = "Old password is required."
+        elif not request.user.check_password(old_password):
+            errors['old_password'] = "Incorrect old password."
+
+        if not new_password:
+            errors['new_password'] = "New password is required."
+        elif len(new_password) < 8:
+            errors['new_password'] = "Password must be at least 8 characters long."
+        elif not any(char.isdigit() for char in new_password):
+            errors['new_password'] = "Password must contain at least one number."
+
+        if not confirm_password:
+            errors['confirm_password'] = "Please confirm your new password."
+        elif new_password != confirm_password:
+            errors['confirm_password'] = "Passwords don't match."
+
+        if not errors:
+            request.user.set_password(new_password)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
+            messages.success(request, "Password updated successfully.")
+            return redirect("profile")
+
+    return render(request, "teach/reset_password.html", {"errors": errors})
 
 
 @login_required
