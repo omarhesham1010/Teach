@@ -23,6 +23,7 @@ urlpatterns = [
     path("messages/", views.messages_view, name="messages"),
     path("notes/", views.notes_view, name="notes"),
     path("discussion/", views.discussion_view, name="discussion"),
+    path("my-courses/", views.my_courses_view, name="my_courses"),
     path("wallet/add/", views.add_money_to_wallet, name="add_money_to_wallet"),
     path("course-content/", views.course_content, name="course_content_static"), ##################
     path("api/toggle-theme/", views.toggle_theme, name="toggle_theme"),
