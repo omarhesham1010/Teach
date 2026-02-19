@@ -296,6 +296,10 @@ class Course(models.Model):
     class Meta:
         ordering = ['-created_at']
 
+    @property
+    def title(self):
+        return self.course_name
+
     def __str__(self):
         return self.course_name
 

@@ -5,160 +5,152 @@
 
 {% block content %}
 <div class="mt-4 mb-6">
-  <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">My Courses</h1>
-  <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm sm:text-base">Continue where you left off</p>
+    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">My Courses</h1>
+    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm sm:text-base">Continue where you left off</p>
 </div>
 
 <!-- Responsive Container -->
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 
-  <!-- Course 1 -->
-  <div
-    class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition overflow-hidden">
-    <div class="p-4 flex items-center gap-4">
+    <!-- Course 1 -->
+    <a href="{% url 'course_content_static' %}"
+        class="block bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition overflow-hidden">
+        <div class="p-4 flex items-center gap-4">
 
-      <div
-        class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0">
-        <img alt="Course"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfqURTaAfX2u82eTJQRM91NJpQKZHMZxivQeewErEb4KXzDKACuwcSZa8x4ZeYEAnAhV9zAW6QBUMgaBgvnxbTOR1zwQquNOvaTGRBfPaAraOA-WF2Rh2uxKxwywgUe7_91ohnrZ3N9fEvGSwEZ7PtOXXRRMcUkNd5jARyU8Fnu-F6opd9GoEC-1Fr-RGTNzhWm5WkvKhVhD964uDLO_aNGMpXzuVuN2l3qr6SuM1Z1Fk2L9aVYzDQyVKlhLqEQ_K0ikojJ0Wwg8U"
-          class="w-full h-full object-cover" />
-      </div>
+            <div
+                class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0">
+                <img alt="Course"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfqURTaAfX2u82eTJQRM91NJpQKZHMZxivQeewErEb4KXzDKACuwcSZa8x4ZeYEAnAhV9zAW6QBUMgaBgvnxbTOR1zwQquNOvaTGRBfPaAraOA-WF2Rh2uxKxwywgUe7_91ohnrZ3N9fEvGSwEZ7PtOXXRRMcUkNd5jARyU8Fnu-F6opd9GoEC-1Fr-RGTNzhWm5WkvKhVhD964uDLO_aNGMpXzuVuN2l3qr6SuM1Z1Fk2L9aVYzDQyVKlhLqEQ_K0ikojJ0Wwg8U"
+                    class="w-full h-full object-cover" />
+            </div>
 
-      <div class="flex-1 min-w-0">
-        <div class="flex items-start justify-between gap-3">
-          <h3 class="font-bold text-base leading-tight truncate">
-            Modern Fullstack Web Development
-          </h3>
-          <span class="text-xs font-bold text-primary flex-shrink-0">40%</span>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-3">
+                    <h3 class="font-bold text-base leading-tight truncate">
+                        Modern Fullstack Web Development
+                    </h3>
+                    <span class="text-xs font-bold text-primary flex-shrink-0">40%</span>
+                </div>
+
+                <div class="mt-2">
+                    <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-primary" style="width: 40%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 -mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex-shrink-0">
+                <span class="material-symbols-outlined text-slate-400 hover:text-primary transition">
+                    chevron_right
+                </span>
+            </div>
+
         </div>
+    </a>
 
-        <div class="mt-2">
-          <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div class="h-full bg-primary" style="width: 40%"></div>
-          </div>
+    <!-- Course 2 -->
+    <a href="{% url 'course_content_static' %}"
+        class="block bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition overflow-hidden">
+        <div class="p-4 flex items-center gap-4">
+
+            <div
+                class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0">
+                <img alt="Course"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfqURTaAfX2u82eTJQRM91NJpQKZHMZxivQeewErEb4KXzDKACuwcSZa8x4ZeYEAnAhV9zAW6QBUMgaBgvnxbTOR1zwQquNOvaTGRBfPaAraOA-WF2Rh2uxKxwywgUe7_91ohnrZ3N9fEvGSwEZ7PtOXXRRMcUkNd5jARyU8Fnu-F6opd9GoEC-1Fr-RGTNzhWm5WkvKhVhD964uDLO_aNGMpXzuVuN2l3qr6SuM1Z1Fk2L9aVYzDQyVKlhLqEQ_K0ikojJ0Wwg8U"
+                    class="w-full h-full object-cover" />
+            </div>
+
+            <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-3">
+                    <h3 class="font-bold text-base leading-tight truncate">
+                        UI/UX Design Fundamentals
+                    </h3>
+                    <span class="text-xs font-bold text-primary flex-shrink-0">65%</span>
+                </div>
+
+                <div class="mt-2">
+                    <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-primary" style="width: 65%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 -mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex-shrink-0">
+                <span class="material-symbols-outlined text-slate-400 hover:text-primary transition">
+                    chevron_right
+                </span>
+            </div>
+
         </div>
-      </div>
+    </a>
 
-      <a href="{% url 'course_content_static' %}"
-        class="p-2 -mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex-shrink-0"
-        aria-label="Open course content">
-        <span class="material-symbols-outlined text-slate-400 hover:text-primary transition">
-          chevron_right
-        </span>
-      </a>
+    <!-- Course 3 -->
+    <a href="{% url 'course_content_static' %}"
+        class="block bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition overflow-hidden">
+        <div class="p-4 flex items-center gap-4">
 
-    </div>
-  </div>
+            <div
+                class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0 bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                <span class="material-symbols-outlined text-purple-500">data_object</span>
+            </div>
 
-  <!-- Course 2 -->
-  <div
-    class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition overflow-hidden">
-    <div class="p-4 flex items-center gap-4">
+            <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-3">
+                    <h3 class="font-bold text-base leading-tight truncate">
+                        Data Science with Python
+                    </h3>
+                    <span class="text-xs font-bold text-primary flex-shrink-0">12%</span>
+                </div>
 
-      <div
-        class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0">
-        <img alt="Course"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-DeW7Cfu8eMPsORx5WN7uhWpcEvK4rXhVXtFGSGZNvgAYxhfEZYyoP1GK439c3f-WA7uW54Xs5kc_oaItzNw-eZaXZc4lkehYu5yKE7zo6YVG6cBVAgBHVnxcYCRoS5pCKM1PDyYelo0I90nyl75_PMfdI3GYX8A3EERSM6a8kMVFV0w8SjzcG9qaLxlsaBh6rikV6yW3nhhe6pqaxOnIlgCbulv8W9agrtdS-r1PzC2GrKfZc71xU5MIl3omVhp6fncdbO9wQCs"
-          class="w-full h-full object-cover" />
-      </div>
+                <div class="mt-2">
+                    <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-primary" style="width: 12%"></div>
+                    </div>
+                </div>
+            </div>
 
-      <div class="flex-1 min-w-0">
-        <div class="flex items-start justify-between gap-3">
-          <h3 class="font-bold text-base leading-tight truncate">
-            UI/UX Design Fundamentals
-          </h3>
-          <span class="text-xs font-bold text-primary flex-shrink-0">65%</span>
+            <div class="p-2 -mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex-shrink-0">
+                <span class="material-symbols-outlined text-slate-400 hover:text-primary transition">
+                    chevron_right
+                </span>
+            </div>
+
         </div>
+    </a>
 
-        <div class="mt-2">
-          <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div class="h-full bg-primary" style="width: 65%"></div>
-          </div>
+    <!-- Course 4 -->
+    <a href="{% url 'course_content_static' %}"
+        class="block bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition overflow-hidden">
+        <div class="p-4 flex items-center gap-4">
+
+            <div
+                class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0 bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
+                <span class="material-symbols-outlined text-orange-500">campaign</span>
+            </div>
+
+            <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between gap-3">
+                    <h3 class="font-bold text-base leading-tight truncate">
+                        Digital Marketing Masterclass
+                    </h3>
+                    <span class="text-xs font-bold text-primary flex-shrink-0">8%</span>
+                </div>
+
+                <div class="mt-2">
+                    <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-primary" style="width: 8%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 -mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex-shrink-0">
+                <span class="material-symbols-outlined text-slate-400 hover:text-primary transition">
+                    chevron_right
+                </span>
+            </div>
+
         </div>
-      </div>
-
-      <a href="{% url 'course_content_static' %}"
-        class="p-2 -mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex-shrink-0"
-        aria-label="Open course content">
-        <span class="material-symbols-outlined text-slate-400 hover:text-primary transition">
-          chevron_right
-        </span>
-      </a>
-
-    </div>
-  </div>
-
-  <!-- Course 3 -->
-  <div
-    class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition overflow-hidden">
-    <div class="p-4 flex items-center gap-4">
-
-      <div
-        class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0 bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-        <span class="material-symbols-outlined text-purple-500">data_object</span>
-      </div>
-
-      <div class="flex-1 min-w-0">
-        <div class="flex items-start justify-between gap-3">
-          <h3 class="font-bold text-base leading-tight truncate">
-            Data Science with Python
-          </h3>
-          <span class="text-xs font-bold text-primary flex-shrink-0">12%</span>
-        </div>
-
-        <div class="mt-2">
-          <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div class="h-full bg-primary" style="width: 12%"></div>
-          </div>
-        </div>
-      </div>
-
-      <a href="{% url 'course_content_static' %}"
-        class="p-2 -mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex-shrink-0"
-        aria-label="Open course content">
-        <span class="material-symbols-outlined text-slate-400 hover:text-primary transition">
-          chevron_right
-        </span>
-      </a>
-
-    </div>
-  </div>
-
-  <!-- Course 4 -->
-  <div
-    class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition overflow-hidden">
-    <div class="p-4 flex items-center gap-4">
-
-      <div
-        class="w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0 bg-orange-100 dark:bg-orange-900 flex items-center justify-center">
-        <span class="material-symbols-outlined text-orange-500">campaign</span>
-      </div>
-
-      <div class="flex-1 min-w-0">
-        <div class="flex items-start justify-between gap-3">
-          <h3 class="font-bold text-base leading-tight truncate">
-            Digital Marketing Masterclass
-          </h3>
-          <span class="text-xs font-bold text-primary flex-shrink-0">8%</span>
-        </div>
-
-        <div class="mt-2">
-          <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div class="h-full bg-primary" style="width: 8%"></div>
-          </div>
-        </div>
-      </div>
-
-      <a href="{% url 'course_content_static' %}"
-        class="p-2 -mr-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition flex-shrink-0"
-        aria-label="Open course content">
-        <span class="material-symbols-outlined text-slate-400 hover:text-primary transition">
-          chevron_right
-        </span>
-      </a>
-
-    </div>
-  </div>
+    </a>
 
 </div>
 {% endblock %}

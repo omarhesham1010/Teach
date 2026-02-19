@@ -4,6 +4,7 @@ import json
 from decimal import Decimal
 
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -44,15 +45,24 @@ def login_view(request):
         return redirect("instructor")
 
     if request.method == "POST":
-        national_id = request.POST.get("username", "").strip()
+        identifier = request.POST.get("identifier", "").strip()
         password = request.POST.get("password", "")
 
-        user = authenticate(request, username=national_id, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("instructor")
+        # Dual-lookup logic
+        user_obj = User.objects.filter(
+            Q(email__iexact=identifier) | Q(national_id=identifier)
+        ).first()
 
-        messages.error(request, "Invalid National ID or password.")
+        if user_obj:
+            user = authenticate(request, username=user_obj.national_id, password=password)
+            if user is not None:
+                login(request, user)
+                next_url = request.POST.get('next')
+                if next_url:
+                    return redirect(next_url)
+                return redirect("instructor")
+
+        messages.error(request, "Invalid Email/National ID or password.")
 
     return render(request, "teach/login.html")
 
@@ -74,8 +84,34 @@ def my_courses_view(request):
         Enrollment.objects
         .filter(user=request.user)
         .select_related("course")
-        .order_by("-created_at")
+        .order_by("-enrolled_at")
     )
+
+    from .models import Lesson, LessonProgress
+
+    for enrollment in enrollments:
+        # 1. Total lessons in this course
+        # lessons belong to CourseContent, which belongs to Course
+        total_lessons = Lesson.objects.filter(content__course=enrollment.course).count()
+        
+        # 2. Completed lessons by this user for this course
+        # LessonProgress stores lesson ID (lesson_id as string/id)
+        # We need to find completed progress records for lessons in this course
+        course_lesson_ids = list(Lesson.objects.filter(content__course=enrollment.course).values_list('lesson_id', flat=True))
+        
+        completed_lessons = LessonProgress.objects.filter(
+            user=request.user,
+            lesson__in=[str(lid) for lid in course_lesson_ids],
+            is_completed=True
+        ).count()
+
+        # 3. Calculate percentage
+        if total_lessons > 0:
+            progress_percent = (completed_lessons / total_lessons) * 100
+        else:
+            progress_percent = 0
+            
+        enrollment.progress = round(progress_percent)
 
     return render(request, "teach/my_courses.html", {
         "enrollments": enrollments
@@ -98,8 +134,91 @@ def enrollment(request):
     return render(request, "teach/enrollement.html")
 
 
+@csrf_protect
 def signup(request):
-    return render(request, "teach/signup.html")
+    if request.user.is_authenticated:
+        logout(request)
+
+    errors = {}
+    if request.method == "POST":
+        data = request.POST
+        first_name = data.get("first_name", "").strip()
+        second_name = data.get("second_name", "").strip()
+        third_name = data.get("third_name", "").strip()
+        gender = data.get("gender", "")
+        phone_number = data.get("phone_number", "").strip()
+        father_phone_number = data.get("father_phone_number", "").strip()
+        school_name = data.get("school_name", "").strip()
+        parents_job = data.get("parents_job", "").strip()
+        government = data.get("government", "")
+        grade = data.get("grade", "")
+        division = data.get("division", "")
+        gmail = data.get("gmail", "").strip().lower()
+        password = data.get("password", "")
+        confirm_password = data.get("confirm_password", "")
+        national_id = data.get("national_id", "").strip()
+
+        # Manual Validation
+        required_fields = {
+            "first_name": first_name,
+            "gender": gender,
+            "phone_number": phone_number,
+            "father_phone_number": father_phone_number,
+            "government": government,
+            "grade": grade,
+            "gmail": gmail,
+            "password": password,
+            "confirm_password": confirm_password,
+            "national_id": national_id,
+        }
+
+        for field, value in required_fields.items():
+            if not value:
+                errors[field] = f"{field.replace('_', ' ').capitalize()} is required."
+
+        if not errors:
+            if User.objects.filter(email__iexact=gmail).exists():
+                errors["gmail"] = "This email is already in use."
+            
+            if User.objects.filter(national_id=national_id).exists():
+                errors["national_id"] = "This National ID is already in use."
+
+            if len(password) < 8 or not any(char.isdigit() for char in password):
+                errors["password"] = "Password must be at least 8 characters and include a number."
+            
+            if password != confirm_password:
+                errors["confirm_password"] = "Passwords do not match."
+
+        if not errors:
+            try:
+                user = User.objects.create_user(
+                    national_id=national_id,
+                    email=gmail,
+                    password=password,
+                    first_name=first_name,
+                    second_name=second_name,
+                    third_name=third_name,
+                    gender=gender,
+                    phone_number=phone_number,
+                    father_phone_number=father_phone_number,
+                    school_name=school_name,
+                    parents_job=parents_job,
+                    government=government,
+                    grade=grade,
+                    division=division,
+                )
+                messages.success(request, "Account created successfully. Please login.")
+                return redirect("login")
+            except Exception as e:
+                errors["form"] = f"An unexpected error occurred: {str(e)}"
+
+    return render(request, "teach/signup.html", {
+        "errors": errors,
+        "gender_choices": User.GENDER_CHOICES,
+        "government_choices": User.GOVERNMENT_CHOICES,
+        "grade_choices": User.GRADE_CHOICES,
+        "division_choices": User.DIVISION_CHOICES,
+    })
 
 
 def quiz(request):
@@ -207,6 +326,9 @@ def login_code_view(request):
         latest.save(update_fields=["is_used"])
 
         login(request, user)
+        next_url = request.POST.get("next")
+        if next_url:
+            return redirect(next_url)
         return redirect("instructor")
 
     messages.error(request, "Invalid action.")
