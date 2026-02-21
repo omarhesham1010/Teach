@@ -16,8 +16,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
 
-from .models import LoginCode, Wallet
-from .models import Course, Enrollment  # ✅ ADD THIS
+from .models import LoginCode, Wallet, Course, Enrollment, Lesson, LessonProgress  # ✅ UPDATED
 
 
 User = get_user_model()
@@ -86,8 +85,6 @@ def my_courses_view(request):
         .select_related("course")
         .order_by("-enrolled_at")
     )
-
-    from .models import Lesson, LessonProgress
 
     for enrollment in enrollments:
         # 1. Total lessons in this course
@@ -465,5 +462,26 @@ def add_money_to_wallet(request):
     })
 @login_required
 def courses(request):
-    courses = Course.objects.filter(is_active=True).order_by("-created_at")
-    return render(request, "teach/courses.html", {"courses": courses})
+    grade_filter = request.GET.get('grade')
+    division_filter = request.GET.get('division')
+    search_query = request.GET.get('search', '').strip()
+    
+    courses_qs = Course.objects.filter(is_active=True).order_by("-created_at")
+    
+    if search_query:
+        courses_qs = courses_qs.filter(course_name__icontains=search_query)
+        
+    if grade_filter:
+        courses_qs = courses_qs.filter(grade=grade_filter)
+        
+    if division_filter:
+        courses_qs = courses_qs.filter(division=division_filter)
+        
+    return render(request, "teach/courses.html", {
+        "courses": courses_qs,
+        "selected_grade": grade_filter,
+        "selected_division": division_filter,
+        "selected_search": search_query,
+        "grade_choices": Course.GRADE_CHOICES,
+        "division_choices": Course.DIVISION_CHOICES,
+    })

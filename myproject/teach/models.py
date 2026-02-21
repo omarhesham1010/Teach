@@ -282,8 +282,23 @@ class Course(models.Model):
         blank=True,
         null=True
     )
-    grade = models.CharField(max_length=10, blank=True, default='')
-    division = models.CharField(max_length=20, blank=True, default='')
+    
+    GRADE_CHOICES = [
+        ('1', 'Grade 1'), ('2', 'Grade 2'), ('3', 'Grade 3'),
+        ('4', 'Grade 4'), ('5', 'Grade 5'), ('6', 'Grade 6'),
+        ('7', 'Grade 7'), ('8', 'Grade 8'), ('9', 'Grade 9'),
+        ('10', 'Grade 10'), ('11', 'Grade 11'), ('12', 'Grade 12'),
+    ]
+    
+    DIVISION_CHOICES = [
+        ('Science', 'Science'),
+        ('Mathematics', 'Mathematics'),
+        ('Literature', 'Literature'),
+        ('General', 'General'),
+    ]
+
+    grade = models.CharField(max_length=10, choices=GRADE_CHOICES, blank=True, default='')
+    division = models.CharField(max_length=20, choices=DIVISION_CHOICES, blank=True, default='')
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
