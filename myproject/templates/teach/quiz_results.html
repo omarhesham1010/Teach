@@ -1,0 +1,133 @@
+{% extends 'teach/base.html' %}
+{% load static %}
+
+{% block title %}Quiz Results - {{ quiz.content.title }} - EduPlatform{% endblock %}
+
+{% block main_class %}px-4 py-4 pb-24 md:pb-8{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6">
+  <!-- Header -->
+  <div class="flex items-center gap-3 mb-4">
+    <a href="{% url 'quiz' %}" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+      <span class="material-icons-outlined">arrow_back</span>
+    </a>
+    <h1 class="text-2xl font-bold text-slate-900 dark:text-white">{{ quiz.content.title }}</h1>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <!-- Best Score -->
+    <div class="rounded-xl bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 border border-amber-200 dark:border-amber-800 p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="material-icons-outlined text-amber-600 dark:text-amber-400">emoji_events</span>
+        <span class="text-sm font-semibold text-amber-700 dark:text-amber-300">Best Score</span>
+      </div>
+      <p class="text-2xl font-bold text-amber-900 dark:text-amber-100">
+        {% if best_score %}{{ best_score }}%{% else %}—{% endif %}
+      </p>
+    </div>
+
+    <!-- Average Score -->
+    <div class="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800 p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="material-icons-outlined text-blue-600 dark:text-blue-400">bar_chart</span>
+        <span class="text-sm font-semibold text-blue-700 dark:text-blue-300">Average Score</span>
+      </div>
+      <p class="text-2xl font-bold text-blue-900 dark:text-blue-100">
+        {% if results %}{{ average_score }}%{% else %}—{% endif %}
+      </p>
+    </div>
+
+    <!-- Attempts -->
+    <div class="rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 border border-slate-200 dark:border-slate-700 p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="material-icons-outlined text-slate-600 dark:text-slate-400">repeat</span>
+        <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Attempts</span>
+      </div>
+      <p class="text-2xl font-bold text-slate-900 dark:text-slate-100">
+        {{ total_attempts }} / {{ max_attempts }}
+      </p>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+        {% if remaining_attempts > 0 %}
+          {{ remaining_attempts }} left
+        {% else %}
+          No attempts left
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <!-- Attempts List -->
+  <div class="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+    <div class="p-5 md:p-6 border-b border-slate-200 dark:border-slate-700">
+      <h2 class="text-lg font-bold text-slate-900 dark:text-white">Your Attempts</h2>
+    </div>
+    {% if results %}
+    <div class="divide-y divide-slate-200 dark:divide-slate-700">
+      {% for result in results %}
+      <div class="p-5 md:p-6 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-sm font-semibold text-slate-600 dark:text-slate-400">Attempt {{ result.attempt_number }}</span>
+              <span class="text-xs text-slate-500 dark:text-slate-500">{{ result.submitted_at|date:"M j, Y" }} at {{ result.submitted_at|time:"g:i A" }}</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="text-2xl font-bold {% if result.score >= 90 %}text-green-600 dark:text-green-400{% elif result.score >= 70 %}text-blue-600 dark:text-blue-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                {{ result.score }}%
+              </span>
+              {% if result.score == best_score and best_score is not None %}
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-medium">
+                <span class="material-icons-outlined text-sm">star</span>
+                Best
+              </span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="shrink-0">
+            {% if result.score >= 90 %}
+              <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium">
+                <span class="material-icons-outlined text-base">check_circle</span>
+                Excellent
+              </span>
+            {% elif result.score >= 70 %}
+              <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm font-medium">
+                <span class="material-icons-outlined text-base">thumb_up</span>
+                Good
+              </span>
+            {% else %}
+              <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 text-sm font-medium">
+                <span class="material-icons-outlined text-base">trending_up</span>
+                Practice More
+              </span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="p-8 text-center">
+      <span class="material-icons-outlined text-5xl text-slate-300 dark:text-slate-600 mb-3">quiz</span>
+      <p class="text-slate-600 dark:text-slate-400">No attempts yet.</p>
+      {% if remaining_attempts > 0 %}
+      <a href="{% url 'quiz_detail' quiz.quiz_id %}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl bg-primary hover:bg-primary/90 text-white font-medium transition-all">
+        Start Quiz
+        <span class="material-icons-outlined text-lg">arrow_forward</span>
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Action Buttons -->
+  {% if remaining_attempts > 0 %}
+  <div class="flex gap-3">
+    <a href="{% url 'quiz_detail' quiz.quiz_id %}" class="flex-1 px-4 py-3 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold text-center transition-all shadow-lg shadow-primary/20">
+      Start Quiz
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

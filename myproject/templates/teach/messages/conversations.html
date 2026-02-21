@@ -1,0 +1,107 @@
+{% extends 'teach/base.html' %}
+{% load static %}
+
+{% block title %}Messages - EduPlatform{% endblock %}
+
+{% block main_class %}px-4 py-4 pb-24 md:pb-8{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold tracking-tight">Messages</h1>
+  </div>
+
+  <!-- Search: Phone or National ID -->
+  <div class="mb-6">
+    <div class="relative flex gap-2">
+      <span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">search</span>
+      <input type="text" id="searchUserInput" placeholder="Search by Phone or National ID..."
+        class="flex-1 bg-white dark:bg-slate-800 border-none rounded-xl pl-10 pr-4 py-3 shadow-sm focus:ring-2 focus:ring-primary ring-1 ring-slate-200 dark:ring-slate-700 transition-all outline-none">
+      <button type="button" id="searchUserBtn" class="px-4 py-3 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 transition shrink-0">
+        Search
+      </button>
+    </div>
+    <p id="searchResult" class="mt-2 text-sm text-slate-500 dark:text-slate-400 hidden"></p>
+  </div>
+
+  <!-- Conversations List -->
+  <div class="space-y-4" id="conversationsList">
+    {% if conversations %}
+      {% for item in conversations %}
+      <a href="{% url 'chat_detail' item.conversation.id %}"
+        class="flex items-start gap-3 p-3 rounded-2xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+        <div class="relative shrink-0">
+          <img
+            src="{% if item.other.gender == 'Female' %}{% static 'teach/img/female-avatar.png' %}{% else %}{% static 'teach/img/male-avatar.png' %}{% endif %}"
+            alt="{{ item.other.get_full_name }}"
+            class="w-12 h-12 rounded-full object-cover ring-2 ring-slate-200 dark:ring-slate-600">
+          {% if item.unread_count > 0 %}
+          <span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center">{{ item.unread_count }}</span>
+          {% endif %}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-baseline mb-1">
+            <h3 class="font-bold text-sm truncate">{{ item.other.get_full_name|default:item.other.get_short_name|default:item.other.national_id }}</h3>
+            <span class="text-xs text-slate-400 shrink-0 ml-2">{{ item.last_at|timesince }} ago</span>
+          </div>
+          <p class="text-sm text-slate-500 dark:text-slate-400 truncate">
+            {% if item.conversation.last_message %}{{ item.conversation.last_message }}{% else %}No messages yet{% endif %}
+          </p>
+        </div>
+      </a>
+      {% endfor %}
+    {% else %}
+      <div class="text-center py-12 px-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
+        <span class="material-icons-outlined text-5xl text-slate-300 dark:text-slate-600 mb-4">chat_bubble_outline</span>
+        <p class="text-slate-500 dark:text-slate-400 font-medium">Start a new conversation</p>
+        <p class="text-sm text-slate-400 dark:text-slate-500 mt-1">Search by Phone or National ID above to message someone.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+(function() {
+  const input = document.getElementById('searchUserInput');
+  const btn = document.getElementById('searchUserBtn');
+  const resultEl = document.getElementById('searchResult');
+
+  function showResult(msg, isError) {
+    resultEl.textContent = msg;
+    resultEl.classList.remove('hidden');
+    resultEl.classList.toggle('text-red-500', isError);
+    resultEl.classList.toggle('text-slate-500', !isError);
+  }
+
+  btn.addEventListener('click', function() {
+    const q = (input.value || '').trim();
+    if (!q) {
+      showResult('Enter a phone number or National ID.', true);
+      return;
+    }
+    resultEl.classList.add('hidden');
+    btn.disabled = true;
+    fetch('{% url "search_user_chat" %}?q=' + encodeURIComponent(q), {
+      method: 'GET',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      credentials: 'same-origin'
+    })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.found && data.redirect_url) {
+          window.location.href = data.redirect_url;
+          return;
+        }
+        showResult(data.error || 'User not found.', true);
+      })
+      .catch(function() { showResult('Something went wrong. Try again.', true); })
+      .finally(function() { btn.disabled = false; });
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') btn.click();
+  });
+})();
+</script>
+{% endblock %}

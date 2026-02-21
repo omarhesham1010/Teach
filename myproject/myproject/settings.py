@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-t+p5lry^9q00xs4r_#3nt_0b3*i=7+5+-kvcg7)$z*3vyo^hv_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+# Required for CSRF when using 127.0.0.1 or localhost (Django 4.0+)
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+]
 
 
 # Application definition
@@ -59,11 +65,12 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                 'django.template.context_processors.debug',
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                 'django.template.context_processors.csrf',
+                'django.template.context_processors.csrf',
+                'teach.context_processors.unread_messages_count',
             ],
         },
     },

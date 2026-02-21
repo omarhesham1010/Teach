@@ -47,10 +47,29 @@
             
             <!-- Messages -->
             <a href="{% url 'messages' %}" 
-               class="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 group"
+               class="relative flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 group"
                title="Messages">
               <span class="material-icons-outlined text-slate-500 group-hover:text-primary transition-colors">chat_bubble_outline</span>
               <span class="text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors">Messages</span>
+              {% if unread_messages_count > 0 %}
+              <span class="absolute -top-0.5 right-1 min-w-[18px] h-[18px] px-1 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">{{ unread_messages_count }}</span>
+              {% endif %}
+            </a>
+            
+            <!-- Assignments -->
+            <a href="{% url 'assignment' %}" 
+               class="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 group"
+               title="Assignments">
+              <span class="material-icons-outlined text-slate-500 group-hover:text-primary transition-colors">assignment</span>
+              <span class="text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors">Assignments</span>
+            </a>
+            
+            <!-- Quizzes -->
+            <a href="{% url 'quiz' %}" 
+               class="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 group"
+               title="Quizzes">
+              <span class="material-icons-outlined text-slate-500 group-hover:text-primary transition-colors">quiz</span>
+              <span class="text-sm font-medium text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors">Quizzes</span>
             </a>
           </div>
 

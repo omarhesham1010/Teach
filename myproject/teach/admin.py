@@ -199,9 +199,10 @@ class AssignmentSubmissionAdmin(admin.ModelAdmin):
 # =========================
 @admin.register(Quiz)
 class QuizAdmin(admin.ModelAdmin):
-    list_display = ('quiz_id', 'content', 'time_limit', 'total_score', 'created_at')
-    list_filter = ('created_at', 'content__course')
+    list_display = ('quiz_id', 'content', 'time_limit', 'max_attempts', 'total_score', 'created_at')
+    list_filter = ('created_at', 'content__course', 'max_attempts')
     search_fields = ('content__title',)
+    fields = ('content', 'time_limit', 'max_attempts', 'total_score')
     readonly_fields = ('quiz_id', 'created_at')
     ordering = ('-created_at',)
 
@@ -231,8 +232,8 @@ class QuizOptionAdmin(admin.ModelAdmin):
 
 @admin.register(QuizResult)
 class QuizResultAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'quiz', 'score', 'submitted_at')
-    list_filter = ('submitted_at', 'quiz__content__course')
+    list_display = ('id', 'user', 'quiz', 'attempt_number', 'score', 'submitted_at')
+    list_filter = ('submitted_at', 'quiz__content__course', 'attempt_number')
     search_fields = ('user__national_id', 'user__email', 'quiz__content__title')
     readonly_fields = ('submitted_at',)
     ordering = ('-submitted_at',)

@@ -500,6 +500,7 @@ class Quiz(models.Model):
     )
     time_limit = models.PositiveIntegerField(help_text='Time limit in minutes', default=30)
     total_score = models.PositiveIntegerField(default=100)
+    max_attempts = models.PositiveIntegerField(help_text='Maximum number of attempts allowed', default=3)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -558,6 +559,7 @@ class QuizResult(models.Model):
         related_name='results',
         to_field='quiz_id'
     )
+    attempt_number = models.PositiveIntegerField(default=1)
     score = models.DecimalField(
         max_digits=5,
         decimal_places=2,
@@ -566,7 +568,7 @@ class QuizResult(models.Model):
     submitted_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'quiz')
+        unique_together = ('user', 'quiz', 'attempt_number')
         ordering = ['-submitted_at']
 
     def __str__(self):

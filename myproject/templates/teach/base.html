@@ -50,8 +50,11 @@
       <span class="text-[10px] {% if request.resolver_match.url_name == 'courses' %}font-bold{% endif %}">Courses</span>
     </a>
     <a href="{% url 'messages' %}"
-      class="flex flex-col items-center gap-1 {% if request.resolver_match.url_name == 'messages' %}text-primary{% else %}text-slate-400 hover:text-primary{% endif %}">
+      class="relative flex flex-col items-center gap-1 {% if request.resolver_match.url_name == 'messages' %}text-primary{% else %}text-slate-400 hover:text-primary{% endif %}">
       <span class="material-icons-outlined">chat_bubble_outline</span>
+      {% if unread_messages_count > 0 %}
+      <span class="absolute top-0 right-1/4 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">{{ unread_messages_count }}</span>
+      {% endif %}
       <span
         class="text-[10px] {% if request.resolver_match.url_name == 'messages' %}font-bold{% endif %}">Messages</span>
     </a>
@@ -111,6 +114,16 @@
           class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           <span class="material-icons-outlined text-slate-500">chat_bubble_outline</span>
           <span class="font-medium">Messages</span>
+        </a>
+        <a href="{% url 'assignment' %}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          <span class="material-icons-outlined text-slate-500">assignment</span>
+          <span class="font-medium">Assignments</span>
+        </a>
+        <a href="{% url 'quiz' %}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          <span class="material-icons-outlined text-slate-500">quiz</span>
+          <span class="font-medium">Quizzes</span>
         </a>
         <a href="{% url 'profile' %}"
           class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">

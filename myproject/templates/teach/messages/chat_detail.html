@@ -1,0 +1,159 @@
+{% extends 'teach/base.html' %}
+{% load static %}
+
+{% block title %}Chat with {{ other.get_full_name|default:other.get_short_name|default:other.national_id }} - EduPlatform{% endblock %}
+
+{% block main_class %}p-0 flex flex-col h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] md:flex-row md:max-w-6xl md:mx-auto overflow-hidden{% endblock %}
+
+{% block content %}
+<!-- Desktop: sidebar with conversation list -->
+<div class="hidden md:flex md:w-72 md:flex-col md:shrink-0 md:border-r md:border-slate-200 dark:md:border-slate-700 md:bg-white dark:md:bg-slate-900">
+  <a href="{% url 'messages' %}" class="flex items-center gap-2 px-4 py-3 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">
+    <span class="material-icons-outlined">arrow_back</span>
+    <span class="font-medium">Messages</span>
+  </a>
+  <div class="flex-1 overflow-y-auto">
+    {% for item in sidebar_conversations %}
+    <a href="{% url 'chat_detail' item.conversation.id %}" class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 border-b border-slate-100 dark:border-slate-800">
+      <img src="{% if item.other.gender == 'Female' %}{% static 'teach/img/female-avatar.png' %}{% else %}{% static 'teach/img/male-avatar.png' %}{% endif %}" alt="" class="w-10 h-10 rounded-full object-cover">
+      <div class="flex-1 min-w-0">
+        <p class="font-medium text-sm truncate">{{ item.other.get_full_name|default:item.other.get_short_name|default:item.other.national_id }}</p>
+        <p class="text-xs text-slate-500 truncate">{% if item.conversation.last_message %}{{ item.conversation.last_message }}{% else %}No messages{% endif %}</p>
+      </div>
+    </a>
+    {% empty %}
+    <p class="px-4 py-3 text-sm text-slate-500">No other conversations</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Chat panel -->
+<div class="flex flex-col flex-1 min-h-0 md:border md:border-slate-200 dark:md:border-slate-700 md:rounded-r-2xl md:shadow-lg">
+<!-- Chat header: back (mobile) + name -->
+<div class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 shrink-0">
+  <a href="{% url 'messages' %}" class="md:hidden p-2 -ml-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Back to messages">
+    <span class="material-icons-outlined">arrow_back</span>
+  </a>
+  <img
+    src="{% if other.gender == 'Female' %}{% static 'teach/img/female-avatar.png' %}{% else %}{% static 'teach/img/male-avatar.png' %}{% endif %}"
+    alt="" class="w-10 h-10 rounded-full object-cover ring-2 ring-slate-200 dark:ring-slate-600">
+  <div class="flex-1 min-w-0">
+    <h1 class="font-bold truncate">{{ other.get_full_name|default:other.get_short_name|default:other.national_id }}</h1>
+    <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ other.national_id }}</p>
+  </div>
+</div>
+
+<!-- Messages area: scrollable -->
+<div id="chatMessages" class="flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 space-y-3 bg-slate-50 dark:bg-slate-900/50">
+  {% for msg in messages %}
+  <div class="flex {% if msg.sender_id == user.national_id %}justify-end{% else %}justify-start{% endif %}">
+    <div class="max-w-[85%] md:max-w-[75%]">
+      <div class="px-4 py-2.5 rounded-2xl break-words {% if msg.sender_id == user.national_id %}bg-primary text-white rounded-br-md{% else %}bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-600 rounded-bl-md{% endif %}">
+        <div class="text-sm whitespace-pre-wrap">{{ msg.message_body }}</div>
+        <div class="text-[10px] mt-1 {% if msg.sender_id == user.national_id %}text-white/80{% else %}text-slate-400 dark:text-slate-500{% endif %}">
+          {{ msg.created_at|time }}
+          {% if msg.sender_id == user.national_id and msg.is_read %}
+            <span class="ml-1" title="Read">✓✓</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="flex items-center justify-center h-32 text-slate-400 dark:text-slate-500 text-sm">No messages yet. Say hello!</div>
+  {% endfor %}
+</div>
+
+<!-- Input area: fixed at bottom -->
+<div class="shrink-0 p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
+  <form id="sendMessageForm" class="flex gap-2 items-end">
+    {% csrf_token %}
+    <input type="hidden" name="conversation_id" value="{{ conversation.id }}">
+    <textarea name="message_body" id="messageBody" rows="1" placeholder="Type a message..." maxlength="2000"
+      class="flex-1 min-h-[44px] max-h-32 resize-none rounded-xl px-4 py-3 bg-slate-100 dark:bg-slate-800 border-none focus:ring-2 focus:ring-primary outline-none text-sm placeholder-slate-400 dark:placeholder-slate-500"
+      required></textarea>
+    <button type="submit" id="sendBtn" class="p-3 rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:pointer-events-none shrink-0" aria-label="Send">
+      <span class="material-icons-outlined">send</span>
+    </button>
+  </form>
+  <p id="sendError" class="mt-2 text-sm text-red-500 hidden"></p>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+(function() {
+  function getCsrfToken() {
+    var input = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (input && input.value) return input.value;
+    var match = document.cookie.match(/csrftoken=([^;]+)/);
+    return match ? match[1].trim() : '';
+  }
+  const form = document.getElementById('sendMessageForm');
+  const bodyInput = document.getElementById('messageBody');
+  const sendBtn = document.getElementById('sendBtn');
+  const messagesContainer = document.getElementById('chatMessages');
+  const sendError = document.getElementById('sendError');
+  const conversationId = form.querySelector('[name=conversation_id]').value;
+
+  function scrollToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function showError(msg) {
+    sendError.textContent = msg || 'Failed to send. Try again.';
+    sendError.classList.remove('hidden');
+  }
+  function hideError() {
+    sendError.classList.add('hidden');
+  }
+
+  var sendInProgress = false;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var body = (bodyInput.value || '').trim();
+    if (!body) return;
+    if (sendInProgress) return;
+    sendInProgress = true;
+    sendBtn.disabled = true;
+    hideError();
+
+    var csrfToken = getCsrfToken();
+    var formData = new FormData();
+    formData.append('csrfmiddlewaretoken', csrfToken);
+    formData.append('conversation_id', conversationId);
+    formData.append('message_body', body);
+
+    fetch('{% url "send_message" %}', {
+      method: 'POST',
+      body: formData,
+      credentials: 'same-origin',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': csrfToken
+      }
+    })
+      .then(function(r) { return r.json().then(function(data) { return { ok: r.ok, data: data }; }); })
+      .then(function(result) {
+        if (result.ok && result.data.success) {
+          bodyInput.value = '';
+          var now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          var html = '<div class="flex justify-end"><div class="max-w-[85%] md:max-w-[75%]"><div class="px-4 py-2.5 rounded-2xl break-words bg-primary text-white rounded-br-md"><div class="text-sm whitespace-pre-wrap">' + body.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div><div class="text-[10px] mt-1 text-white/80">' + now + '</div></div></div></div>';
+          messagesContainer.insertAdjacentHTML('beforeend', html);
+          scrollToBottom();
+        } else {
+          showError(result.data.error || 'Failed to send.');
+        }
+      })
+      .catch(function() { showError(); })
+      .finally(function() {
+        sendInProgress = false;
+        sendBtn.disabled = false;
+      });
+  });
+
+  setTimeout(scrollToBottom, 100);
+})();
+</script>
+{% endblock %}

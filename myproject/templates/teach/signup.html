@@ -42,12 +42,25 @@
       <p class="text-slate-500 dark:text-slate-400 text-sm">Join our community of learners today</p>
     </div>
 
-    <form class="space-y-4">
+    <form method="post" action="{% url 'signup' %}" class="space-y-4">
+      {% csrf_token %}
+      {% if messages %}
+      <div class="rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm px-4 py-3">
+        {% for msg in messages %}{{ msg }}{% if not forloop.last %} {% endif %}{% endfor %}
+      </div>
+      {% endif %}
       <div class="space-y-4">
         <div class="relative group">
           <span
+            class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">badge</span>
+          <input type="text" name="national_id" placeholder="National ID" maxlength="20" autocomplete="username"
+            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
+            required>
+        </div>
+        <div class="relative group">
+          <span
             class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">person_outline</span>
-          <input type="text" placeholder="Full Name"
+          <input type="text" name="full_name" placeholder="Full Name"
             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
             required>
         </div>
@@ -55,7 +68,7 @@
         <div class="relative group">
           <span
             class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">mail_outline</span>
-          <input type="email" placeholder="Email Address"
+          <input type="email" name="email" placeholder="Email Address" autocomplete="email"
             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
             required>
         </div>
@@ -63,7 +76,7 @@
         <div class="relative group">
           <span
             class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">lock_outline</span>
-          <input type="password" placeholder="Password"
+          <input type="password" name="password" placeholder="Password" autocomplete="new-password"
             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
             required>
         </div>
@@ -78,10 +91,10 @@
         </label>
       </div>
 
-      <a href="{% url 'login' %}"
+      <button type="submit"
         class="block w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg shadow-primary/30 transition-all transform active:scale-[0.98] text-center mt-6">
         Sign Up
-      </a>
+      </button>
 
       <div class="relative my-6 text-center">
         <div class="absolute inset-0 flex items-center">
