@@ -13,21 +13,20 @@
 <div
     class="mb-10 p-5 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-wrap gap-6 items-end">
     <!-- Search Bar -->
-    <div class="flex-[2] min-w-[300px]">
-        <label for="search-input" class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Search
+    <div class="flex-[3] min-w-[300px]">
+        <label for="search-filter" class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Search
             Courses</label>
         <div class="relative">
-            <input type="text" id="search-input" value="{{ selected_search|default:'' }}"
-                placeholder="Search"
-                class="w-full bg-slate-50 dark:bg-slate-900 border-none rounded-2xl px-12 py-3 focus:ring-2 focus:ring-primary transition-all outline-none"
-                onkeypress="if(event.key === 'Enter') applyFilters()">
+            <input type="text" id="search-filter" placeholder="Search ..." value="{{ selected_search }}"
+                onkeyup="if(event.key === 'Enter') applyFilters()"
+                class="w-full bg-slate-50 dark:bg-slate-900 border-none rounded-2xl px-12 py-3 focus:ring-2 focus:ring-primary transition-all outline-none">
             <span
                 class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
         </div>
     </div>
 
     <!-- Grade Filter -->
-    <div class="flex-1 min-w-[200px]">
+    <div class="flex-1 min-w-[150px]">
         <label for="grade-filter"
             class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Grade</label>
         <div class="relative">
@@ -42,7 +41,7 @@
     </div>
 
     <!-- Division Filter -->
-    <div class="flex-1 min-w-[200px]">
+    <div class="flex-1 min-w-[150px]">
         <label for="division-filter"
             class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Division</label>
         <div class="relative">
@@ -68,7 +67,7 @@
 <!-- Course Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
     {% for course in courses %}
-    <a href="{% url 'course_content' %}"
+    <a href="{% url 'course_details' %}"
         class="group block bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden">
         <div class="p-5 flex flex-col h-full">
             <div class="flex items-center gap-4 mb-4">
@@ -132,7 +131,7 @@
 
 <script>
     function applyFilters() {
-        const search = document.getElementById('search-input').value;
+        const search = document.getElementById('search-filter').value.trim();
         const grade = document.getElementById('grade-filter').value;
         const division = document.getElementById('division-filter').value;
         const url = new URL(window.location.href);

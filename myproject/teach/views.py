@@ -116,7 +116,19 @@ def my_courses_view(request):
 
 
 def course_details(request):
-    return render(request, "teach/coursedetails.html")
+    # Fetch a default course to check enrollment against (since page is static)
+    default_course = Course.objects.filter(is_active=True).first()
+    is_enrolled = False
+    
+    if request.user.is_authenticated and default_course:
+        is_enrolled = Enrollment.objects.filter(
+            user=request.user, 
+            course=default_course
+        ).exists()
+        
+    return render(request, "teach/coursedetails.html", {
+        "is_enrolled": is_enrolled
+    })
 
 
 def course_content(request):
@@ -468,14 +480,14 @@ def courses(request):
     
     courses_qs = Course.objects.filter(is_active=True).order_by("-created_at")
     
-    if search_query:
-        courses_qs = courses_qs.filter(course_name__icontains=search_query)
-        
     if grade_filter:
         courses_qs = courses_qs.filter(grade=grade_filter)
         
     if division_filter:
         courses_qs = courses_qs.filter(division=division_filter)
+
+    if search_query:
+        courses_qs = courses_qs.filter(course_name__icontains=search_query)
         
     return render(request, "teach/courses.html", {
         "courses": courses_qs,
