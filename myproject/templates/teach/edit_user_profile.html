@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html class="light" lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -17,7 +18,8 @@
 <body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 pb-24">
 
   <!-- NAV -->
-  <nav class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+  <nav
+    class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
     <a href="{% url 'profile' %}" class="flex items-center gap-2">
       <span class="material-icons-outlined text-primary">arrow_back</span>
       <span class="font-bold text-lg tracking-tight">Edit Profile</span>
@@ -30,17 +32,15 @@
   <main class="px-4 py-6">
     <div class="max-w-5xl mx-auto">
 
-    
-      <section class="bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-white/30 dark:border-slate-800/60 rounded-3xl shadow-2xl overflow-hidden">
+
+      <section
+        class="bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-white/30 dark:border-slate-800/60 rounded-3xl shadow-2xl overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-2">
 
-         
+
           <div class="relative w-full h-56 md:h-auto">
-            <img
-              src="{% static 'teach/img/edit.png' %}"
-              alt="Edit Profile"
-              class="absolute inset-0 w-full h-full object-cover"
-            />
+            <img src="{% static 'teach/img/edit.png' %}" alt="Edit Profile"
+              class="absolute inset-0 w-full h-full object-cover" />
             <div class="absolute inset-0 bg-black/20"></div>
           </div>
 
@@ -58,101 +58,173 @@
 
               <!-- First Name -->
               <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">First Name</label>
-                <input name="first_name" value="{{ user.first_name|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-              </div>
-
-              <!-- Last Name -->
-              <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Last Name</label>
-                <input name="last_name" value="{{ user.last_name|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">First
+                  Name</label>
+                <input name="first_name" value="{{ request.POST.first_name|default:user.first_name|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.first_name %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+                {% if errors.first_name %}
+                <p class="text-red-500 text-xs mt-1">{{ errors.first_name }}</p>
+                {% endif %}
               </div>
 
               <!-- Second Name -->
               <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Second Name</label>
-                <input name="second_name" value="{{ user.second_name|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Second
+                  Name</label>
+                <input name="second_name" value="{{ request.POST.second_name|default:user.second_name|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
               </div>
 
               <!-- Third Name -->
               <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Third Name</label>
-                <input name="third_name" value="{{ user.third_name|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Third
+                  Name</label>
+                <input name="third_name" value="{{ request.POST.third_name|default:user.third_name|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
               </div>
 
               <!-- Gender -->
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Gender</label>
-                <select name="gender" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-                  <option value="" {% if not user.gender %}selected{% endif %}>—</option>
-                  <option value="Male" {% if user.gender == "Male" %}selected{% endif %}>Male</option>
-                  <option value="Female" {% if user.gender == "Female" %}selected{% endif %}>Female</option>
+                <select name="gender" 
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.gender %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+    
+                <option value="" {% if not user.gender and not request.POST.gender %}selected{% endif %}>—</option>
+    
+                {% for val, label in user.GENDER_CHOICES %}
+                <option value="{{ val }}" {% if request.POST.gender == val or not request.POST and user.gender == val %}selected{% endif %}>
+                  {{ label }}
+                </option>
+                {% endfor %}
                 </select>
+
+                {% if errors.gender %}
+                <p class="text-red-500 text-xs mt-1">{{ errors.gender }}</p>
+                {% endif %}
               </div>
 
               <!-- Phone -->
               <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Phone Number</label>
-                <input name="phone_number" value="{{ user.phone_number|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Phone
+                  Number</label>
+                <input name="phone_number" value="{{ request.POST.phone_number|default:user.phone_number|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.phone_number %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+                {% if errors.phone_number %}
+                <p class="text-red-500 text-xs mt-1">{{ errors.phone_number }}</p>
+                {% endif %}
               </div>
 
               <!-- Father Phone -->
               <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Father Phone Number</label>
-                <input name="father_phone_number" value="{{ user.father_phone_number|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-              </div>
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Parent
+                  Phone Number</label>
+                <input name="father_phone_number"
+                  value="{{ request.POST.father_phone_number|default:user.father_phone_number|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
 
-              <!-- Mother Phone -->
-              <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Mother Phone Number</label>
-                <input name="mother_phone_number" value="{{ user.mother_phone_number|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                  {% if errors.father_phone_number %}
+                    <p class="text-red-500 text-xs mt-1">{{ errors.father_phone_number }}</p>
+                  {% endif %}
               </div>
 
               <!-- School -->
               <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">School Name</label>
-                <input name="school_name" value="{{ user.school_name|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">School
+                  Name</label>
+                <input name="school_name" value="{{ request.POST.school_name|default:user.school_name|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
               </div>
 
               <!-- Parent Job -->
               <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Parent's Job</label>
-                <input name="parents_job" value="{{ user.parents_job|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <label
+                  class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Parent's
+                  Job</label>
+                <input name="parents_job" value="{{ request.POST.parents_job|default:user.parents_job|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
               </div>
 
               <!-- Government -->
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Government</label>
-                <input name="government" value="{{ user.government|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-              </div>
+  
+                <select name="government"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.government %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+    
+                <option value="" {% if not user.government and not request.POST.government %}selected{% endif %}>—</option>
+    
+                {% for val, label in user.GOVERNMENT_CHOICES %}
+                  <option value="{{ val }}" {% if request.POST.government == val or not request.POST and user.government == val %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                {% endfor %}
+                </select>
 
+                {% if errors.government %}
+                  <p class="text-red-500 text-xs mt-1">{{ errors.government }}</p>
+                {% endif %}
+              </div>
+            
               <!-- Grade -->
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Grade</label>
-                <input name="grade" value="{{ user.grade|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+  
+                <select name="grade"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.grade %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+    
+                <option value="" {% if not user.grade and not request.POST.grade %}selected{% endif %}>—</option>
+    
+                {% for val, label in user.GRADE_CHOICES %}
+                  <option value="{{ val }}" {% if request.POST.grade == val or not request.POST and user.grade == val %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                {% endfor %}
+                </select>
+
+                {% if errors.grade %}
+                  <p class="text-red-500 text-xs mt-1">{{ errors.grade }}</p>
+                {% endif %}
               </div>
 
               <!-- Division -->
               <div class="space-y-2">
                 <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Division</label>
-                <select name="division" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
-                  <option value="" {% if not user.division %}selected{% endif %}>—</option>
-                  <option value="Science" {% if user.division == "Science" %}selected{% endif %}>Science</option>
-                  <option value="Mathmatics" {% if user.division == "Mathmatics" %}selected{% endif %}>Mathmatics</option>
-                  <option value="Literature" {% if user.division == "Literature" %}selected{% endif %}>Literature</option>
+  
+                <select name="division"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.division %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+    
+                <option value="" {% if not user.division and not request.POST.division %}selected{% endif %}>—</option>
+    
+                {% for val, label in user.DIVISION_CHOICES %}
+                  <option value="{{ val }}" {% if request.POST.division == val or not request.POST and user.division == val %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                {% endfor %}
                 </select>
+
+                {% if errors.division %}
+                  <p class="text-red-500 text-xs mt-1">{{ errors.division }}</p>
+                {% endif %}
               </div>
 
               <!-- Gmail -->
               <div class="space-y-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Gmail</label>
-                <input name="gmail" value="{{ user.email|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <label
+                  class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Gmail</label>
+                <input name="gmail" value="{{ request.POST.gmail|default:user.email|default:'' }}"
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border {% if errors.gmail %}border-red-500{% else %}border-slate-200/60 dark:border-slate-700/50{% endif %} focus:ring-2 focus:ring-primary/40">
+                {% if errors.gmail %}
+                <p class="text-red-500 text-xs mt-1">{{ errors.gmail }}</p>
+                {% endif %}
               </div>
 
               <!-- National ID -->
               <div class="space-y-2 md:col-span-2">
-                <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">National ID</label>
-                <input name="national_id" value="{{ user.national_id|default:'' }}" class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40">
+                <label
+                  class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">National
+                  ID</label>
+                <input name="national_id" value="{{ user.national_id|default:'' }}" readonly
+                  class="w-full rounded-2xl px-4 py-3.5 text-sm bg-slate-50 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 focus:ring-2 focus:ring-primary/40 opacity-70 cursor-not-allowed">
               </div>
 
               <!-- Actions -->
@@ -176,5 +248,7 @@
     </div>
   </main>
 
+  
 </body>
+
 </html>

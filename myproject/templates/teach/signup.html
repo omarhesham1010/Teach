@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html class="light" lang="en">
 
@@ -12,8 +13,24 @@
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-  <link rel="stylesheet" href="/static/teach/css/style.css">
-  <script src="/static/teach/js/script.js"></script>
+  <link rel="stylesheet" href="{% static 'teach/css/style.css' %}">
+  <script src="{% static 'teach/js/script.js' %}"></script>
+  <style>
+    /* Hide the default eye icon in Edge/IE/Chrome */
+    input::-ms-reveal,
+    input::-ms-clear {
+      display: none;
+    }
+
+    input::-webkit-contacts-auto-fill-button,
+    input::-webkit-credentials-auto-fill-button {
+      visibility: hidden;
+      display: none !important;
+      pointer-events: none;
+      position: absolute;
+      right: 0;
+    }
+  </style>
 </head>
 
 <body
@@ -27,103 +44,300 @@
     <div
       class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/20 rounded-full blur-[100px] opacity-30 animate-blob animation-delay-2000">
     </div>
-    <div
-      class="absolute top-[20%] right-[20%] w-[20%] h-[20%] bg-yellow-500/20 rounded-full blur-[80px] opacity-20 animate-blob animation-delay-4000">
-    </div>
   </div>
 
   <div
-    class="w-full max-w-md bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/50 p-8 transform transition-all hover:scale-[1.005]">
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
+    class="w-full max-w-4xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/50 p-6 md:p-8 transform transition-all">
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-3">
         <span class="material-symbols-outlined text-2xl">school</span>
       </div>
-      <h1 class="text-2xl font-bold tracking-tight mb-2">Create Account</h1>
+      <h1 class="text-2xl font-bold tracking-tight mb-1">Create Account</h1>
       <p class="text-slate-500 dark:text-slate-400 text-sm">Join our community of learners today</p>
     </div>
 
-    <form method="post" action="{% url 'signup' %}" class="space-y-4">
+    <form method="POST" class="space-y-6">
       {% csrf_token %}
-      {% if messages %}
-      <div class="rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm px-4 py-3">
-        {% for msg in messages %}{{ msg }}{% if not forloop.last %} {% endif %}{% endfor %}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+
+        <!-- First Name -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">First Name</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">person</span>
+            <input type="text" name="first_name" placeholder="First Name" value="{{ request.POST.first_name }}"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/50 transition-all font-medium {% if errors.first_name %}ring-2 ring-red-500{% endif %}"
+              required>
+          </div>
+          {% if errors.first_name %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.first_name }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Second Name -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Second Name</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">person</span>
+            <input type="text" name="second_name" placeholder="Second Name" value="{{ request.POST.second_name }}"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/50 transition-all font-medium">
+          </div>
+        </div>
+
+        <!-- Third Name -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Third Name</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">person</span>
+            <input type="text" name="third_name" placeholder="Third Name" value="{{ request.POST.third_name }}"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/50 transition-all font-medium">
+          </div>
+        </div>
+
+        <!-- Gender -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Gender</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">wc</span>
+            <select name="gender"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-10 focus:ring-2 focus:ring-primary/50 transition-all font-medium appearance-none bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2394a3b8%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22L19%209l-7%207-7-7%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_1rem_center] bg-no-repeat {% if errors.gender %}ring-2 ring-red-500{% endif %}"
+              required>
+              <option value="" disabled {% if not request.POST.gender %}selected{% endif %}>Select Gender</option>
+              {% for val, label in gender_choices %}
+              <option value="{{ val }}" {% if request.POST.gender==val %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% if errors.gender %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.gender }}</p>
+          {% endif %}
+        </div>
+
+        <!-- National ID -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">National ID</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">badge</span>
+            <input type="text" name="national_id" placeholder="National ID" value="{{ request.POST.national_id }}"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/50 transition-all font-medium {% if errors.national_id %}ring-2 ring-red-500{% endif %}"
+              required>
+          </div>
+          {% if errors.national_id %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.national_id }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Phone Number -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">phone</span>
+            <input type="text" name="phone_number" placeholder="01xxxxxxxxx" value="{{ request.POST.phone_number }}"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/50 transition-all font-medium {% if errors.phone_number %}ring-2 ring-red-500{% endif %}"
+              required>
+          </div>
+          {% if errors.phone_number %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.phone_number }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Father Phone -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Parent's Phone</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">contact_phone</span>
+            <input type="text" name="father_phone_number" placeholder="Parent's Phone"
+              value="{{ request.POST.father_phone_number }}"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/50 transition-all font-medium {% if errors.father_phone_number %}ring-2 ring-red-500{% endif %}"
+              required>
+          </div>
+          {% if errors.father_phone_number %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.father_phone_number }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Email (Gmail) -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Email (Gmail)</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">mail</span>
+            <input type="email" name="gmail" placeholder="example@gmail.com" value="{{ request.POST.gmail }}"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/50 transition-all font-medium {% if errors.gmail %}ring-2 ring-red-500{% endif %}"
+              required>
+          </div>
+          {% if errors.gmail %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.gmail }}</p>
+          {% endif %}
+        </div>
+
+        <!-- School Name -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">School Name</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">school</span>
+            <input type="text" name="school_name" placeholder="School Name" value="{{ request.POST.school_name }}"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/50 transition-all font-medium">
+          </div>
+        </div>
+
+        <!-- Parents Job -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Parent's Job</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">work</span>
+            <input type="text" name="parents_job" placeholder="Parent's Job" value="{{ request.POST.parents_job }}"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-4 focus:ring-2 focus:ring-primary/50 transition-all font-medium">
+          </div>
+        </div>
+
+        <!-- Government -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Government</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">map</span>
+            <select name="government"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-10 focus:ring-2 focus:ring-primary/50 transition-all font-medium appearance-none bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2394a3b8%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22L19%209l-7%207-7-7%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_1rem_center] bg-no-repeat {% if errors.government %}ring-2 ring-red-500{% endif %}"
+              required>
+              <option value="" disabled {% if not request.POST.government %}selected{% endif %}>Select Government
+              </option>
+              {% for val, label in government_choices %}
+              <option value="{{ val }}" {% if request.POST.government==val %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% if errors.government %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.government }}</p>
+          {% endif %}
+        </div>
+
+        <!-- Grade -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Grade</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">grade</span>
+            <select name="grade"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-10 focus:ring-2 focus:ring-primary/50 transition-all font-medium appearance-none bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2394a3b8%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22L19%209l-7%207-7-7%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_1rem_center] bg-no-repeat {% if errors.grade %}ring-2 ring-red-500{% endif %}"
+              required>
+              <option value="" disabled {% if not request.POST.grade %}selected{% endif %}>Select Grade</option>
+              {% for val, label in grade_choices %}
+              <option value="{{ val }}" {% if request.POST.grade==val %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% if errors.grade %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.grade }}</p>
+          {% endif %}
+        </div>
+
+        <!-- (Division was here, moved to end) -->
+
       </div>
-      {% endif %}
-      <div class="space-y-4">
-        <div class="relative group">
-          <span
-            class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">badge</span>
-          <input type="text" name="national_id" placeholder="National ID" maxlength="20" autocomplete="username"
-            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
-            required>
-        </div>
-        <div class="relative group">
-          <span
-            class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">person_outline</span>
-          <input type="text" name="full_name" placeholder="Full Name"
-            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
-            required>
+
+      <!-- Password Row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Password -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Password</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">lock</span>
+            <input type="password" name="password" id="password" placeholder="Password"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3.5 pl-11 pr-12 focus:ring-2 focus:ring-primary/50 transition-all font-medium {% if errors.password %}ring-2 ring-red-500{% endif %}"
+              required>
+            <button type="button" onclick="togglePass('password', this)"
+              class="absolute right-4 top-3.5 text-slate-400 hover:text-primary transition-colors">
+              <span class="material-icons-outlined text-xl">visibility</span>
+            </button>
+          </div>
+          {% if errors.password %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.password }}</p>
+          {% else %}
+          <div class="flex items-center gap-1 mt-1 text-slate-400/80">
+            <span class="material-icons-outlined text-[12px]">info</span>
+            <p class="text-[10px] font-medium">Password must be at least 8 characters and include a number.</p>
+          </div>
+          {% endif %}
         </div>
 
-        <div class="relative group">
-          <span
-            class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">mail_outline</span>
-          <input type="email" name="email" placeholder="Email Address" autocomplete="email"
-            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
-            required>
-        </div>
-
-        <div class="relative group">
-          <span
-            class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 transition-colors group-focus-within:text-primary">lock_outline</span>
-          <input type="password" name="password" placeholder="Password" autocomplete="new-password"
-            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl py-3.5 pl-11 pr-4 outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium placeholder:font-normal"
-            required>
+        <!-- Confirm Password -->
+        <div class="space-y-1">
+          <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Confirm Password</label>
+          <div class="relative group">
+            <span
+              class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">verified_user</span>
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password"
+              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3.5 pl-11 pr-12 focus:ring-2 focus:ring-primary/50 transition-all font-medium {% if errors.confirm_password %}ring-2 ring-red-500{% endif %}"
+              required>
+            <button type="button" onclick="togglePass('confirm_password', this)"
+              class="absolute right-4 top-3.5 text-slate-400 hover:text-primary transition-colors">
+              <span class="material-icons-outlined text-xl">visibility</span>
+            </button>
+          </div>
+          {% if errors.confirm_password %}
+          <p class="text-red-500 text-[10px] mt-1 font-medium">{{ errors.confirm_password }}</p>
+          {% endif %}
         </div>
       </div>
 
-      <div class="flex items-start gap-3 mt-2">
-        <input type="checkbox" id="terms" class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary">
-        <label for="terms"
-          class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed cursor-pointer select-none">
-          By signing up, I agree to the <a href="#" class="text-primary font-semibold hover:underline">Terms of
-            Service</a> and <a href="#" class="text-primary font-semibold hover:underline">Privacy Policy</a>
-        </label>
+      <!-- Division (Moved to end) -->
+      <div class="space-y-1 !mt-4">
+        <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Division</label>
+        <div class="relative group">
+          <span
+            class="material-icons-outlined absolute left-4 top-3 text-slate-400 group-focus-within:text-primary transition-colors">category</span>
+          <select name="division"
+            class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 pl-11 pr-10 focus:ring-2 focus:ring-primary/50 transition-all font-medium appearance-none bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2394a3b8%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%222%22%20d%3D%22L19%209l-7%207-7-7%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_1rem_center] bg-no-repeat">
+            <option value="" disabled {% if not request.POST.division %}selected{% endif %}>Select Division</option>
+            {% for val, label in division_choices %}
+            <option value="{{ val }}" {% if request.POST.division==val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
       </div>
 
       <button type="submit"
-        class="block w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg shadow-primary/30 transition-all transform active:scale-[0.98] text-center mt-6">
+        class="w-full py-3.5 px-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg shadow-primary/30 transition-all transform active:scale-[0.98] text-center mt-6">
         Sign Up
       </button>
 
-      <div class="relative my-6 text-center">
-        <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
-        </div>
-        <span
-          class="relative bg-white dark:bg-slate-900 px-4 text-xs text-slate-400 uppercase tracking-widest font-semibold">Or
-          continue with</span>
-      </div>
-
-      <div class="grid grid-cols-2 gap-3">
-        <button type="button"
-          class="flex items-center justify-center gap-2 py-3 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
-          <span class="text-sm font-semibold">Google</span>
-        </button>
-        <button type="button"
-          class="flex items-center justify-center gap-2 py-3 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all">
-          <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" class="w-5 h-5" alt="Facebook">
-          <span class="text-sm font-semibold">Facebook</span>
-        </button>
-      </div>
-
-      <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
+      <p class="text-center text-sm text-slate-500 dark:text-slate-400">
+        <span class="text-slate-400 cursor-pointer hover:text-primary transition-colors select-none"
+          onclick="this.classList.toggle('text-blue-500'); this.classList.toggle('text-slate-400');">
+          Remember Me
+        </span>
+        <span class="mx-2 opacity-50">•</span>
         Already have an account?
         <a href="{% url 'login' %}" class="text-primary font-bold hover:underline">Sign In</a>
       </p>
     </form>
   </div>
+
+  <script>
+    function togglePass(id, btn) {
+      const input = document.getElementById(id);
+      const icon = btn.querySelector('span');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+  </script>
 </body>
 
 </html>

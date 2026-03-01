@@ -163,7 +163,8 @@
           </section>
 
           <nav class="flex border-b border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar">
-            <a href="{% url 'courses' %}" class="px-4 py-2 text-sm font-semibold border-b-2 border-primary text-primary whitespace-nowrap">
+            <a href="{% url 'courses' %}"
+              class="px-4 py-2 text-sm font-semibold border-b-2 border-primary text-primary whitespace-nowrap">
               Lessons
             </a>
 
@@ -178,16 +179,6 @@
             </a>
           </nav>
 
-          <div
-            class="bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-sm font-semibold">Course Progress</span>
-              <span id="courseProgressText" class="text-sm font-bold text-primary">0%</span>
-            </div>
-            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
-              <div id="courseProgressBar" class="bg-primary h-full w-[0%] rounded-full"></div>
-            </div>
-          </div>
 
         </aside>
 
@@ -215,20 +206,17 @@
                 </div>
               </div>
 
-              <span class="accordion-arrow material-symbols-rounded text-primary transition-transform">expand_more</span>
+              <span
+                class="accordion-arrow material-symbols-rounded text-primary transition-transform">expand_more</span>
             </button>
 
             <div class="accordion-content px-3">
               <div
                 class="mt-3 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 p-4">
                 <div class="grid grid-cols-2 gap-3 text-sm">
-                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
+                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3 col-span-2">
                     <div class="text-xs text-slate-500">Duration</div>
                     <div class="font-semibold">12:45</div>
-                  </div>
-                  <div class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3">
-                    <div class="text-xs text-slate-500">Progress</div>
-                    <div class="font-semibold">33%</div>
                   </div>
                 </div>
 
@@ -246,8 +234,8 @@
           <div class="accordion-item" data-type="assignment">
             <button type="button"
               class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition text-left">
-              <div
-                class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">📝
+              <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">
+                📝
               </div>
 
               <div class="flex-1 min-w-0">
@@ -265,7 +253,8 @@
                 </div>
               </div>
 
-              <span class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
+              <span
+                class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
             </button>
 
             <div class="accordion-content px-3">
@@ -299,8 +288,8 @@
           <div class="accordion-item" data-type="quiz">
             <button type="button"
               class="accordion-trigger w-full flex items-center gap-4 p-4 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition text-left">
-              <div
-                class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">❓
+              <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-lg">
+                ❓
               </div>
 
               <div class="flex-1 min-w-0">
@@ -318,7 +307,8 @@
                 </div>
               </div>
 
-              <span class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
+              <span
+                class="accordion-arrow material-symbols-rounded text-slate-400 transition-transform">expand_more</span>
             </button>
 
             <div class="accordion-content px-3">
@@ -567,131 +557,12 @@
     }
     renderLinks(LESSON_DATA.links);
 
-    // ===== Progress Tracking (unchanged) =====
-    const markBtn = document.getElementById("markCompleteBtn");
-    const markText = document.getElementById("markCompleteText");
-
-    const progressText = document.getElementById("courseProgressText");
-    const progressBar = document.getElementById("courseProgressBar");
-
-    const headerBtn = document.getElementById("lessonHeaderCompleteBtn");
-    const headerText = document.getElementById("lessonHeaderCompleteText");
-
-    const COURSE_KEY = "ux-design-masterclass";
-    const LESSON_PREFIX = `${COURSE_KEY}-lesson-`;
-
-    function getAllLessonItems() {
-      return Array.from(document.querySelectorAll('.accordion-item[data-type="lesson"][data-lesson-id]'));
-    }
-
-    function isLessonCompleted(lessonId) {
-      return localStorage.getItem(LESSON_PREFIX + lessonId) === "true";
-    }
-
-    function setLessonCompleted(lessonId) {
-      localStorage.setItem(LESSON_PREFIX + lessonId, "true");
-    }
-
-    function updateLessonUI(item) {
-      const lessonId = item.getAttribute("data-lesson-id");
-      const statusEl = item.querySelector(".status-text");
-      if (!statusEl) return;
-
-      if (isLessonCompleted(lessonId)) {
-        statusEl.textContent = "Completed";
-        statusEl.classList.remove("text-slate-400");
-        statusEl.classList.add("text-green-500");
-      } else {
-        statusEl.textContent = "Not Completed";
-        statusEl.classList.remove("text-green-500");
-        statusEl.classList.add("text-slate-400");
-      }
-    }
-
-    function updateCourseProgress() {
-      const lessons = getAllLessonItems();
-      const total = lessons.length || 1;
-
-      let completed = 0;
-      lessons.forEach((item) => {
-        const id = item.getAttribute("data-lesson-id");
-        if (isLessonCompleted(id)) completed++;
-      });
-
-      const pct = Math.round((completed / total) * 100);
-
-      if (progressText) progressText.textContent = `${pct}%`;
-      if (progressBar) progressBar.style.width = `${pct}%`;
-    }
-
-    function updateMarkButton() {
-      const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
-      if (!currentLesson) return;
-
-      const currentId = currentLesson.getAttribute("data-lesson-id");
-      const done = isLessonCompleted(currentId);
-
-      if (done) {
-        markBtn.classList.remove("bg-slate-100", "dark:bg-slate-700");
-        markBtn.classList.add("bg-green-600", "text-white");
-        markText.textContent = "Completed";
-      } else {
-        markBtn.classList.remove("bg-green-600", "text-white");
-        markBtn.classList.add("bg-slate-100", "dark:bg-slate-700");
-        markText.textContent = "Mark Complete";
-      }
-    }
-
-    function updateHeaderButton() {
-      const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
-      if (!currentLesson) return;
-
-      const currentId = currentLesson.getAttribute("data-lesson-id");
-      const done = isLessonCompleted(currentId);
-
-      if (!headerBtn || !headerText) return;
-
-      if (done) {
-        headerBtn.classList.remove("bg-primary", "shadow-primary/25");
-        headerBtn.classList.add("bg-green-600", "text-white");
-        headerText.textContent = "Completed";
-      } else {
-        headerBtn.classList.remove("bg-green-600", "text-white");
-        headerBtn.classList.add("bg-primary", "text-white");
-        headerText.textContent = "Mark as completed";
-      }
-    }
-
+    // ===== Refresh UI =====
     function refreshAll() {
-      getAllLessonItems().forEach(updateLessonUI);
-      updateCourseProgress();
-      updateMarkButton();
-      updateHeaderButton();
+      // Logic for refreshing non-progress UI if any
     }
 
     refreshAll();
-
-    if (markBtn) {
-      markBtn.addEventListener("click", () => {
-        const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
-        if (!currentLesson) return;
-
-        const currentId = currentLesson.getAttribute("data-lesson-id");
-        setLessonCompleted(currentId);
-        refreshAll();
-      });
-    }
-
-    if (headerBtn) {
-      headerBtn.addEventListener("click", () => {
-        const currentLesson = document.querySelector('.accordion-item[data-type="lesson"][data-current="true"]');
-        if (!currentLesson) return;
-
-        const currentId = currentLesson.getAttribute("data-lesson-id");
-        setLessonCompleted(currentId);
-        refreshAll();
-      });
-    }
   </script>
 
   <!-- Accordion behavior -->

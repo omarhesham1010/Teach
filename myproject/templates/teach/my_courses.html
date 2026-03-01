@@ -1,101 +1,77 @@
-<!DOCTYPE html>
-<html class="light" lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>My Courses</title>
+{% extends 'teach/base.html' %}
+{% load static %}
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-    rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+{% block title %}My Courses - EduPlatform{% endblock %}
 
-  <link rel="stylesheet" href="/static/teach/css/style.css">
-  <script src="/static/teach/js/script.js"></script>
-</head>
+{% block content %}
+<div class="mt-4 mb-6">
+  <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">My Courses</h1>
+  <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm sm:text-base">Continue where you left off</p>
+</div>
 
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-8 sm:mt-10">
+  {% for enrollment in enrollments %}
+  <a href="{% url 'course_content_static' %}"
+    class="group block bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden cursor-pointer">
+    <div class="p-5 flex flex-col h-full">
 
-  <header class="px-6 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-2">
-      <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
-        <span class="material-symbols-outlined">auto_stories</span>
-      </div>
-      <span class="text-xl font-bold tracking-tight">EduFlow</span>
-    </div>
-
-    <div class="flex items-center gap-3">
-      <button onclick="toggleDarkMode()"
-        class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400">
-        <span class="material-symbols-outlined">dark_mode</span>
-      </button>
-    </div>
-  </header>
-
-  <main class="px-6 pb-32">
-    <div class="mt-4 mb-6">
-      <h1 class="text-3xl font-extrabold tracking-tight">My Courses</h1>
-      <p class="text-slate-500 dark:text-slate-400 mt-1">Continue where you left off</p>
-    </div>
-
-    <div class="space-y-4">
-      {% if enrollments %}
-        {% for e in enrollments %}
-          <a href="{% url 'course_content' %}"
-            class="group block bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition overflow-hidden">
-            <div class="p-4 flex items-center gap-4">
-
-              <!-- Small image (left) -->
-              <div class="w-16 h-16 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0 bg-slate-100 dark:bg-slate-700">
-                {% if e.course.image_url %}
-                  <img src="{{ e.course.image_url }}" alt="{{ e.course.title }}" class="w-full h-full object-cover" />
-                {% else %}
-                  <div class="w-full h-full flex items-center justify-center">
-                    <span class="material-symbols-outlined text-slate-400">image</span>
-                  </div>
-                {% endif %}
-              </div>
-
-              <!-- Content -->
-              <div class="flex-1 min-w-0">
-                <div class="flex items-start justify-between gap-3">
-                  <h3 class="font-bold text-base leading-tight truncate">
-                    {{ e.course.title }}
-                  </h3>
-                  <span class="text-xs font-bold text-primary flex-shrink-0">
-                    {{ e.progress_percent }}%
-                  </span>
-                </div>
-
-                <!-- Progress bar -->
-                <div class="mt-2">
-                  <div class="w-full h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                    <div class="h-full bg-primary" style="width: {{ e.progress_percent }}%"></div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Arrow -->
-              <span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition flex-shrink-0">
-                chevron_right
-              </span>
-
-            </div>
-          </a>
-        {% endfor %}
-      {% else %}
-        <div class="p-6 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700">
-          <p class="text-slate-600 dark:text-slate-300">You don’t have any courses yet.</p>
+      <div class="flex items-center gap-4 mb-4">
+        <!-- Small image (left) -->
+        <div
+          class="w-14 h-14 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 flex-shrink-0 bg-slate-100 dark:bg-slate-700">
+          {% if enrollment.course.course_image %}
+          <img src="{{ enrollment.course.course_image.url }}" alt="{{ enrollment.course.title }}"
+            class="w-full h-full object-cover" />
+          {% else %}
+          <div class="w-full h-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-slate-400">image</span>
+          </div>
+          {% endif %}
         </div>
-      {% endif %}
+
+        <!-- Title -->
+        <div class="flex-1 min-w-0">
+          <h3 class="font-bold text-lg leading-tight truncate group-hover:text-primary transition-colors">
+            {{ enrollment.course.title }}
+          </h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Course</p>
+        </div>
+
+        <!-- Chevron -->
+        <span
+          class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-all transform group-hover:translate-x-1">
+          chevron_right
+        </span>
+      </div>
+
+      <!-- Progress Section -->
+      <div class="mt-auto pt-4 border-t border-slate-50 dark:border-slate-700/50">
+        <div class="flex items-center justify-between mb-2">
+          <span
+            class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Progress</span>
+          <span class="text-sm font-bold text-primary">
+            {{ enrollment.progress }}%
+          </span>
+        </div>
+        <!-- Progress bar -->
+        <div class="w-full h-2.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+          <div class="h-full bg-primary rounded-full transition-all duration-1000 ease-out"
+            style="width: {{ enrollment.progress }}%"></div>
+        </div>
+      </div>
+
     </div>
-  </main>
-
-  <script>
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.classList.add('dark');
-    }
-  </script>
-
-</body>
-</html>
+  </a>
+  {% empty %}
+  <div
+    class="col-span-full p-12 text-center rounded-3xl bg-white dark:bg-slate-800 border border-dashed border-slate-200 dark:border-slate-700 mx-auto w-full">
+    <div
+      class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-50 dark:bg-slate-700 text-slate-400 mb-4">
+      <span class="material-symbols-outlined text-3xl">inbox</span>
+    </div>
+    <h3 class="text-lg font-bold mb-1">No courses found</h3>
+    <p class="text-slate-500 dark:text-slate-400">You haven't enrolled in any courses yet.</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

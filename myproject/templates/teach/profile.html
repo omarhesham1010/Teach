@@ -249,7 +249,7 @@
     </div>
 
     <div class="space-y-2">
-      <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Father Phone
+      <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Parent Phone
         Number</label>
       <div
         class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
@@ -257,14 +257,14 @@
       </div>
     </div>
 
-    <div class="space-y-2">
+    <!-- <div class="space-y-2">
       <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">Mother Phone
         Number</label>
       <div
         class="rounded-2xl px-4 py-3.5 text-sm font-medium bg-slate-50/80 dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-700/50 shadow-sm">
         {{ user.mother_phone_number|default:"—" }}
       </div>
-    </div>
+    </div> -->
 
     <div class="space-y-2">
       <label class="text-[11px] font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase">School
@@ -339,4 +339,32 @@
     </button>
   </form>
 </div>
+
+                {% if messages %}
+                    <div id="success-toast" class="fixed bottom-6 right-6 z-50 animate-bounce-in">
+                        {% for message in messages %}
+                        <div class="flex items-center gap-3 bg-green-500 text-white px-6 py-4 rounded-2xl shadow-2xl border border-white/20">
+                            <span class="material-icons-outlined">check_circle</span>
+                            <div class="flex flex-col">
+                                <p class="font-bold text-sm">Success</p>
+                                <p class="text-xs opacity-90">{{ message }}</p>
+                            </div>
+                            <button onclick="document.getElementById('success-toast').remove()" class="ml-2 hover:opacity-70">
+                                <span class="material-icons-outlined text-sm">close</span>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <script>
+                        setTimeout(function() {
+                            var toast = document.getElementById('success-toast');
+                            if (toast) {
+                                toast.style.transition = 'opacity 0.5s ease';
+                                toast.style.opacity = '0';
+                                setTimeout(function() { toast.remove(); }, 500);
+                            }
+                        }, 4000);
+                    </script>
+                {% endif %}
 {% endblock %}
