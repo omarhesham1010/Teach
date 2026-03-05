@@ -1,0 +1,70 @@
+{% extends 'teach/base.html' %}
+
+{% block title %}Assignments - Instructor Dashboard{% endblock %}
+
+{% block main_class %}px-4 py-4 pb-24 md:pb-8{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-6">
+  <div class="flex items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Instructor Assignments</h1>
+      <p class="text-sm text-slate-500 dark:text-slate-400">
+        Manage assignments, view submissions, and enter grades.
+      </p>
+    </div>
+  </div>
+
+  <div class="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+    <table class="min-w-full text-sm">
+      <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300">
+        <tr>
+          <th class="px-4 py-3 text-left font-semibold">Assignment</th>
+          <th class="px-4 py-3 text-left font-semibold">Course</th>
+          <th class="px-4 py-3 text-left font-semibold">Opened</th>
+          <th class="px-4 py-3 text-left font-semibold">Due</th>
+          <th class="px-4 py-3 text-right font-semibold">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+        {% for a in assignments %}
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/60">
+          <td class="px-4 py-3">
+            <div class="font-semibold text-slate-900 dark:text-white">
+              {{ a.content.title }}
+            </div>
+          </td>
+          <td class="px-4 py-3 text-slate-600 dark:text-slate-400">
+            {% if a.course_name_display or a.course_code_display %}
+            {{ a.course_name_display }}{% if a.course_code_display %} ({{ a.course_code_display }}){% endif %}
+            {% else %}
+            {{ a.content.course.course_name }}
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 text-slate-600 dark:text-slate-400">
+            {% if a.opened_at %}{{ a.opened_at|date:"j M Y, g:i A" }}{% else %}—{% endif %}
+          </td>
+          <td class="px-4 py-3 text-slate-600 dark:text-slate-400">
+            {{ a.deadline|date:"j M Y, g:i A" }}
+          </td>
+          <td class="px-4 py-3 text-right">
+            <a href="{% url 'instructor_assignment_submissions' a.assignment_id %}"
+               class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20">
+              <span class="material-icons-outlined text-sm">visibility</span>
+              View submissions
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="px-4 py-6 text-center text-slate-500 dark:text-slate-400">
+            No assignments found. Create assignments in the admin first.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+

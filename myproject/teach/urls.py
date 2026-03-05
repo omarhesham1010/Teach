@@ -14,6 +14,7 @@ urlpatterns = [
     path("course-content/", views.course_content, name="course_content"),
     path("assignment/", views.assignment, name="assignment"),
     path("assignment/<int:assignment_id>/", views.assignment_detail_view, name="assignment_detail"),
+    path("assignment/<int:assignment_id>/download/", views.assignment_file_download_view, name="assignment_file_download"),
     path("enrollment/", views.enrollment, name="enrollment"),
     path("signup/", views.signup, name="signup"),
     path("quiz/", views.quiz, name="quiz"),
@@ -32,4 +33,30 @@ urlpatterns = [
     path("wallet/add/", views.add_money_to_wallet, name="add_money_to_wallet"),
     path("course-content/", views.course_content, name="course_content_static"),
     path("api/toggle-theme/", views.toggle_theme, name="toggle_theme"),
+    # Instructor assignment dashboards
+    path(
+        "instructor/assignments/",
+        views.instructor_assignments_dashboard,
+        name="instructor_assignments_dashboard",
+    ),
+    path(
+        "instructor/assignments/<int:assignment_id>/submissions/",
+        views.instructor_assignment_submissions,
+        name="instructor_assignment_submissions",
+    ),
+    path(
+        "instructor/assignments/<int:assignment_id>/submissions/<str:national_id>/grade/",
+        views.instructor_grade_submission,
+        name="instructor_grade_submission",
+    ),
+    path(
+        "instructor/assignments/<int:assignment_id>/submissions/<str:national_id>/history/",
+        views.instructor_submission_history,
+        name="instructor_submission_history",
+    ),
+    path(
+        "instructor/submission-history/<int:history_id>/download/",
+        views.instructor_history_file_download,
+        name="instructor_history_file_download",
+    ),
 ]

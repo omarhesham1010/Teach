@@ -276,6 +276,7 @@ class Message(models.Model):
 class Course(models.Model):
     course_id = models.AutoField(primary_key=True)
     course_name = models.CharField(max_length=200)
+    course_code = models.CharField(max_length=50, blank=True, default='')
     course_description = models.TextField(blank=True, default='')
     course_image = models.ImageField(
         upload_to='courses/images/',
@@ -444,8 +445,32 @@ class Assignment(models.Model):
         related_name='assignments',
         to_field='content_id'
     )
-    description = models.TextField()
-    deadline = models.DateTimeField()
+    description = models.TextField(blank=True, default='')
+    learning_objectives = models.TextField(
+        blank=True,
+        default='',
+        help_text='Bullet points describing what the student will learn.'
+    )
+    opened_at = models.DateTimeField(null=True, blank=True, help_text='When the assignment becomes available.')
+    deadline = models.DateTimeField(help_text='Due date and time.')
+    assignment_file = models.FileField(
+        upload_to='assignments/files/',
+        blank=True,
+        null=True,
+        help_text='Downloadable file (e.g. .docx, .pdf) uploaded by instructor.'
+    )
+    course_name_display = models.CharField(
+        max_length=200,
+        blank=True,
+        default='',
+        help_text='Course name shown on assignment page (e.g. Image Processing).'
+    )
+    course_code_display = models.CharField(
+        max_length=100,
+        blank=True,
+        default='',
+        help_text='Course code (e.g. CS389/CS486).'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -459,6 +484,10 @@ class Assignment(models.Model):
 # Assignment Submissions
 # =========================
 class AssignmentSubmission(models.Model):
+    GRADING_STATUS_CHOICES = [
+        ('not_graded', 'Not graded'),
+        ('graded', 'Graded'),
+    ]
     assignment = models.ForeignKey(
         Assignment,
         on_delete=models.CASCADE,
@@ -477,7 +506,28 @@ class AssignmentSubmission(models.Model):
         blank=True,
         null=True
     )
+    grading_status = models.CharField(
+        max_length=20,
+        choices=GRADING_STATUS_CHOICES,
+        default='not_graded'
+    )
+    grade = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+    submission_comments = models.TextField(
+        blank=True,
+        default='',
+        help_text='Instructor feedback or comments visible to the student.',
+    )
     submitted_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_deleted = models.BooleanField(
+        default=False,
+        help_text='True when the student has deleted the active submission.',
+    )
 
     class Meta:
         unique_together = ('assignment', 'user')
@@ -485,6 +535,50 @@ class AssignmentSubmission(models.Model):
 
     def __str__(self):
         return f"{self.user.national_id} - Assignment {self.assignment.assignment_id}"
+
+
+# =========================
+# Assignment Submission History
+# =========================
+class AssignmentSubmissionHistory(models.Model):
+    ACTION_CHOICES = [
+        ('submitted', 'Submitted'),
+        ('edited', 'Edited'),
+        ('deleted', 'Deleted'),
+    ]
+
+    assignment = models.ForeignKey(
+        Assignment,
+        on_delete=models.CASCADE,
+        related_name='submission_history',
+        to_field='assignment_id',
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='assignment_submission_history',
+        to_field='national_id',
+    )
+    action_type = models.CharField(max_length=20, choices=ACTION_CHOICES)
+    file = models.FileField(
+        upload_to='assignments/submissions/history/',
+        blank=True,
+        null=True,
+    )
+    file_name = models.CharField(
+        max_length=255,
+        blank=True,
+        default='',
+        help_text='Original filename as uploaded by the student.',
+    )
+    answer_text = models.TextField(blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"History {self.id} - {self.user.national_id} - Assignment {self.assignment.assignment_id}"
 
 
 # =========================

@@ -35,8 +35,8 @@
   </div>
   {% endif %}
 
-  <hr class="border-slate-200 dark:border-slate-700 {% if not assignments %}hidden{% endif %}" />
-
+  {% if not assignments %}
+  <hr class="border-slate-200 dark:border-slate-700" />
   <div class="space-y-2">
     <h2 class="text-xl font-bold text-slate-900 dark:text-white">Research Methodology Submission</h2>
     <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
@@ -90,6 +90,7 @@
       </a>
     </div>
   </div>
+  {% endif %}
 </div>
 
 <script>

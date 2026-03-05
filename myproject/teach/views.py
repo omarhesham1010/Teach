@@ -1,4 +1,5 @@
 # teach/views.py
+import os
 import random
 import json
 import logging
@@ -14,13 +15,13 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse, Http404
 
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg  # Avg for quiz_results_view
 from django.utils import timezone
 
 from .models import LoginCode, Wallet, Conversation, Message
-from .models import Course, Enrollment, Assignment, AssignmentSubmission
+from .models import Course, Enrollment, Assignment, AssignmentSubmission, AssignmentSubmissionHistory
 from .models import Quiz, QuizQuestion, QuizOption, QuizResult
 
 
@@ -176,6 +177,7 @@ def course_content(request):
     return render(request, "teach/coursecontent.html")
 
 
+@login_required
 def assignment(request):
     """Assignments list; links to assignment detail by ID."""
     assignments = (
@@ -186,10 +188,60 @@ def assignment(request):
     return render(request, "teach/assignment.html", {"assignments": assignments})
 
 
+def _assignment_display_info(assignment):
+    """Build display strings for course name/code from assignment or linked content."""
+    name = (assignment.course_name_display or "").strip()
+    code = (assignment.course_code_display or "").strip()
+    if name or code:
+        return name, code
+    try:
+        c = assignment.content.course
+        return (getattr(c, "course_name", "") or ""), (getattr(c, "course_code", "") or "")
+    except Exception:
+        return "", ""
+
+
+def _early_late_text(submission, deadline):
+    """Return (text, is_late) for submission timing vs deadline."""
+    if not submission or not submission.submitted_at or not deadline:
+        return None, False
+    from datetime import timedelta
+    delta = submission.submitted_at - deadline
+    if delta.total_seconds() <= 0:
+        days = abs(delta.days) or (abs(delta.total_seconds()) / 86400)
+        return f"Submitted early by {int(round(days))} day(s)", False
+    days = delta.days or 1
+    return f"Submitted late by {days} day(s)", True
+
+
+def _require_instructor(user):
+    """Simple helper to check instructor/admin access."""
+    return user.is_staff or user.is_superuser
+
+
+@login_required
+def assignment_file_download_view(request, assignment_id):
+    """Serve assignment file for download (instructor-uploaded file)."""
+    assignment_obj = (
+        Assignment.objects.filter(assignment_id=assignment_id)
+        .select_related("content")
+        .first()
+    )
+    if not assignment_obj or not assignment_obj.assignment_file:
+        raise Http404("Assignment or file not found.")
+    f = assignment_obj.assignment_file
+    try:
+        filename = os.path.basename(f.name)
+        response = FileResponse(f.open("rb"), as_attachment=True, filename=filename)
+        return response
+    except Exception:
+        raise Http404("File not available.")
+
+
 @login_required
 @csrf_protect
 def assignment_detail_view(request, assignment_id):
-    """Assignment detail page: description, submission form (UI only), and status."""
+    """Assignment detail: course, dates, objectives, file link, submit form, submission status table."""
     assignment_obj = (
         Assignment.objects.filter(assignment_id=assignment_id)
         .select_related("content", "content__course")
@@ -199,7 +251,9 @@ def assignment_detail_view(request, assignment_id):
         messages.error(request, "Assignment not found.")
         return redirect("assignment")
 
+    # There is at most one AssignmentSubmission per (assignment, user)
     submission = None
+    active_submission = None
     if request.user.is_authenticated:
         submission = (
             AssignmentSubmission.objects.filter(
@@ -207,24 +261,275 @@ def assignment_detail_view(request, assignment_id):
                 user=request.user,
             ).first()
         )
+        active_submission = submission if submission and not submission.is_deleted else None
 
     if request.method == "POST":
-        # UI only: do not save to database yet; file upload remains fake
-        messages.info(request, "Submission received (preview only — not saved yet).")
+        action = (request.POST.get("action") or "submit").lower()
+
+        # Do not allow any edits/deletes once graded
+        if active_submission and active_submission.grading_status == "graded":
+            messages.error(request, "This submission has been graded and can no longer be edited or deleted.")
+            return redirect("assignment_detail", assignment_id=assignment_id)
+
+        if action == "delete":
+            if not active_submission:
+                messages.error(request, "There is no submission to delete.")
+                return redirect("assignment_detail", assignment_id=assignment_id)
+
+            # Log deletion (keep previous versions intact)
+            AssignmentSubmissionHistory.objects.create(
+                assignment=assignment_obj,
+                user=request.user,
+                action_type="deleted",
+                file_name=active_submission.file_path.name if active_submission.file_path else "",
+                answer_text=active_submission.answer_text,
+            )
+            active_submission.is_deleted = True
+            active_submission.answer_text = ""
+            active_submission.file_path = None
+            active_submission.save(update_fields=["is_deleted", "answer_text", "file_path", "updated_at"])
+            messages.success(request, "Your submission has been deleted. You can submit a new version before grading.")
+            return redirect("assignment_detail", assignment_id=assignment_id)
+
+        # Default: create/update submission (submit or edit)
+        answer_text = (request.POST.get("answer_text") or "").strip()
+        file_upload = request.FILES.get("file_upload")
+
+        is_new = submission is None
+        if is_new:
+            submission = AssignmentSubmission(
+                assignment=assignment_obj,
+                user=request.user,
+            )
+
+        submission.answer_text = answer_text
+        submission.grading_status = "not_graded"
+        submission.is_deleted = False
+        if file_upload:
+            submission.file_path = file_upload
+        submission.save()
+
+        # History entry
+        history_action = "submitted" if is_new else "edited"
+        history_file = file_upload if file_upload is not None else None
+        AssignmentSubmissionHistory.objects.create(
+            assignment=assignment_obj,
+            user=request.user,
+            action_type=history_action,
+            file=history_file,
+            file_name=file_upload.name if file_upload is not None else (submission.file_path.name if submission.file_path else ""),
+            answer_text=answer_text,
+        )
+
+        messages.success(request, "Your submission has been saved.")
         return redirect("assignment_detail", assignment_id=assignment_id)
 
-    submission_reviewed = (
-        getattr(submission, "reviewed", False) if submission else False
-    )
+    course_name, course_code = _assignment_display_info(assignment_obj)
+    deadline = assignment_obj.deadline
+    now = timezone.now()
+    time_remaining = None
+    if deadline and now < deadline:
+        delta = deadline - now
+        days, remainder = divmod(int(delta.total_seconds()), 86400)
+        hours = remainder // 3600
+        time_remaining = f"{days} days {hours} hours remaining"
+
+    display_submission = active_submission
+    early_late_text, is_late = _early_late_text(display_submission, deadline)
+
+    objectives_list = []
+    if assignment_obj.learning_objectives:
+        objectives_list = [
+            line.strip() for line in assignment_obj.learning_objectives.splitlines()
+            if line.strip()
+        ]
+
     return render(
         request,
         "teach/assignment_detail.html",
         {
             "assignment": assignment_obj,
-            "submission": submission,
-            "submission_reviewed": submission_reviewed,
+            "submission": display_submission,
+            "course_name": course_name,
+            "course_code": course_code,
+            "objectives_list": objectives_list,
+            "time_remaining": time_remaining,
+            "early_late_text": early_late_text,
+            "is_late": is_late,
+            "is_locked": bool(display_submission and display_submission.grading_status == "graded"),
         },
     )
+
+
+# =========================
+# Instructor assignment dashboards
+# =========================
+
+
+@login_required
+def instructor_assignments_dashboard(request):
+    if not _require_instructor(request.user):
+        messages.error(request, "You do not have permission to access the instructor dashboard.")
+        return redirect("instructor")
+
+    assignments = (
+        Assignment.objects
+        .select_related("content", "content__course")
+        .order_by("-created_at")[:100]
+    )
+    return render(
+        request,
+        "teach/instructor_assignments.html",
+        {"assignments": assignments},
+    )
+
+
+@login_required
+def instructor_assignment_submissions(request, assignment_id):
+    if not _require_instructor(request.user):
+        messages.error(request, "You do not have permission to view submissions.")
+        return redirect("instructor")
+
+    assignment_obj = (
+        Assignment.objects.filter(assignment_id=assignment_id)
+        .select_related("content", "content__course")
+        .first()
+    )
+    if not assignment_obj:
+        messages.error(request, "Assignment not found.")
+        return redirect("instructor_assignments_dashboard")
+
+    submissions = (
+        AssignmentSubmission.objects
+        .filter(assignment=assignment_obj, is_deleted=False)
+        .select_related("user")
+        .order_by("user__first_name", "user__second_name")
+    )
+
+    return render(
+        request,
+        "teach/instructor_assignment_submissions.html",
+        {
+            "assignment": assignment_obj,
+            "submissions": submissions,
+        },
+    )
+
+
+@login_required
+@csrf_protect
+def instructor_grade_submission(request, assignment_id, national_id):
+    if not _require_instructor(request.user):
+        messages.error(request, "You do not have permission to grade submissions.")
+        return redirect("instructor")
+
+    assignment_obj = (
+        Assignment.objects.filter(assignment_id=assignment_id)
+        .select_related("content", "content__course")
+        .first()
+    )
+    if not assignment_obj:
+        messages.error(request, "Assignment not found.")
+        return redirect("instructor_assignments_dashboard")
+
+    submission = (
+        AssignmentSubmission.objects.select_related("user")
+        .filter(assignment=assignment_obj, user__national_id=national_id)
+        .first()
+    )
+    if not submission:
+        messages.error(request, "Submission not found.")
+        return redirect("instructor_assignment_submissions", assignment_id=assignment_id)
+
+    if request.method == "POST":
+        grade_raw = (request.POST.get("grade") or "").strip()
+        comments = (request.POST.get("feedback") or "").strip()
+        try:
+            grade_value = Decimal(grade_raw) if grade_raw else None
+        except Exception:
+            messages.error(request, "Please enter a valid numeric grade.")
+            return redirect("instructor_grade_submission", assignment_id=assignment_id, national_id=national_id)
+
+        if grade_value is not None and grade_value < 0:
+            messages.error(request, "Grade cannot be negative.")
+            return redirect("instructor_grade_submission", assignment_id=assignment_id, national_id=national_id)
+
+        submission.grade = grade_value
+        submission.submission_comments = comments
+        submission.grading_status = "graded"
+        submission.save(update_fields=["grade", "submission_comments", "grading_status", "updated_at"])
+
+        messages.success(request, "Grade saved. Submission is now locked for the student.")
+        return redirect("instructor_assignment_submissions", assignment_id=assignment_id)
+
+    return render(
+        request,
+        "teach/instructor_grade_submission.html",
+        {
+            "assignment": assignment_obj,
+            "submission": submission,
+        },
+    )
+
+
+@login_required
+def instructor_submission_history(request, assignment_id, national_id):
+    if not _require_instructor(request.user):
+        messages.error(request, "You do not have permission to view submission history.")
+        return redirect("instructor")
+
+    assignment_obj = (
+        Assignment.objects.filter(assignment_id=assignment_id)
+        .select_related("content", "content__course")
+        .first()
+    )
+    if not assignment_obj:
+        messages.error(request, "Assignment not found.")
+        return redirect("instructor_assignments_dashboard")
+
+    history_qs = (
+        AssignmentSubmissionHistory.objects
+        .filter(assignment=assignment_obj, user__national_id=national_id)
+        .select_related("user")
+        .order_by("created_at")
+    )
+
+    if history_qs:
+        student = history_qs[0].user
+    else:
+        # Fallback: get user from active submission, if any
+        active = AssignmentSubmission.objects.filter(
+            assignment=assignment_obj,
+            user__national_id=national_id,
+        ).select_related("user").first()
+        student = active.user if active else None
+
+    return render(
+        request,
+        "teach/instructor_submission_history.html",
+        {
+            "assignment": assignment_obj,
+            "history": history_qs,
+            "student": student,
+        },
+    )
+
+
+@login_required
+def instructor_history_file_download(request, history_id):
+    if not _require_instructor(request.user):
+        messages.error(request, "You do not have permission to download history files.")
+        return redirect("instructor")
+
+    history = AssignmentSubmissionHistory.objects.select_related("assignment").filter(id=history_id).first()
+    if not history or not history.file:
+        raise Http404("History file not found.")
+
+    try:
+        filename = os.path.basename(history.file.name) or history.file_name or "submission"
+        return FileResponse(history.file.open("rb"), as_attachment=True, filename=filename)
+    except Exception:
+        raise Http404("File not available.")
 
 
 def enrollment(request):
@@ -504,10 +809,21 @@ def submission_success(request):
 @login_required
 def profile_view(request):
     wallet, _ = Wallet.objects.get_or_create(user=request.user)
+
+    # Determine user role
+    user = request.user
+    if user.is_superuser:
+        user_role = "Super Admin"
+    elif user.is_staff:
+        user_role = "Instructor"
+    else:
+        user_role = "Student"
+
     return render(request, "teach/profile.html", {
-        "user": request.user,
+        "user": user,
         "wallet_balance": wallet.balance,
         "wallet_updated_at": wallet.updated_at,
+        "user_role": user_role,
     })
 
 

@@ -175,11 +175,18 @@ class TransactionAdmin(admin.ModelAdmin):
 # =========================
 @admin.register(Assignment)
 class AssignmentAdmin(admin.ModelAdmin):
-    list_display = ('assignment_id', 'content', 'deadline', 'created_at')
+    list_display = ('assignment_id', 'content', 'course_name_display', 'course_code_display', 'deadline', 'created_at')
     list_filter = ('deadline', 'created_at', 'content__course')
-    search_fields = ('content__title', 'description')
+    search_fields = ('content__title', 'description', 'course_name_display', 'course_code_display')
     readonly_fields = ('assignment_id', 'created_at')
     ordering = ('-created_at',)
+    fieldsets = (
+        (None, {'fields': ('assignment_id', 'content')}),
+        ('Display', {'fields': ('course_name_display', 'course_code_display')}),
+        ('Dates', {'fields': ('opened_at', 'deadline')}),
+        ('Content', {'fields': ('description', 'learning_objectives', 'assignment_file')}),
+        ('Meta', {'fields': ('created_at',)}),
+    )
 
 
 # =========================
@@ -187,8 +194,8 @@ class AssignmentAdmin(admin.ModelAdmin):
 # =========================
 @admin.register(AssignmentSubmission)
 class AssignmentSubmissionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'assignment', 'submitted_at')
-    list_filter = ('submitted_at', 'assignment__content__course')
+    list_display = ('id', 'user', 'assignment', 'grading_status', 'grade', 'submitted_at')
+    list_filter = ('grading_status', 'submitted_at', 'assignment__content__course')
     search_fields = ('user__national_id', 'user__email', 'assignment__content__title')
     readonly_fields = ('submitted_at',)
     ordering = ('-submitted_at',)

@@ -36,6 +36,16 @@
   @media (min-width: 768px) {
     .assignment-content { padding: 2rem 1.5rem 4rem; }
   }
+  .assignment-file-link {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+  .assignment-file-link:hover {
+    color: #1d4ed8;
+  }
+  .submission-late {
+    color: #dc2626;
+  }
 </style>
 {% endblock %}
 
@@ -57,33 +67,150 @@
     </div>
     {% endif %}
 
-    <!-- Card 1: Assignment Description -->
-    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+    <!-- Course and title -->
+    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-4">
       <div class="p-5 md:p-6">
+        {% if course_name or course_code %}
+        <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">
+          Course: {{ course_name }}{% if course_code %} ({{ course_code }}){% endif %}
+        </p>
+        {% endif %}
         <h1 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight mb-3">
           {{ assignment.content.title }}
         </h1>
-        <div class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap">{{ assignment.description }}</div>
-        <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-          <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Instructions</h3>
-          <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">Complete the assignment as described above. Submit your text answer and optional file (PDF or image) before the deadline.</p>
+        <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-slate-600 dark:text-slate-400">
+          {% if assignment.opened_at %}
+          <span><strong>Opened:</strong> {{ assignment.opened_at|date:"l, j F Y, g:i A" }}</span>
+          {% endif %}
+          <span><strong>Due:</strong> {{ assignment.deadline|date:"l, j F Y, g:i A" }}</span>
         </div>
-        {% if assignment.deadline %}
-        <div class="mt-4 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-          <span class="material-icons-outlined text-lg">schedule</span>
-          <span>Deadline: {{ assignment.deadline|date:"F j, Y" }} at {{ assignment.deadline|time:"g:i A" }}</span>
-        </div>
-        {% endif %}
       </div>
     </div>
 
-    <!-- Card 2: Submit Your Answer -->
+    <!-- Learning objectives -->
+    {% if objectives_list %}
     <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+      <div class="p-5 md:p-6">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Learning Objectives</h2>
+        <p class="text-slate-600 dark:text-slate-300 text-sm mb-3">By the end of this assignment, students should be able to:</p>
+        <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300 text-sm">
+          {% for obj in objectives_list %}
+          <li>{{ obj }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Description -->
+    {% if assignment.description %}
+    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+      <div class="p-5 md:p-6">
+        <div class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap">{{ assignment.description }}</div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Assignment file (downloadable) -->
+    {% if assignment.assignment_file %}
+    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+      <div class="p-5 md:p-6 flex flex-wrap items-center gap-2">
+        <span class="material-icons-outlined text-slate-500 dark:text-slate-400">description</span>
+        <a href="{% url 'assignment_file_download' assignment.assignment_id %}" class="assignment-file-link font-medium" download>
+          {{ assignment.assignment_file.name }}
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Submit / Edit / Delete actions -->
+    <div class="mb-6 flex flex-wrap gap-3 items-center">
+      <a href="#submit-form"
+         class="inline-flex items-center gap-2 py-3 px-6 rounded-xl
+                {% if is_locked %}bg-slate-300 text-slate-600 cursor-not-allowed{% else %}bg-primary hover:bg-primary/90 text-white{% endif %}
+                font-semibold shadow-lg shadow-primary/25 transition-all">
+        <span class="material-icons-outlined">add_circle_outline</span>
+        {% if submission %}Edit submission{% else %}Add submission{% endif %}
+      </a>
+      {% if submission %}
+      <form method="post" action="{% url 'assignment_detail' assignment.assignment_id %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="delete">
+        <button type="submit"
+                {% if is_locked %}disabled{% endif %}
+                class="inline-flex items-center gap-2 py-3 px-4 rounded-xl border border-red-500 text-red-600 hover:bg-red-50
+                       text-sm font-semibold transition-all {% if is_locked %}opacity-60 cursor-not-allowed{% endif %}">
+          <span class="material-icons-outlined text-base">delete</span>
+          Delete submission
+        </button>
+      </form>
+      {% endif %}
+      {% if is_locked %}
+      <p class="text-xs text-slate-200 mt-1">Submission is graded and locked. You can no longer edit or delete it.</p>
+      {% endif %}
+    </div>
+
+    <!-- Submission status table -->
+    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+      <div class="p-5 md:p-6">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Submission status</h2>
+        <table class="w-full text-sm text-left">
+          <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+            <tr>
+              <td class="py-2 pr-4 font-medium text-slate-700 dark:text-slate-300">Submission status</td>
+              <td class="py-2 text-slate-600 dark:text-slate-400">
+                {% if submission %}Submitted{% else %}No submissions have been made yet{% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4 font-medium text-slate-700 dark:text-slate-300">Grading status</td>
+              <td class="py-2 text-slate-600 dark:text-slate-400">
+                {% if submission %}{{ submission.get_grading_status_display }}{% else %}Not graded{% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4 font-medium text-slate-700 dark:text-slate-300">Time remaining</td>
+              <td class="py-2 text-slate-600 dark:text-slate-400">
+                {% if time_remaining %}{{ time_remaining }}{% else %}—{% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4 font-medium text-slate-700 dark:text-slate-300">Last modified</td>
+              <td class="py-2 text-slate-600 dark:text-slate-400">
+                {% if submission %}{{ submission.submitted_at|date:"j F Y, g:i A" }}{% else %}—{% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4 font-medium text-slate-700 dark:text-slate-300">Grade</td>
+              <td class="py-2 text-slate-600 dark:text-slate-400">
+                {% if submission and submission.grade is not None %}{{ submission.grade }} / 10{% else %}-{% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4 font-medium text-slate-700 dark:text-slate-300">Instructor feedback</td>
+              <td class="py-2 text-slate-600 dark:text-slate-400">
+                {% if submission and submission.submission_comments %}{{ submission.submission_comments }}{% else %}-{% endif %}
+              </td>
+            </tr>
+            {% if early_late_text %}
+            <tr>
+              <td class="py-2 pr-4 font-medium text-slate-700 dark:text-slate-300">Timing</td>
+              <td class="py-2 {% if is_late %}submission-late font-medium{% else %}text-slate-600 dark:text-slate-400{% endif %}">{{ early_late_text }}</td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Submit form -->
+    <div id="submit-form" class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
       <div class="p-5 md:p-6 border-b border-slate-100 dark:border-slate-800">
         <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Submit Your Answer</h2>
 
-        <form method="post" action="{% url 'assignment_detail' assignment.assignment_id %}" class="space-y-5">
+        <form method="post" action="{% url 'assignment_detail' assignment.assignment_id %}" enctype="multipart/form-data" class="space-y-5">
           {% csrf_token %}
+          <input type="hidden" name="action" value="submit">
 
           <div>
             <label for="answer_text" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -91,7 +218,7 @@
               Text Answer
             </label>
             <textarea name="answer_text" id="answer_text" rows="6" placeholder="Type your answer here..."
-              class="w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary focus:border-primary px-4 py-3 text-sm resize-y min-h-[120px] transition-all outline-none"></textarea>
+              class="w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-primary focus:border-primary px-4 py-3 text-sm resize-y min-h-[120px] transition-all outline-none">{% if submission %}{{ submission.answer_text }}{% endif %}</textarea>
           </div>
 
           <div>
@@ -100,43 +227,20 @@
               File Upload (PDF or Image)
             </label>
             <div class="relative flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 hover:border-primary/50 dark:hover:border-primary/50 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all cursor-pointer group">
-              <input type="file" name="file_upload" id="file_upload" accept=".pdf,image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+              <input type="file" name="file_upload" id="file_upload" accept=".pdf,image/*,.doc,.docx" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
               <span class="material-icons-outlined text-4xl text-slate-400 group-hover:text-primary transition-colors mb-2">upload_file</span>
-              <p class="text-sm text-slate-500 dark:text-slate-400">Click or drag file here (UI only — not saved)</p>
-              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">PDF, PNG, JPG, GIF</p>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Click or drag file here</p>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">PDF, DOC, DOCX, PNG, JPG, GIF</p>
             </div>
           </div>
 
-          <button type="submit" class="w-full py-3.5 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-200 flex items-center justify-center gap-2">
+          <button type="submit"
+                  {% if is_locked %}disabled{% endif %}
+                  class="w-full py-3.5 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-200 flex items-center justify-center gap-2 {% if is_locked %}opacity-60 cursor-not-allowed{% endif %}">
             <span class="material-icons-outlined text-lg">send</span>
-            Submit
+            {% if submission %}Update submission{% else %}Submit assignment{% endif %}
           </button>
         </form>
-      </div>
-    </div>
-
-    <!-- Card 3: Submission Status -->
-    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden">
-      <div class="p-5 md:p-6">
-        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Submission Status</h2>
-        <div class="flex items-center gap-3">
-          {% if not submission %}
-            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300">
-              <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-              Not Submitted
-            </span>
-          {% elif submission_reviewed %}
-            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
-              <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
-              Reviewed
-            </span>
-          {% else %}
-            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-              Submitted
-            </span>
-          {% endif %}
-        </div>
       </div>
     </div>
   </div>

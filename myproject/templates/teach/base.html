@@ -115,11 +115,19 @@
           <span class="material-icons-outlined text-slate-500">chat_bubble_outline</span>
           <span class="font-medium">Messages</span>
         </a>
+        {% if user.is_staff or user.is_superuser %}
+        <a href="{% url 'instructor_assignments_dashboard' %}"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          <span class="material-icons-outlined text-slate-500">assignment</span>
+          <span class="font-medium">Assignments</span>
+        </a>
+        {% else %}
         <a href="{% url 'assignment' %}"
           class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           <span class="material-icons-outlined text-slate-500">assignment</span>
           <span class="font-medium">Assignments</span>
         </a>
+        {% endif %}
         <a href="{% url 'quiz' %}"
           class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           <span class="material-icons-outlined text-slate-500">quiz</span>
