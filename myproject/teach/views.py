@@ -20,6 +20,7 @@ from django.http import JsonResponse, FileResponse, Http404
 
 from django.db.models import Q, Avg  # Avg for quiz_results_view
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .models import LoginCode, Wallet, Conversation, Message
 from .models import Course, Enrollment, Assignment, AssignmentSubmission, AssignmentSubmissionHistory
@@ -145,8 +146,8 @@ def login_view(request):
             user = authenticate(request, username=user_obj.national_id, password=password)
             if user is not None:
                 login(request, user)
-                next_url = request.POST.get('next')
-                if next_url:
+                next_url = request.POST.get('next', '').strip()
+                if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
                     return redirect(next_url)
                 return redirect("instructor")
 
@@ -669,55 +670,6 @@ def signup(request):
         "grade_choices": User.GRADE_CHOICES,
         "division_choices": User.DIVISION_CHOICES,
     })
-    if request.user.is_authenticated:
-        return redirect("instructor")
-    if request.method == "POST":
-        national_id = (request.POST.get("national_id") or "").strip()
-        full_name = (request.POST.get("full_name") or "").strip()
-        email = (request.POST.get("email") or "").strip()
-        password = request.POST.get("password", "")
-        if not national_id or not email or not full_name or not password:
-            messages.error(request, "Please fill in National ID, Full Name, Email, and Password.")
-            return render(request, "teach/signup.html")
-        if User.objects.filter(national_id=national_id).exists():
-            messages.error(request, "This National ID is already registered.")
-            return render(request, "teach/signup.html")
-        if User.objects.filter(email__iexact=email).exists():
-            messages.error(request, "This email is already registered.")
-            return render(request, "teach/signup.html")
-        try:
-            parts = full_name.split(None, 2)
-            first_name = parts[0] if parts else full_name
-            second_name = parts[1] if len(parts) > 1 else ""
-            third_name = parts[2] if len(parts) > 2 else ""
-            new_user = User.objects.create_user(
-                national_id=national_id,
-                email=email,
-                password=password,
-                first_name=first_name,
-                second_name=second_name,
-                third_name=third_name,
-            )
-        except Exception as e:
-            logger.exception("Signup: failed to create user: %s", e)
-            messages.error(request, "Could not create account. Please try again.")
-            return render(request, "teach/signup.html")
-
-        # Welcome conversation: best-effort; must not block login or redirect
-        try:
-            create_welcome_conversation_for_user(new_user)
-        except Exception as e:
-            logger.warning(
-                "Signup: welcome conversation failed for user %s: %s",
-                new_user.national_id,
-                e,
-                exc_info=True,
-            )
-
-        login(request, new_user)
-        messages.success(request, "Welcome! A support conversation has been started for you.")
-        return redirect("home")
-    return render(request, "teach/signup.html")
 
 
 @login_required
@@ -1187,8 +1139,8 @@ def login_code_view(request):
         latest.save(update_fields=["is_used"])
 
         login(request, user)
-        next_url = request.POST.get("next")
-        if next_url:
+        next_url = (request.POST.get("next") or "").strip()
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
             return redirect(next_url)
         return redirect("instructor")
 
