@@ -13,6 +13,11 @@
         Manage assignments, view submissions, and enter grades.
       </p>
     </div>
+    <a href="{% url 'instructor_add_assignment' %}"
+      class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-200 hover:scale-105">
+      <span class="material-icons-outlined text-lg">add_circle</span>
+      Add Assignment
+    </a>
   </div>
 
   <div class="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
@@ -49,7 +54,7 @@
           </td>
           <td class="px-4 py-3 text-right">
             <a href="{% url 'instructor_assignment_submissions' a.assignment_id %}"
-               class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20">
+              class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20">
               <span class="material-icons-outlined text-sm">visibility</span>
               View submissions
             </a>
@@ -58,7 +63,9 @@
         {% empty %}
         <tr>
           <td colspan="5" class="px-4 py-6 text-center text-slate-500 dark:text-slate-400">
-            No assignments found. Create assignments in the admin first.
+            No assignments yet.
+            <a href="{% url 'instructor_add_assignment' %}" class="text-primary hover:underline font-semibold">Create
+              your first assignment</a>
           </td>
         </tr>
         {% endfor %}
@@ -67,4 +74,3 @@
   </div>
 </div>
 {% endblock %}
-

@@ -1,0 +1,169 @@
+{% extends 'teach/base.html' %}
+
+{% block title %}Add Assignment - Instructor Dashboard{% endblock %}
+
+{% block main_class %}px-4 py-4 pb-24 md:pb-8{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center gap-3">
+    <a href="{% url 'instructor_assignments_dashboard' %}"
+      class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+      <span class="material-icons-outlined text-slate-500">arrow_back</span>
+    </a>
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Add Assignment</h1>
+      <p class="text-sm text-slate-500 dark:text-slate-400">
+        Create a new assignment for your students.
+      </p>
+    </div>
+  </div>
+
+  <!-- Error Messages -->
+  {% if messages %}
+  <div class="space-y-2">
+    {% for message in messages %}
+    <div
+      class="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium
+      {% if message.tags == 'error' %}bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800
+      {% elif message.tags == 'success' %}bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-800
+      {% else %}bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800{% endif %}">
+      <span class="material-icons-outlined text-sm">
+        {% if message.tags == 'error' %}error{% elif message.tags == 'success' %}check_circle{% else %}info{% endif %}
+      </span>
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Form Card -->
+  <form method="post" enctype="multipart/form-data"
+    class="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden">
+
+    {% csrf_token %}
+
+    <div class="p-6 space-y-5">
+
+      <!-- Course -->
+      <div>
+        <label for="course_id" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+          Course <span class="text-red-500">*</span>
+        </label>
+        <select name="course_id" id="course_id" required
+          class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+          <option value="">— Select a course —</option>
+          {% for c in courses %}
+          <option value="{{ c.course_id }}">
+            {{ c.course_name }}{% if c.course_code %} ({{ c.course_code }}){% endif %}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Title -->
+      <div>
+        <label for="title" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+          Assignment Title <span class="text-red-500">*</span>
+        </label>
+        <input type="text" name="title" id="title" required value="{{ form_data.title|default:'' }}"
+          placeholder="e.g. Assignment 1 – Neural Networks"
+          class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label for="description" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+          Description
+        </label>
+        <textarea name="description" id="description" rows="4"
+          placeholder="Instructions and details about this assignment..."
+          class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors resize-y">{{ form_data.description|default:'' }}</textarea>
+      </div>
+
+      <!-- Learning Objectives -->
+      <div>
+        <label for="learning_objectives" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+          Learning Objectives
+        </label>
+        <textarea name="learning_objectives" id="learning_objectives" rows="3"
+          placeholder="- Understand backpropagation&#10;- Implement gradient descent"
+          class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors resize-y">{{ form_data.learning_objectives|default:'' }}</textarea>
+      </div>
+
+      <!-- Dates row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Opened At -->
+        <div>
+          <label for="opened_at" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            Opens At
+          </label>
+          <input type="datetime-local" name="opened_at" id="opened_at" value="{{ form_data.opened_at|default:'' }}"
+            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" />
+        </div>
+
+        <!-- Deadline -->
+        <div>
+          <label for="deadline" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            Deadline <span class="text-red-500">*</span>
+          </label>
+          <input type="datetime-local" name="deadline" id="deadline" required
+            value="{{ form_data.deadline|default:'' }}"
+            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" />
+        </div>
+      </div>
+
+      <!-- File Upload -->
+      <div>
+        <label for="assignment_file" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+          Assignment File <span class="text-xs font-normal text-slate-400">(optional – PDF, DOCX, etc.)</span>
+        </label>
+        <div class="relative">
+          <input type="file" name="assignment_file" id="assignment_file"
+            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 text-sm file:mr-4 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-colors" />
+        </div>
+      </div>
+
+      <!-- Display overrides row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label for="course_name_display"
+            class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            Display Course Name <span class="text-xs font-normal text-slate-400">(optional)</span>
+          </label>
+          <input type="text" name="course_name_display" id="course_name_display"
+            value="{{ form_data.course_name_display|default:'' }}" placeholder="e.g. Image Processing"
+            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" />
+        </div>
+        <div>
+          <label for="course_code_display"
+            class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            Display Course Code <span class="text-xs font-normal text-slate-400">(optional)</span>
+          </label>
+          <input type="text" name="course_code_display" id="course_code_display"
+            value="{{ form_data.course_code_display|default:'' }}" placeholder="e.g. CS389/CS486"
+            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors" />
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div
+      class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 flex items-center justify-end gap-3">
+      <a href="{% url 'instructor_assignments_dashboard' %}"
+        class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        Cancel
+      </a>
+      <button type="submit"
+        class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all duration-200 hover:scale-105">
+        <span class="material-icons-outlined text-lg">add_task</span>
+        Create Assignment
+      </button>
+    </div>
+
+  </form>
+</div>
+{% endblock %}

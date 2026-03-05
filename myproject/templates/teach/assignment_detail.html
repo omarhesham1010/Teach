@@ -10,6 +10,7 @@
     position: relative;
     overflow-x: hidden;
   }
+
   .assignment-bg {
     position: fixed;
     inset: 0;
@@ -20,12 +21,14 @@
     -webkit-filter: blur(8px);
     z-index: 0;
   }
+
   .assignment-bg-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.45);
     z-index: 1;
   }
+
   .assignment-content {
     position: relative;
     z-index: 2;
@@ -33,16 +36,22 @@
     max-width: 42rem;
     margin: 0 auto;
   }
+
   @media (min-width: 768px) {
-    .assignment-content { padding: 2rem 1.5rem 4rem; }
+    .assignment-content {
+      padding: 2rem 1.5rem 4rem;
+    }
   }
+
   .assignment-file-link {
     color: #2563eb;
     text-decoration: underline;
   }
+
   .assignment-file-link:hover {
     color: #1d4ed8;
   }
+
   .submission-late {
     color: #dc2626;
   }
@@ -57,7 +66,8 @@
   <div class="assignment-bg-overlay" aria-hidden="true"></div>
 
   <div class="assignment-content">
-    <a href="{% url 'assignment' %}" class="inline-flex items-center gap-2 text-sm font-medium text-white/90 hover:text-white mb-4 transition-colors">
+    <a href="{% url 'assignment' %}"
+      class="inline-flex items-center gap-2 text-sm font-medium text-white/90 hover:text-white mb-4 transition-colors">
       <span class="material-icons-outlined text-lg">arrow_back</span>
       Back to Assignments
     </a>
@@ -68,7 +78,8 @@
     {% endif %}
 
     <!-- Course and title -->
-    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-4">
+    <div
+      class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-4">
       <div class="p-5 md:p-6">
         {% if course_name or course_code %}
         <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">
@@ -89,10 +100,12 @@
 
     <!-- Learning objectives -->
     {% if objectives_list %}
-    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+    <div
+      class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
       <div class="p-5 md:p-6">
         <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Learning Objectives</h2>
-        <p class="text-slate-600 dark:text-slate-300 text-sm mb-3">By the end of this assignment, students should be able to:</p>
+        <p class="text-slate-600 dark:text-slate-300 text-sm mb-3">By the end of this assignment, students should be
+          able to:</p>
         <ul class="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300 text-sm">
           {% for obj in objectives_list %}
           <li>{{ obj }}</li>
@@ -104,19 +117,24 @@
 
     <!-- Description -->
     {% if assignment.description %}
-    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+    <div
+      class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
       <div class="p-5 md:p-6">
-        <div class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap">{{ assignment.description }}</div>
+        <div
+          class="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+          {{ assignment.description }}</div>
       </div>
     </div>
     {% endif %}
 
     <!-- Assignment file (downloadable) -->
     {% if assignment.assignment_file %}
-    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+    <div
+      class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
       <div class="p-5 md:p-6 flex flex-wrap items-center gap-2">
         <span class="material-icons-outlined text-slate-500 dark:text-slate-400">description</span>
-        <a href="{% url 'assignment_file_download' assignment.assignment_id %}" class="assignment-file-link font-medium" download>
+        <a href="{% url 'assignment_file_download' assignment.assignment_id %}" class="assignment-file-link font-medium"
+          download>
           {{ assignment.assignment_file.name }}
         </a>
       </div>
@@ -125,8 +143,7 @@
 
     <!-- Submit / Edit / Delete actions -->
     <div class="mb-6 flex flex-wrap gap-3 items-center">
-      <a href="#submit-form"
-         class="inline-flex items-center gap-2 py-3 px-6 rounded-xl
+      <a href="#submit-form" class="inline-flex items-center gap-2 py-3 px-6 rounded-xl
                 {% if is_locked %}bg-slate-300 text-slate-600 cursor-not-allowed{% else %}bg-primary hover:bg-primary/90 text-white{% endif %}
                 font-semibold shadow-lg shadow-primary/25 transition-all">
         <span class="material-icons-outlined">add_circle_outline</span>
@@ -136,9 +153,8 @@
       <form method="post" action="{% url 'assignment_detail' assignment.assignment_id %}">
         {% csrf_token %}
         <input type="hidden" name="action" value="delete">
-        <button type="submit"
-                {% if is_locked %}disabled{% endif %}
-                class="inline-flex items-center gap-2 py-3 px-4 rounded-xl border border-red-500 text-red-600 hover:bg-red-50
+        <button type="submit" {% if is_locked %}disabled{% endif %}
+          class="inline-flex items-center gap-2 py-3 px-4 rounded-xl border border-red-500 text-red-600 hover:bg-red-50
                        text-sm font-semibold transition-all {% if is_locked %}opacity-60 cursor-not-allowed{% endif %}">
           <span class="material-icons-outlined text-base">delete</span>
           Delete submission
@@ -151,7 +167,8 @@
     </div>
 
     <!-- Submission status table -->
-    <div class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+    <div
+      class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
       <div class="p-5 md:p-6">
         <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Submission status</h2>
         <table class="w-full text-sm text-left">
@@ -195,7 +212,9 @@
             {% if early_late_text %}
             <tr>
               <td class="py-2 pr-4 font-medium text-slate-700 dark:text-slate-300">Timing</td>
-              <td class="py-2 {% if is_late %}submission-late font-medium{% else %}text-slate-600 dark:text-slate-400{% endif %}">{{ early_late_text }}</td>
+              <td
+                class="py-2 {% if is_late %}submission-late font-medium{% else %}text-slate-600 dark:text-slate-400{% endif %}">
+                {{ early_late_text }}</td>
             </tr>
             {% endif %}
           </tbody>
@@ -204,11 +223,13 @@
     </div>
 
     <!-- Submit form -->
-    <div id="submit-form" class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
+    <div id="submit-form"
+      class="rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-slate-900/50 overflow-hidden mb-6">
       <div class="p-5 md:p-6 border-b border-slate-100 dark:border-slate-800">
         <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Submit Your Answer</h2>
 
-        <form method="post" action="{% url 'assignment_detail' assignment.assignment_id %}" enctype="multipart/form-data" class="space-y-5">
+        <form method="post" action="{% url 'assignment_detail' assignment.assignment_id %}"
+          enctype="multipart/form-data" class="space-y-5" id="submission-form">
           {% csrf_token %}
           <input type="hidden" name="action" value="submit">
 
@@ -224,19 +245,61 @@
           <div>
             <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               <span class="material-icons-outlined align-middle text-base mr-1">attach_file</span>
-              File Upload (PDF or Image)
+              File Upload (PDF or Image) <span class="text-red-500">*</span>
             </label>
-            <div class="relative flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 hover:border-primary/50 dark:hover:border-primary/50 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all cursor-pointer group">
-              <input type="file" name="file_upload" id="file_upload" accept=".pdf,image/*,.doc,.docx" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-              <span class="material-icons-outlined text-4xl text-slate-400 group-hover:text-primary transition-colors mb-2">upload_file</span>
-              <p class="text-sm text-slate-500 dark:text-slate-400">Click or drag file here</p>
-              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">PDF, DOC, DOCX, PNG, JPG, GIF</p>
+            <div id="file-drop-zone"
+              class="relative flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 hover:border-primary/50 dark:hover:border-primary/50 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all cursor-pointer group">
+              <input type="file" name="file_upload" id="file_upload" accept=".pdf,image/*,.doc,.docx"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+              <!-- Default state (no file selected) -->
+              <div id="file-placeholder">
+                <div class="flex flex-col items-center">
+                  <span
+                    class="material-icons-outlined text-4xl text-slate-400 group-hover:text-primary transition-colors mb-2">upload_file</span>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">Click or drag file here</p>
+                  <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">PDF, DOC, DOCX, PNG, JPG, GIF</p>
+                </div>
+              </div>
+              <!-- File selected state -->
+              <div id="file-selected" class="hidden">
+                <div class="flex items-center gap-3">
+                  <span class="material-icons-outlined text-2xl text-green-500">check_circle</span>
+                  <div>
+                    <p id="file-name" class="text-sm font-semibold text-slate-900 dark:text-white"></p>
+                    <p id="file-size" class="text-xs text-slate-400 dark:text-slate-500"></p>
+                  </div>
+                  <button type="button" id="file-remove"
+                    class="ml-2 p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 transition-colors">
+                    <span class="material-icons-outlined text-lg">close</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Existing submitted file download -->
+            {% if submission and submission.file_path %}
+            <div
+              class="mt-3 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+              <span class="material-icons-outlined text-blue-500 text-lg">description</span>
+              <span class="text-sm text-slate-700 dark:text-slate-300">Your submitted file:</span>
+              <a href="{% url 'student_submission_download' assignment.assignment_id %}"
+                class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+                <span class="material-icons-outlined text-sm">download</span>
+                {{ submission.file_path.name|truncatechars:40 }}
+              </a>
+            </div>
+            {% endif %}
+
+            <!-- Alert: no file selected -->
+            <div id="file-alert"
+              class="hidden mt-3 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-sm font-medium">
+              <span class="material-icons-outlined text-base">warning</span>
+              Please upload a file before submitting.
             </div>
           </div>
 
-          <button type="submit"
-                  {% if is_locked %}disabled{% endif %}
-                  class="w-full py-3.5 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-200 flex items-center justify-center gap-2 {% if is_locked %}opacity-60 cursor-not-allowed{% endif %}">
+          <button type="submit" id="submit-btn" {% if is_locked %}disabled{% endif %}
+            class="w-full py-3.5 px-4 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-200 flex items-center justify-center gap-2 {% if is_locked %}opacity-60 cursor-not-allowed{% endif %}">
             <span class="material-icons-outlined text-lg">send</span>
             {% if submission %}Update submission{% else %}Submit assignment{% endif %}
           </button>
@@ -245,4 +308,71 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    const fileInput = document.getElementById('file_upload');
+    const placeholder = document.getElementById('file-placeholder');
+    const selected = document.getElementById('file-selected');
+    const fileNameEl = document.getElementById('file-name');
+    const fileSizeEl = document.getElementById('file-size');
+    const removeBtn = document.getElementById('file-remove');
+    const alert = document.getElementById('file-alert');
+    const form = document.getElementById('submission-form');
+    const dropZone = document.getElementById('file-drop-zone');
+
+    // Has an existing submitted file?
+    const hasExistingFile = JSON.parse('{{ submission.file_path|yesno:"true,false" }}');
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    function showFile(file) {
+      fileNameEl.textContent = file.name;
+      fileSizeEl.textContent = formatSize(file.size);
+      placeholder.classList.add('hidden');
+      selected.classList.remove('hidden');
+      dropZone.classList.remove('border-slate-300', 'dark:border-slate-600');
+      dropZone.classList.add('border-green-400', 'dark:border-green-600', 'bg-green-50/50', 'dark:bg-green-900/10');
+      alert.classList.add('hidden');
+    }
+
+    function clearFile() {
+      fileInput.value = '';
+      placeholder.classList.remove('hidden');
+      selected.classList.add('hidden');
+      dropZone.classList.add('border-slate-300', 'dark:border-slate-600');
+      dropZone.classList.remove('border-green-400', 'dark:border-green-600', 'bg-green-50/50', 'dark:bg-green-900/10');
+    }
+
+    fileInput.addEventListener('change', function () {
+      if (this.files && this.files.length > 0) {
+        showFile(this.files[0]);
+      } else {
+        clearFile();
+      }
+    });
+
+    removeBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      clearFile();
+    });
+
+    // Validate on submit: file required if no existing file
+    form.addEventListener('submit', function (e) {
+      const hasNewFile = fileInput.files && fileInput.files.length > 0;
+      if (!hasNewFile && !hasExistingFile) {
+        e.preventDefault();
+        alert.classList.remove('hidden');
+        alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  })();
+</script>
 {% endblock %}

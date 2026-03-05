@@ -287,6 +287,23 @@ def assignment_file_download_view(request, assignment_id):
 
 
 @login_required
+def student_submission_download(request, assignment_id):
+    """Let a student download their own submitted file."""
+    submission = (
+        AssignmentSubmission.objects
+        .filter(assignment__assignment_id=assignment_id, user=request.user, is_deleted=False)
+        .first()
+    )
+    if not submission or not submission.file_path:
+        raise Http404("Submission file not found.")
+    try:
+        filename = os.path.basename(submission.file_path.name)
+        return FileResponse(submission.file_path.open("rb"), as_attachment=True, filename=filename)
+    except Exception:
+        raise Http404("File not available.")
+
+
+@login_required
 @csrf_protect
 def assignment_detail_view(request, assignment_id):
     """Assignment detail: course, dates, objectives, file link, submit form, submission status table."""
@@ -430,6 +447,107 @@ def instructor_assignments_dashboard(request):
         "teach/instructor_assignments.html",
         {"assignments": assignments},
     )
+
+
+@login_required
+@csrf_protect
+def instructor_add_assignment(request):
+    """Allow instructor/admin to create a new assignment from the web UI."""
+    if not _require_instructor(request.user):
+        messages.error(request, "You do not have permission to add assignments.")
+        return redirect("instructor")
+
+    courses = Course.objects.filter(is_active=True).order_by("course_name")
+
+    if request.method == "POST":
+        course_id = request.POST.get("course_id", "").strip()
+        title = request.POST.get("title", "").strip()
+        description = request.POST.get("description", "").strip()
+        learning_objectives = request.POST.get("learning_objectives", "").strip()
+        opened_at = request.POST.get("opened_at", "").strip()
+        deadline = request.POST.get("deadline", "").strip()
+        course_name_display = request.POST.get("course_name_display", "").strip()
+        course_code_display = request.POST.get("course_code_display", "").strip()
+        assignment_file = request.FILES.get("assignment_file")
+
+        # Validation
+        errors = []
+        if not course_id:
+            errors.append("Please select a course.")
+        if not title:
+            errors.append("Title is required.")
+        if not deadline:
+            errors.append("Deadline is required.")
+
+        selected_course = None
+        if course_id:
+            selected_course = Course.objects.filter(course_id=course_id, is_active=True).first()
+            if not selected_course:
+                errors.append("Selected course not found.")
+
+        parsed_deadline = None
+        parsed_opened_at = None
+        if deadline:
+            try:
+                from django.utils.dateparse import parse_datetime
+                parsed_deadline = parse_datetime(deadline)
+                if not parsed_deadline:
+                    errors.append("Invalid deadline format.")
+            except Exception:
+                errors.append("Invalid deadline format.")
+        if opened_at:
+            try:
+                from django.utils.dateparse import parse_datetime
+                parsed_opened_at = parse_datetime(opened_at)
+            except Exception:
+                pass  # opened_at is optional
+
+        if errors:
+            for err in errors:
+                messages.error(request, err)
+            return render(request, "teach/instructor_add_assignment.html", {
+                "courses": courses,
+                "form_data": request.POST,
+            })
+
+        # Determine next order_index for the course
+        from .models import CourseContent
+        last_content = (
+            CourseContent.objects
+            .filter(course=selected_course)
+            .order_by("-order_index")
+            .first()
+        )
+        next_order = (last_content.order_index + 1) if last_content else 1
+
+        # Create CourseContent
+        content = CourseContent.objects.create(
+            course=selected_course,
+            title=title,
+            content_type="assignment",
+            order_index=next_order,
+        )
+
+        # Create Assignment
+        assignment_obj = Assignment(
+            content=content,
+            description=description,
+            learning_objectives=learning_objectives,
+            opened_at=parsed_opened_at,
+            deadline=parsed_deadline,
+            course_name_display=course_name_display,
+            course_code_display=course_code_display,
+        )
+        if assignment_file:
+            assignment_obj.assignment_file = assignment_file
+        assignment_obj.save()
+
+        messages.success(request, f'Assignment "{title}" created successfully.')
+        return redirect("instructor_assignments_dashboard")
+
+    return render(request, "teach/instructor_add_assignment.html", {
+        "courses": courses,
+    })
 
 
 @login_required

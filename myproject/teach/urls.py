@@ -15,6 +15,7 @@ urlpatterns = [
     path("assignment/", views.assignment, name="assignment"),
     path("assignment/<int:assignment_id>/", views.assignment_detail_view, name="assignment_detail"),
     path("assignment/<int:assignment_id>/download/", views.assignment_file_download_view, name="assignment_file_download"),
+    path("assignment/<int:assignment_id>/submission-download/", views.student_submission_download, name="student_submission_download"),
     path("enrollment/", views.enrollment, name="enrollment"),
     path("signup/", views.signup, name="signup"),
     path("quiz/", views.quiz, name="quiz"),
@@ -39,6 +40,11 @@ urlpatterns = [
         "instructor/assignments/",
         views.instructor_assignments_dashboard,
         name="instructor_assignments_dashboard",
+    ),
+    path(
+        "instructor/assignments/add/",
+        views.instructor_add_assignment,
+        name="instructor_add_assignment",
     ),
     path(
         "instructor/assignments/<int:assignment_id>/submissions/",
