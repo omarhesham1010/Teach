@@ -7,9 +7,12 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>Login</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
 
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
 
@@ -17,27 +20,32 @@
   <script src="{% static 'teach/js/script.js' %}"></script>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
+<body
+  class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
 
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-    <div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[100px] opacity-30 animate-blob"></div>
-    <div class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-[100px] opacity-30 animate-blob animation-delay-2000"></div>
-    <div class="absolute bottom-[20%] right-[20%] w-[20%] h-[20%] bg-indigo-500/20 rounded-full blur-[80px] opacity-20 animate-blob animation-delay-4000"></div>
+    <div
+      class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[100px] opacity-30 animate-blob">
+    </div>
+    <div
+      class="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-[100px] opacity-30 animate-blob animation-delay-2000">
+    </div>
+    <div
+      class="absolute bottom-[20%] right-[20%] w-[20%] h-[20%] bg-indigo-500/20 rounded-full blur-[80px] opacity-20 animate-blob animation-delay-4000">
+    </div>
   </div>
 
   <div class="relative z-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
 
-<div class="relative w-full h-56 md:h-full rounded-3xl overflow-hidden shadow-2xl">
-  <img
-    src="{% static 'teach/img/Welcome.png' %}"
-    alt="Welcome"
-    class="absolute inset-0 w-full h-full object-cover"
-  />
-  <div class="absolute inset-0 bg-black/20"></div>
-</div>
+    <div class="relative w-full h-56 md:h-full rounded-3xl overflow-hidden shadow-2xl">
+      <img src="{% static 'teach/img/Welcome.png' %}" alt="Welcome"
+        class="absolute inset-0 w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-black/20"></div>
+    </div>
 
 
-    <div class="w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/50 p-8 transform transition-all hover:scale-[1.005]">
+    <div
+      class="w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 dark:border-slate-800/50 p-8 transform transition-all hover:scale-[1.005]">
 
       <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4">
@@ -59,9 +67,9 @@
       </div>
 
       {% if messages %}
-        <div class="space-y-2 mb-4">
-          {% for message in messages %}
-            <div class="text-sm rounded-xl px-4 py-3 border
+      <div class="space-y-2 mb-4">
+        {% for message in messages %}
+        <div class="text-sm rounded-xl px-4 py-3 border
               {% if message.tags == 'error' %}
                 bg-red-50 text-red-700 border-red-200
               {% elif message.tags == 'success' %}
@@ -70,28 +78,31 @@
                 bg-slate-50 text-slate-700 border-slate-200
               {% endif %}
             ">
-              {{ message }}
-            </div>
-          {% endfor %}
+          {{ message }}
         </div>
+        {% endfor %}
+      </div>
       {% endif %}
 
       <!-- FORM 1: Password Login -->
       <form id="formPassword" method="POST" action="{% url 'login' %}" class="space-y-4">
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
 
         <div class="space-y-4">
           <div class="relative group">
-            <span class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
+            <span
+              class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
               person_outline
             </span>
-            <input type="text" name="username" placeholder="Username"
+            <input type="text" name="identifier" placeholder="Email or National ID"
               class="w-full bg-slate-50 dark:bg-slate-800 rounded-xl py-3.5 pl-11 pr-4 focus:ring-2 focus:ring-primary/50"
               required>
           </div>
 
           <div class="relative group">
-            <span class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
+            <span
+              class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
               lock_outline
             </span>
             <input type="password" name="password" placeholder="Password"
@@ -106,7 +117,13 @@
         </button>
 
         <p class="text-center text-sm text-slate-500 mt-6">
+          <span class="text-slate-400 cursor-pointer hover:text-primary transition-colors select-none"
+            onclick="this.classList.toggle('text-blue-500'); this.classList.toggle('text-slate-400');">
+            Remember Me
+          </span>
+          <span class="mx-2 opacity-50">•</span>
           Don't have an account?
+
           <a href="{% url 'signup' %}" class="text-primary font-bold hover:underline">Sign Up</a>
         </p>
       </form>
@@ -114,10 +131,12 @@
       <!-- FORM 2: Code Login -->
       <form id="formCode" method="POST" action="{% url 'login_code' %}" class="space-y-4 hidden">
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
 
         <div class="space-y-4">
           <div class="relative group">
-            <span class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
+            <span
+              class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
               mail_outline
             </span>
             <input type="text" name="identifier" placeholder="Email"
@@ -126,7 +145,8 @@
           </div>
 
           <div class="relative group hidden" id="codeBox">
-            <span class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
+            <span
+              class="material-icons-outlined absolute left-4 top-3.5 text-slate-400 group-focus-within:text-primary">
               pin
             </span>
             <input type="text" name="code" placeholder="Enter 6-digit code"
@@ -135,20 +155,26 @@
           </div>
         </div>
 
-      
+
         <button type="submit" name="action" value="send" id="btnSend"
           class="w-full py-3.5 bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-bold rounded-xl">
           Send Code
         </button>
 
-      
+
         <button type="submit" name="action" value="verify" id="btnVerify" class="hidden
           w-full py-3.5 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl shadow-lg">
           Verify & Login
         </button>
 
         <p class="text-center text-sm text-slate-500 mt-6">
+          <span class="text-slate-400 cursor-pointer hover:text-primary transition-colors select-none"
+            onclick="this.classList.toggle('text-blue-500'); this.classList.toggle('text-slate-400');">
+            Remember Me
+          </span>
+          <span class="mx-2 opacity-50">•</span>
           Don't have an account?
+
           <a href="{% url 'signup' %}" class="text-primary font-bold hover:underline">Sign Up</a>
         </p>
       </form>
@@ -183,7 +209,7 @@
     tabPassword.addEventListener("click", activatePassword);
     tabCode.addEventListener("click", activateCode);
 
-  
+
     btnSend.addEventListener("click", () => {
       setTimeout(() => {
         codeBox.classList.remove("hidden");
@@ -193,4 +219,5 @@
   </script>
 
 </body>
+
 </html>

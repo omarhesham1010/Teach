@@ -6,6 +6,7 @@ import logging
 from decimal import Decimal
 
 from django.shortcuts import render, redirect, reverse
+from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -23,6 +24,7 @@ from django.utils import timezone
 from .models import LoginCode, Wallet, Conversation, Message
 from .models import Course, Enrollment, Assignment, AssignmentSubmission, AssignmentSubmissionHistory
 from .models import Quiz, QuizQuestion, QuizOption, QuizResult
+from .models import LoginCode, Wallet, Course, Enrollment, Lesson, LessonProgress  # ✅ UPDATED
 
 
 User = get_user_model()
@@ -131,15 +133,24 @@ def login_view(request):
         return redirect("instructor")
 
     if request.method == "POST":
-        national_id = request.POST.get("username", "").strip()
+        identifier = request.POST.get("identifier", "").strip()
         password = request.POST.get("password", "")
 
-        user = authenticate(request, username=national_id, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("instructor")
+        # Dual-lookup logic
+        user_obj = User.objects.filter(
+            Q(email__iexact=identifier) | Q(national_id=identifier)
+        ).first()
 
-        messages.error(request, "Invalid National ID or password.")
+        if user_obj:
+            user = authenticate(request, username=user_obj.national_id, password=password)
+            if user is not None:
+                login(request, user)
+                next_url = request.POST.get('next')
+                if next_url:
+                    return redirect(next_url)
+                return redirect("instructor")
+
+        messages.error(request, "Invalid Email/National ID or password.")
 
     return render(request, "teach/login.html")
 
@@ -161,8 +172,32 @@ def my_courses_view(request):
         Enrollment.objects
         .filter(user=request.user)
         .select_related("course")
-        .order_by("-created_at")
+        .order_by("-enrolled_at")
     )
+
+    for enrollment in enrollments:
+        # 1. Total lessons in this course
+        # lessons belong to CourseContent, which belongs to Course
+        total_lessons = Lesson.objects.filter(content__course=enrollment.course).count()
+        
+        # 2. Completed lessons by this user for this course
+        # LessonProgress stores lesson ID (lesson_id as string/id)
+        # We need to find completed progress records for lessons in this course
+        course_lesson_ids = list(Lesson.objects.filter(content__course=enrollment.course).values_list('lesson_id', flat=True))
+        
+        completed_lessons = LessonProgress.objects.filter(
+            user=request.user,
+            lesson__in=[str(lid) for lid in course_lesson_ids],
+            is_completed=True
+        ).count()
+
+        # 3. Calculate percentage
+        if total_lessons > 0:
+            progress_percent = (completed_lessons / total_lessons) * 100
+        else:
+            progress_percent = 0
+            
+        enrollment.progress = round(progress_percent)
 
     return render(request, "teach/my_courses.html", {
         "enrollments": enrollments
@@ -170,7 +205,19 @@ def my_courses_view(request):
 
 
 def course_details(request):
-    return render(request, "teach/coursedetails.html")
+    # Fetch a default course to check enrollment against (since page is static)
+    default_course = Course.objects.filter(is_active=True).first()
+    is_enrolled = False
+    
+    if request.user.is_authenticated and default_course:
+        is_enrolled = Enrollment.objects.filter(
+            user=request.user, 
+            course=default_course
+        ).exists()
+        
+    return render(request, "teach/coursedetails.html", {
+        "is_enrolled": is_enrolled
+    })
 
 
 def course_content(request):
@@ -537,7 +584,91 @@ def enrollment(request):
 
 
 @csrf_protect
+@csrf_protect
 def signup(request):
+    if request.user.is_authenticated:
+        logout(request)
+
+    errors = {}
+    if request.method == "POST":
+        data = request.POST
+        first_name = data.get("first_name", "").strip()
+        second_name = data.get("second_name", "").strip()
+        third_name = data.get("third_name", "").strip()
+        gender = data.get("gender", "")
+        phone_number = data.get("phone_number", "").strip()
+        father_phone_number = data.get("father_phone_number", "").strip()
+        school_name = data.get("school_name", "").strip()
+        parents_job = data.get("parents_job", "").strip()
+        government = data.get("government", "")
+        grade = data.get("grade", "")
+        division = data.get("division", "")
+        gmail = data.get("gmail", "").strip().lower()
+        password = data.get("password", "")
+        confirm_password = data.get("confirm_password", "")
+        national_id = data.get("national_id", "").strip()
+
+        # Manual Validation
+        required_fields = {
+            "first_name": first_name,
+            "gender": gender,
+            "phone_number": phone_number,
+            "father_phone_number": father_phone_number,
+            "government": government,
+            "grade": grade,
+            "gmail": gmail,
+            "password": password,
+            "confirm_password": confirm_password,
+            "national_id": national_id,
+        }
+
+        for field, value in required_fields.items():
+            if not value:
+                errors[field] = f"{field.replace('_', ' ').capitalize()} is required."
+
+        if not errors:
+            if User.objects.filter(email__iexact=gmail).exists():
+                errors["gmail"] = "This email is already in use."
+            
+            if User.objects.filter(national_id=national_id).exists():
+                errors["national_id"] = "This National ID is already in use."
+
+            if len(password) < 8 or not any(char.isdigit() for char in password):
+                errors["password"] = "Password must be at least 8 characters and include a number."
+            
+            if password != confirm_password:
+                errors["confirm_password"] = "Passwords do not match."
+
+        if not errors:
+            try:
+                user = User.objects.create_user(
+                    national_id=national_id,
+                    email=gmail,
+                    password=password,
+                    first_name=first_name,
+                    second_name=second_name,
+                    third_name=third_name,
+                    gender=gender,
+                    phone_number=phone_number,
+                    father_phone_number=father_phone_number,
+                    school_name=school_name,
+                    parents_job=parents_job,
+                    government=government,
+                    grade=grade,
+                    division=division,
+                )
+                messages.success(request, "Account created successfully. Please login.")
+                return redirect("login")
+            except Exception as e:
+                errors["form"] = f"An unexpected error occurred: {str(e)}"
+
+    return render(request, "teach/signup.html", {
+        "errors": errors,
+        "gender_choices": User.GENDER_CHOICES,
+        "government_choices": User.GOVERNMENT_CHOICES,
+        "grade_choices": User.GRADE_CHOICES,
+        "division_choices": User.DIVISION_CHOICES,
+    })
     if request.user.is_authenticated:
         return redirect("instructor")
     if request.method == "POST":
@@ -1056,6 +1187,9 @@ def login_code_view(request):
         latest.save(update_fields=["is_used"])
 
         login(request, user)
+        next_url = request.POST.get("next")
+        if next_url:
+            return redirect(next_url)
         return redirect("instructor")
 
     messages.error(request, "Invalid action.")
@@ -1064,41 +1198,104 @@ def login_code_view(request):
 
 @login_required
 def edit_user_profile(request):
+    user = request.user
+    errors = {}
+
     if request.method == "POST":
-        user = request.user
-        user.first_name = request.POST.get("first_name", "")
-        user.second_name = request.POST.get("second_name", "")
-        user.third_name = request.POST.get("third_name", "")
-        user.gender = request.POST.get("gender", "")
-        user.phone_number = request.POST.get("phone_number", "")
-        user.father_phone_number = request.POST.get("father_phone_number", "")
-        user.mother_phone_number = request.POST.get("mother_phone_number", "")
-        user.school_name = request.POST.get("school_name", "")
-        user.parents_job = request.POST.get("parents_job", "")
-        user.government = request.POST.get("government", "")
-        user.grade = request.POST.get("grade", "")
-        user.division = request.POST.get("division", "")
-        user.email = request.POST.get("gmail", user.email)
-        user.save()
+        first_name = request.POST.get("first_name", "").strip()
+        second_name = request.POST.get("second_name", "").strip()
+        third_name = request.POST.get("third_name", "").strip()
+        gender = request.POST.get("gender", "")
+        phone_number = request.POST.get("phone_number", "").strip()
+        father_phone_number = request.POST.get("father_phone_number", "").strip()
+        school_name = request.POST.get("school_name", "").strip()
+        parents_job = request.POST.get("parents_job", "").strip()
+        government = request.POST.get("government", "")
+        grade = request.POST.get("grade", "")
+        division = request.POST.get("division", "")
+        gmail = request.POST.get("gmail", "").strip()
 
-        messages.success(request, "Profile updated successfully.")
-        return redirect("profile")
+        # Validation Logic
+        if not first_name:
+            errors['first_name'] = "First name is required."
+        
+        if not gmail:
+            errors['gmail'] = "Email is required."
+        elif "@" not in gmail or "." not in gmail:
+            errors['gmail'] = "Enter a valid email address."
+        elif User.objects.filter(email__iexact=gmail).exclude(national_id=user.national_id).exists():
+            errors['gmail'] = "This email is already in use by another account."
 
-    return render(request, "teach/edit_user_profile.html", {"user": request.user})
+
+        prefixes = ['010', '011', '012', '015']
+        if phone_number:
+            is_valid_phone = phone_number.isdigit() and len(phone_number) == 11 and any(phone_number.startswith(p) for p in prefixes)
+            if not is_valid_phone:
+                errors['phone_number'] = "Please enter a valid phone number."
+
+        if father_phone_number:
+            is_valid_father = father_phone_number.isdigit() and len(father_phone_number) == 11 and any(father_phone_number.startswith(p) for p in prefixes)
+            if not is_valid_father:
+                errors['father_phone_number'] = "Please enter a valid phone number."
+
+        if not errors:
+            user.first_name = first_name
+            user.second_name = second_name
+            user.third_name = third_name
+            user.gender = gender
+            user.phone_number = phone_number
+            user.father_phone_number = father_phone_number
+            user.school_name = school_name
+            user.parents_job = parents_job
+            user.government = government
+            user.grade = grade
+            user.division = division
+            user.email = gmail
+            user.save()
+
+            messages.success(request, "Profile updated successfully.")
+            return redirect("profile")
+
+    return render(request, "teach/edit_user_profile.html", {
+        "user": user,
+        "errors": errors,
+    })
 
 
 @login_required
 def reset_password(request):
+    errors = {}
     if request.method == "POST":
-        form = PasswordChangeForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            return redirect("profile")
-    else:
-        form = PasswordChangeForm(user=request.user)
+        old_password = request.POST.get("old_password", "")
+        new_password = request.POST.get("new_password", "")
+        confirm_password = request.POST.get("confirm_password", "")
 
-    return render(request, "teach/reset_password.html", {"form": form})
+        # Validation Logic
+        if not old_password:
+            errors['old_password'] = "Old password is required."
+        elif not request.user.check_password(old_password):
+            errors['old_password'] = "Incorrect old password."
+
+        if not new_password:
+            errors['new_password'] = "New password is required."
+        elif len(new_password) < 8:
+            errors['new_password'] = "Password must be at least 8 characters long."
+        elif not any(char.isdigit() for char in new_password):
+            errors['new_password'] = "Password must contain at least one number."
+
+        if not confirm_password:
+            errors['confirm_password'] = "Please confirm your new password."
+        elif new_password != confirm_password:
+            errors['confirm_password'] = "Passwords don't match."
+
+        if not errors:
+            request.user.set_password(new_password)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
+            messages.success(request, "Password updated successfully.")
+            return redirect("profile")
+
+    return render(request, "teach/reset_password.html", {"errors": errors})
 
 
 @login_required
@@ -1129,5 +1326,26 @@ def add_money_to_wallet(request):
     })
 @login_required
 def courses(request):
-    courses = Course.objects.filter(is_active=True).order_by("-created_at")
-    return render(request, "teach/courses.html", {"courses": courses})
+    grade_filter = request.GET.get('grade')
+    division_filter = request.GET.get('division')
+    search_query = request.GET.get('search', '').strip()
+    
+    courses_qs = Course.objects.filter(is_active=True).order_by("-created_at")
+    
+    if grade_filter:
+        courses_qs = courses_qs.filter(grade=grade_filter)
+        
+    if division_filter:
+        courses_qs = courses_qs.filter(division=division_filter)
+
+    if search_query:
+        courses_qs = courses_qs.filter(course_name__icontains=search_query)
+        
+    return render(request, "teach/courses.html", {
+        "courses": courses_qs,
+        "selected_grade": grade_filter,
+        "selected_division": division_filter,
+        "selected_search": search_query,
+        "grade_choices": Course.GRADE_CHOICES,
+        "division_choices": Course.DIVISION_CHOICES,
+    })
